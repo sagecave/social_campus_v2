@@ -27,3 +27,14 @@ def db():
     except Exception as e:
         print(e, flush=True)
         raise Exception("Scoial campus exception - Database under maintenance", 500)
+
+##############################
+def no_cache(view):
+    @wraps(view)
+    def no_cache_view(*args, **kwargs):
+        response = make_response(view(*args, **kwargs))
+        response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+        response.headers["Pragma"] = "no-cache"
+        response.headers["Expires"] = "0"
+        return response
+    return no_cache_view

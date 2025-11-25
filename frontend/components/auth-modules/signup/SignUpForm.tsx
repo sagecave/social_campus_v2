@@ -19,6 +19,7 @@ const SignUpForm = () => {
                 method: "POST",
                 headers:{"Content-Type": "application/json"},
                 body: JSON.stringify({email, password,username, firstName, lastName, education, shcool}),
+                credentials: "include",
 
             });
             if (!response.ok) {
@@ -29,16 +30,6 @@ const SignUpForm = () => {
             console.log("data login form", data);
             router.push(typeof data === "string" ? data : (data.redirect ?? "/"));
         
-
-            console.log("email", email);
-            console.log("password", password);
-            
-            console.log("username", username);
-            console.log("firstName", firstName);
-            
-            console.log("lastName", lastName);
-            console.log("education", education);
-            console.log("shcool", shcool);
         } catch (err){
             console.error("Error during login:", err);
             // Make alert to a user-friendly notification in the future

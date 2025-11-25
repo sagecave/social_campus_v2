@@ -1,5 +1,5 @@
 "use client";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation'; 
 
 
@@ -8,6 +8,31 @@ const LoginForm = () => {
     const router = useRouter();
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
+
+    useEffect(() => {
+        const checkSession = async() => {
+            try{
+                console.log("Checking session status...");
+                const response = await fetch("http://127.0.0.1:80/session-check", {
+                    method: "GET",
+                    headers:{"Content-Type": "application/json"},
+                    credentials:"include",
+                });
+                const data = await response.json();
+                console.log("Session check data:", data);
+                if (data.redirect){
+                    router.push("/");
+                }
+                
+
+            } catch (err) {
+                console.error("Error during session check:", err);
+            }
+        };
+        checkSession();
+
+    },[])
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -19,6 +44,7 @@ const LoginForm = () => {
                 method: "POST",
                 headers:{"Content-Type": "application/json"},
                 body: JSON.stringify({email, password}),
+                credentials: "include",
 
             });
 

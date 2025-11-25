@@ -1,4 +1,5 @@
 "use client";
+import LogoutForm from '@/components/auth-modules/logout/LogoutForm';
 import React, { useState, useEffect } from 'react';
 
 type UserData = {
@@ -11,7 +12,11 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-  fetch("http://127.0.0.1/user-data")
+  fetch("http://127.0.0.1/user-data",{
+    method: "GET",
+    headers:{"Content-Type": "application/json"},
+    credentials: "include",
+  })
     .then(res => res.json())
     .then(json => {
       console.log("json text",json);   
@@ -32,6 +37,7 @@ export default function Home() {
       <h1>Data from Flask:</h1>
       <p>{JSON.stringify(data.user_first_name)}</p>
       <p>pls = {data.user_first_name}</p>
+      <LogoutForm></LogoutForm>
     </div>
   );
 }

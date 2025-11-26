@@ -66,12 +66,16 @@ const LoginForm = () => {
     };
     
     return ( 
-        <form onSubmit={handleSubmit}>
-            <label>E-mail</label>
-            <input type="text" name="email" value={email} placeholder="E-mail" onChange={e => setEmail(e.target.value)} />
-            <label>Password</label>
-            <input type="text" name="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
-            <button type="submit" >Login</button>
+        <form className="flex flex-col justify-self-center w-[inherit] max-w-160 gap-4 place-items-center" onSubmit={handleSubmit}>
+            <div className="flex flex-col w-full">
+                <label className="text-label-dark-gray font-bold">E-mail</label>
+                <input className=" px-4 py-6 bg-inside-border-white border-2 rounded-border-form border-border-light-gray h-12 placeholder:text-light-gray caret-accent-purple w-full" type="email" name="email" value={email} placeholder="E-mail" onChange={e => setEmail(e.target.value)} />
+            </div>
+            <div className='flex flex-col w-full'>
+                <label className="text-label-dark-gray font-bold">Password</label>
+                <input className=" px-4 py-6 bg-inside-border-white border-2 rounded-border-form border-border-light-gray w-full h-12 placeholder:text-light-gray caret-accent-purple" type="password" name="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
+            </div>
+            <button className="bg-linear-to-r w-auto from-accent-purple to-accent-red rounded-full px-24 py-4 mt-6 text-inside-border-white font-bold text-[1.5rem] bg-[length:300%_100%] bg-left hover:bg-right transition-all duration-500" type="submit" >Login</button>
         </form>
      );
 }

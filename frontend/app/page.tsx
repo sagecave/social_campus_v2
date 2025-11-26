@@ -1,7 +1,7 @@
 "use client";
 import LogoutForm from '@/components/auth-modules/logout/LogoutForm';
 import React, { useState, useEffect } from 'react';
-
+import './globals.css';
 type UserData = {
   user_first_name: string;
 };

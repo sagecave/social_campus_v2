@@ -38,22 +38,42 @@ const SignUpForm = () => {
         
     } 
     return ( 
-        <form onSubmit={handleSubmit}>
-            <label>Username</label>
-            <input type="text" name="username" value={username} placeholder="Username" onChange={e => setUsername(e.target.value)} />
-            <label>Email</label>
-            <input type="text" name="email" value={email} placeholder="E-mail" onChange={e => setEmail(e.target.value)} />
-            <label>First name</label>
-            <input type="text" name="firstname" value={firstName} placeholder="First name" onChange={e => setFirstName(e.target.value)} />
-            <label>Last name</label>
-            <input type="text" name="lastname" value={lastName} placeholder="Last name" onChange={e => setLastName(e.target.value)} />
-            <label>Education</label>
-            <input type="text" name="education" value={education} placeholder="Education" onChange={e => setEducation(e.target.value)} />
-            <label>Shcool</label>
-            <input type="text" name="shcool" value={shcool} placeholder="Shcool" onChange={e => setSchool(e.target.value)} />
-            <label>Password</label>
-            <input type='text' name="password" placeholder='Password' value={password} onChange={e => setPassword(e.target.value)}/>
-            <button type="submit" >Sign Up</button>
+        <form className="flex flex-col justify-self-center w-[inherit] max-w-160 gap-4 place-items-center" onSubmit={handleSubmit}>
+          
+            <div className="flex flex-col w-full">
+                <label className="text-label-dark-gray font-bold">Username</label>
+                <input className=" px-4 py-6 bg-inside-border-white border-2 rounded-border-form border-border-light-gray h-12 placeholder:text-light-gray caret-accent-purple w-full" type="text" name="username" value={username} placeholder="Username" onChange={e => setUsername(e.target.value)} />
+            </div>
+            <div className="flex flex-col w-full">
+                <label className="text-label-dark-gray font-bold">Email</label>
+                <input className=" px-4 py-6 bg-inside-border-white border-2 rounded-border-form border-border-light-gray h-12 placeholder:text-light-gray caret-accent-purple w-full" type="text" name="email" value={email} placeholder="E-mail" onChange={e => setEmail(e.target.value)} />
+            </div>
+      
+             <div className="flex flex-row gap-4 w-full">
+                <div className="flex flex-col w-full">
+                    <label className="text-label-dark-gray font-bold">First name</label>
+                    <input className=" px-4 py-6 bg-inside-border-white border-2 rounded-border-form border-border-light-gray h-12 placeholder:text-light-gray caret-accent-purple w-full" type="text" name="firstname" value={firstName} placeholder="First name" onChange={e => setFirstName(e.target.value)} />
+                </div>
+                <div className="flex flex-col w-full">
+                    <label className="text-label-dark-gray font-bold">Last name</label>
+                    <input className=" px-4 py-6 bg-inside-border-white border-2 rounded-border-form border-border-light-gray h-12 placeholder:text-light-gray caret-accent-purple w-full" type="text" name="lastname" value={lastName} placeholder="Last name" onChange={e => setLastName(e.target.value)} />
+                </div>
+            </div>
+            <div className="flex flex-row gap-4 w-full">
+                <div className="flex flex-col w-full">
+                    <label className="text-label-dark-gray font-bold">Education</label>
+                    <input className=" px-4 py-6 bg-inside-border-white border-2 rounded-border-form border-border-light-gray h-12 placeholder:text-light-gray caret-accent-purple w-full" type="text" name="education" value={education} placeholder="Education" onChange={e => setEducation(e.target.value)} />
+                </div>
+                <div className="flex flex-col w-full">
+                    <label className="text-label-dark-gray font-bold">Shcool</label>
+                    <input className=" px-4 py-6 bg-inside-border-white border-2 rounded-border-form border-border-light-gray h-12 placeholder:text-light-gray caret-accent-purple w-full" type="text" name="shcool" value={shcool} placeholder="Shcool" onChange={e => setSchool(e.target.value)} />
+                </div>
+            </div>
+            <div className="flex flex-col w-full">
+                <label className="text-label-dark-gray font-bold">Password</label>
+                <input className=" px-4 py-6 bg-inside-border-white border-2 rounded-border-form border-border-light-gray h-12 placeholder:text-light-gray caret-accent-purple w-full" type='text' name="password" placeholder='Password' value={password} onChange={e => setPassword(e.target.value)}/>
+            </div>            
+            <button className="bg-linear-to-r w-auto from-accent-purple to-accent-red rounded-full px-24 py-4 mt-6 text-inside-border-white font-bold text-[1.5rem] bg-[length:300%_100%] bg-left hover:bg-right transition-all duration-500"  type="submit" >Sign Up</button>
         </form>
      );
 }

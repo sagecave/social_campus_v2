@@ -1,2 +1,52 @@
 @import "tailwindcss";
 
+
+@theme {
+    /* Purple accent color */
+    --color-accent-purple: #6E44FF;
+
+    /* secound accent color red */
+    --color-accent-red: #EF7A85;
+    /* main background color */
+    --color-main-bg-white: #F9F9F9;
+
+    /* main text color */
+    --color-text-dark-gray: #1F1F1F;
+
+    /* labels color */
+    --color-label-dark-gray: #5C5C5C;
+
+    /* link text none click */
+    --color-link-light-gray: #6E6E6E;
+
+    /* text inside, inputs */
+    --color-light-gray: #777777;
+
+    /* color inside a border full white */
+    --color-inside-border-white: #FFFFFF;
+
+    /* Border color for main bg white - signup & login */
+    --color-border-light-gray: #D9D9D9;
+
+    /* px for the borders */
+    --spacing-border-px: 1px;
+
+    /* border radius */
+    --radius-border-form: 10px;
+}
+
+
+h1,h2,h3,h5 {
+    font-family: 'poppins' ;
+}
+button {
+    cursor: pointer;
+}
+label,p,a, input, button{
+    font-family: 'inter';
+}
+
+
+label{
+    padding:0rem 1rem
+}

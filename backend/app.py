@@ -122,6 +122,13 @@ def signup_submit():
             user_email = data.get("email")
             user_password = generate_password_hash(data.get("password"))
 
+            
+            user_username = x.validate_user_username(user_username)
+            user_email = x.validate_user_email(user_email)
+                
+             
+            
+
             q = "INSERT INTO users (`user_first_name`, `user_last_name`, `user_username`, `user_education`, `user_school`, `user_email`, `user_password`) VALUES (%s, %s, %s, %s, %s, %s, %s)"
 
             db,cursor = x.db()

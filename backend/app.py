@@ -27,6 +27,8 @@ CORS(app, supports_credentials=True, origins=["http://127.0.0.1:3000"],allow_hea
 app.config["SECRET_KEY"] = "your_fixed_secret_key"
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['MAX_CONTENT_LENGTH'] = 1 * 1024 * 1024  
+#   SESSION_COOKIE_SAMESITE="None",
+#     SESSION_COOKIE_SECURE=False,
 
 
 
@@ -71,7 +73,6 @@ def login_submit():
     if request.method == "GET":
 
         if session.get("user",""): 
-            redirect_url = "/"
             ic("XXXXXX - User in session", session["user"])
             return jsonify({"redirect": "/"})
         return jsonify({"redirect": "/login"})
@@ -93,6 +94,10 @@ def login_submit():
             if not user: raise Exception(("Inavlid email"), 400)    
             if not check_password_hash(user["user_password"], user_password):
                 raise Exception(("Invalid password"), 400)
+
+            # TODO: email verification check
+            # if user["user_verification_key"] != "":
+            #     raise Exception(("user_allready_exists"), 400)
             user.pop("user_password")
             session["user"] = user  
         
@@ -100,7 +105,17 @@ def login_submit():
             return jsonify(redirect_url)
         except Exception as e:
             ic(e)
+            # TODO: handle errors properly, and make toast to them
+             # User errors
+            # if ex.args[1] == 400:
+            #     toast_error = render_template("___toast_error.html", message=ex.args[0])
+            #     return f"""<browser mix-update="#toast">{ toast_error }</browser>""", 400
+
+            # System or developer error
+            # toast_error = render_template("___toast_error.html", message="System under maintenance")
+            # return f"""<browser mix-bottom="#toast">{ toast_error }</browser>""", 500
             pass
+            
         finally:
             if "cursor" in locals(): cursor.close()
             if "db" in locals(): db.close()
@@ -131,7 +146,24 @@ def signup_submit():
             return jsonify(redirect_url)
         except Exception as e: 
             ic(e)
+            # TODO: handle errors properly, and make toast to them
             pass
+            # if ex.args[1] == 400:
+            #     toast_error = render_template("___toast_error.html", message=ex.args[0])
+            #     return f"""<mixhtml mix-update="#toast">{ toast_error }</mixhtml>""", 400
+        
+            # # Database errors
+            # if "Duplicate entry" and user_email in str(ex): 
+            #     toast_error = render_template("___toast_error.html", message="Email already registered")
+            #     return f"""<mixhtml mix-update="#toast">{ toast_error }</mixhtml>""", 400
+            # if "Duplicate entry" and user_username in str(ex): 
+            #     toast_error = render_template("___toast_error.html", message="Username already registered")
+            #     return f"""<mixhtml mix-update="#toast">{ toast_error }</mixhtml>""", 400
+            
+            # # System or developer error
+            # toast_error = render_template("___toast_error.html", message="System under maintenance")
+            # return f"""<mixhtml mix-bottom="#toast">{ toast_error }</mixhtml>""", 500
+
         finally:
             if "cursor" in locals(): cursor.close()
             if "db" in locals(): db.close()

@@ -39,12 +39,13 @@ def global_variables():
         # dictionary = dictionary,
         x = x
     )
-
+###################USER DATA FOR HOME###################################
 # TODO: change the url name to make more sense this is the home page
 @app.get("/user-data")
 @x.no_cache
 def get_data(): 
     user = session.get("user", "")
+    if not user: return redirect("http://127.0.0.1:3000/login")
     ic("Session after login:", session)
     if not user: 
         return jsonify({"redirect": "/login"})
@@ -64,7 +65,7 @@ def get_data():
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()
 
-################################################
+#####################LOGIN###########################
 @app.route("/login-submit", methods=["GET","POST"])
 @x.no_cache
 def login_submit():

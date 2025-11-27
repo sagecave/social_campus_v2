@@ -120,12 +120,15 @@ def signup_submit():
             user_education = data.get("education")
             user_school = data.get("shcool") 
             user_email = data.get("email")
-            user_password = generate_password_hash(data.get("password"))
+            user_password = data.get("password")
 
-            
+
+            user_first_name = x.validate_user_first_name(user_first_name)   
             user_username = x.validate_user_username(user_username)
             user_email = x.validate_user_email(user_email)
-                
+            user_last_name = x.validate_user_last_name(user_last_name)
+            user_password = x.validate_user_password(user_password)
+            user_password = generate_password_hash(user_password)
              
             
 

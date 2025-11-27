@@ -65,6 +65,33 @@ def validate_user_username(user_username):
     return user_username
 
 
-
-
+############FIRST NAME VALIDATION##################
+USER_FIRST_NAME_MIN = 2
+USER_FIRST_NAME_MAX = 20
+REGEX_USER_FIRST_NAME = f"^.{{{USER_FIRST_NAME_MIN},{USER_FIRST_NAME_MAX}}}$"
+def validate_user_first_name(user_first_name ):
+    user_first_name = user_first_name.strip()
+    error = f"first name min {USER_FIRST_NAME_MIN} max {USER_FIRST_NAME_MAX} characters"
+    if not re.match(REGEX_USER_FIRST_NAME, user_first_name): raise Exception(error, 400)
+    return user_first_name
     
+
+############LAST NAME VALIDATION##################
+USER_LAST_NAME_MIN = 2
+USER_LAST_NAME_MAX = 20
+REGEX_USER_LAST_NAME = f"^.{{{USER_LAST_NAME_MIN},{USER_LAST_NAME_MAX}}}$"
+def validate_user_last_name(user_last_name):
+    user_last_name = user_last_name.strip()
+    error = f"last name min {USER_LAST_NAME_MIN} max {USER_LAST_NAME_MAX} characters"
+    if not re.match(REGEX_USER_LAST_NAME, user_last_name): raise Exception(error, 400)
+    return user_last_name
+
+
+############PASSWORD VALIDATION##################
+USER_PASSWORD_MIN = 6
+USER_PASSWORD_MAX = 50
+REGEX_USER_PASSWORD = f"^.{{{USER_PASSWORD_MIN},{USER_PASSWORD_MAX}}}$"
+def validate_user_password(user_password):
+    user_password = user_password.strip()
+    if not re.match(REGEX_USER_PASSWORD, user_password): raise Exception("Invalid email or password", 400)
+    return user_password

@@ -91,9 +91,13 @@ def login_submit():
             cursor.execute(q,(user_email,))
             user = cursor.fetchone()  
   
-            if not user: raise Exception(("Inavlid email"), 400)    
+            if not user: raise Exception(("Inavlid email"), 400)   
+
             if not check_password_hash(user["user_password"], user_password):
                 raise Exception(("Invalid password"), 400)
+            
+            if user["user_verification_key"] != "":
+                raise Exception ("user not verified")
             user.pop("user_password")
             session["user"] = user  
         

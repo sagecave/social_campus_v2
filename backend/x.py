@@ -95,3 +95,13 @@ def validate_user_password(user_password):
     user_password = user_password.strip()
     if not re.match(REGEX_USER_PASSWORD, user_password): raise Exception("Invalid email or password", 400)
     return user_password
+
+
+############UUID4 VALIDATION##################
+REGEX_UUID4_WITHOUT_DASHES = "^[0-9a-f]{8}[0-9a-f]{4}4[0-9a-f]{3}[89ab][0-9a-f]{3}[0-9a-f]{12}$"
+def validate_uuid4_without_dashes(uuid4 = ""):
+    error = "Invalid uuid4 without dashes"
+    if not uuid4: raise Exception(error, 400)
+    uuid4 = uuid4.strip()
+    if not re.match(REGEX_UUID4_WITHOUT_DASHES, uuid4): raise Exception(error, 400)
+    return uuid4

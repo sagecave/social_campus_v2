@@ -4,6 +4,7 @@ from flask_session import Session
 from werkzeug.security import generate_password_hash
 from werkzeug.security import check_password_hash
 import x 
+import send_emails
 import time
 import uuid
 import os
@@ -110,7 +111,7 @@ def login_submit():
 
 @app.route("/signup-submit", methods=["POST"])
 def signup_submit():
-    ic("request from signup form")
+   
     if request.method == "POST":
         try:
             data = request.get_json()
@@ -121,8 +122,8 @@ def signup_submit():
             user_school = data.get("shcool") 
             user_email = data.get("email")
             user_password = data.get("password")
-
-
+            user_verification_key = uuid.uuid4().hex
+            user_verified_at = 0 
             user_first_name = x.validate_user_first_name(user_first_name)   
             user_username = x.validate_user_username(user_username)
             user_email = x.validate_user_email(user_email)
@@ -132,11 +133,16 @@ def signup_submit():
              
             
 
-            q = "INSERT INTO users (`user_first_name`, `user_last_name`, `user_username`, `user_education`, `user_school`, `user_email`, `user_password`) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+            q = "INSERT INTO users (`user_first_name`, `user_last_name`, `user_username`, `user_education`, `user_school`, `user_email`, `user_password`, `user_verification_key`, `user_verified_at`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
 
             db,cursor = x.db()
-            cursor.execute(q,(user_first_name, user_last_name, user_username, user_education, user_school, user_email, user_password))
+            cursor.execute(q,(user_first_name, user_last_name, user_username, user_education, user_school, user_email, user_password, user_verification_key, user_verified_at))
             db.commit()
+
+            email_verify_account = render_template("_email_verify_account.html", user_verification_key=user_verification_key)
+            ic(email_verify_account)
+            send_emails.send_verify_email(user_email, user_verification_key)
+
             redirect_url = "/"
             return jsonify(redirect_url)
         except Exception as e: 
@@ -168,3 +174,33 @@ def session_check():
        
         return jsonify({"redirect": "/"})
     return jsonify({"redirect": None})
+
+
+####################VERIFY ACCOUNT############################
+@app.route("/verify-account", methods=["GET"])
+def verify_account():
+    try:
+        user_verification_key = x.validate_uuid4_without_dashes(request.args.get("key", ""))
+        ic(user_verification_key,"TROR DET ER LORT")
+        user_verifief_at = int(time.time())
+        db, cursor = x.db()
+        q = "UPDATE users SET user_verification_key = '', user_verified_at = %s WHERE user_verification_key = %s"
+        cursor.execute(q,(user_verifief_at, user_verification_key))
+        db.commit()
+        if cursor.rowcount != 1: raise Exception("Invalid key", 400)
+        return redirect("http://127.0.0.1:3000/")
+    except Exception as ex:
+        ic(ex)
+        
+        if "db" in locals(): db.rollback()
+        # User errors
+        # if ex.args[1] == 400: return ex.args[0], 400   
+        if ex.args[1] == 400: 
+            return redirect("http://127.0.0.1:3000/login") 
+        # System or developer error
+        # return "Cannot verify user" 
+        return redirect("http://127.0.0.1:3000/login")
+    finally:
+        if "cursor" in locals(): cursor.close()
+        if "db" in locals(): db.close()
+        

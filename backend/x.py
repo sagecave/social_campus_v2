@@ -42,7 +42,7 @@ def no_cache(view):
 
 ############EMAIL VALIDATE##################
 def validate_user_email(user_email):
-    user_email = user_email.strip()
+    user_email = user_email.strip().lower()
     try:
         email_validation = validate_email(user_email, check_deliverability=False)
         return email_validation.email
@@ -58,7 +58,7 @@ USER_USERNAME_MIN = 2
 USER_USERNAME_MAX = 20
 REGEX_USER_USERNAME = f"^.{{{USER_USERNAME_MIN},{USER_USERNAME_MAX}}}$"
 def validate_user_username(user_username):
-    user_username = user_username.strip()
+    user_username = user_username.strip().lower()
     error = f"username min {USER_USERNAME_MIN} max {USER_USERNAME_MAX} characters"
     if len(user_username) < USER_USERNAME_MIN: raise Exception(("User name to small"), 400)
     if len(user_username) > USER_USERNAME_MAX: raise Exception(("username to big"), 400)
@@ -70,7 +70,7 @@ USER_FIRST_NAME_MIN = 2
 USER_FIRST_NAME_MAX = 20
 REGEX_USER_FIRST_NAME = f"^.{{{USER_FIRST_NAME_MIN},{USER_FIRST_NAME_MAX}}}$"
 def validate_user_first_name(user_first_name ):
-    user_first_name = user_first_name.strip()
+    user_first_name = user_first_name.strip().lower()
     error = f"first name min {USER_FIRST_NAME_MIN} max {USER_FIRST_NAME_MAX} characters"
     if not re.match(REGEX_USER_FIRST_NAME, user_first_name): raise Exception(error, 400)
     return user_first_name
@@ -81,7 +81,7 @@ USER_LAST_NAME_MIN = 2
 USER_LAST_NAME_MAX = 20
 REGEX_USER_LAST_NAME = f"^.{{{USER_LAST_NAME_MIN},{USER_LAST_NAME_MAX}}}$"
 def validate_user_last_name(user_last_name):
-    user_last_name = user_last_name.strip()
+    user_last_name = user_last_name.strip().lower()
     error = f"last name min {USER_LAST_NAME_MIN} max {USER_LAST_NAME_MAX} characters"
     if not re.match(REGEX_USER_LAST_NAME, user_last_name): raise Exception(error, 400)
     return user_last_name

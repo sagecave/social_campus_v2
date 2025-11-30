@@ -7,6 +7,7 @@ import x
 import send_emails
 import time
 import uuid
+import secrets
 import os
 import io
 import csv
@@ -73,7 +74,7 @@ def login_submit():
     if request.method == "GET":
 
         if session.get("user",""): 
-            redirect_url = "/"
+            
             ic("XXXXXX - User in session", session["user"])
             return jsonify({"redirect": "/"})
         return jsonify({"redirect": "/login"})
@@ -84,6 +85,7 @@ def login_submit():
             data = request.get_json()
             ic("data", data)
             user_email = data.get("email")
+            user_email = x.validate_user_email(user_email)
             user_password = data.get("password")
             ic(user_password)
             q = "SELECT * FROM `users` WHERE user_email = %s"
@@ -110,9 +112,21 @@ def login_submit():
         finally:
             if "cursor" in locals(): cursor.close()
             if "db" in locals(): db.close()
+
+####################LOGIN OUT############################
+@app.post("/logout-submit")
+def logout(): 
+    try:
+        session.clear()
+        return jsonify({"redirect": "/login"})
+    except Exception as e:
+        ic(e)
+        return "error with logout"
+    finally:
+        pass
             
        
-################################################
+####################SIGNUP SUBMIT############################
 
 @app.route("/signup-submit", methods=["POST"])
 def signup_submit():
@@ -144,12 +158,10 @@ def signup_submit():
             cursor.execute(q,(user_first_name, user_last_name, user_username, user_education, user_school, user_email, user_password, user_verification_key, user_verified_at))
             db.commit()
 
-            email_verify_account = render_template("_email_verify_account.html", user_verification_key=user_verification_key)
-            ic(email_verify_account)
             send_emails.send_verify_email(user_email, user_verification_key)
 
-            redirect_url = "/"
-            return jsonify(redirect_url)
+        
+            return jsonify({"redirect": "/"})
         except Exception as e: 
             ic(e)
             pass
@@ -158,17 +170,62 @@ def signup_submit():
             if "db" in locals(): db.close()
 
 
-####################LOGIN OUT############################
-@app.post("/logout-submit")
-def logout(): 
+
+
+####################FORGOT PASSWORD############################
+@app.post("/forgot-password")
+def forgot_password():
     try:
-        session.clear()
-        return jsonify("/login")
+        data = request.get_json()
+        ic("data", data)
+        user_email = data.get("email")
+        user_email = x.validate_user_email(user_email)
+        user_token = secrets.token_urlsafe(32)
+        ic("user_token", user_token)
+        user_token_created_at = int(time.time())
+        db,cursor = x.db()
+        q = "UPDATE `users` SET `user_token`=%s ,`user_token_created_at`=%s WHERE user_email = %s"
+        cursor.execute(q,(user_token, user_token_created_at, user_email))
+        db.commit()
+        send_emails.password_reset_email(user_email, user_token)
+        return jsonify({"redirect": "/login"})
+    except Exception as e:
+        ic("PASSWORD WRONG",e)
+        #validate, and return to user email "Email is send´t to active account is possiable" or something like that. 
+        pass
+    finally:
+        if "db" in locals(): db.close()
+        if "cursor" in locals(): cursor.close()
+
+
+####################VERIFY PASSWORD CHANGE############################
+@app.post("/update-password")
+def update_pasword():
+    
+    try:
+        data = request.get_json()
+        user_token = data.get("token")
+        user_new_password = data.get("password")
+        user_new_password = x.validate_user_password(user_new_password)
+        user_new_password = generate_password_hash(user_new_password)
+        db,cursor = x.db()
+        q="UPDATE `users` SET user_token = NULL, `user_password`=%s WHERE user_token = %s;"
+        cursor.execute(q,(user_new_password ,user_token))
+        db.commit()
+        if cursor.rowcount == 0:
+            # Token invalid or already used
+            return jsonify({"error": "Invalid or expired token"}), 400
+        return jsonify({"redirect": "/login"})
     except Exception as e:
         ic(e)
-        return "error with logout"
-    finally:
+        if "db" in locals():
+            db.rollback()
+        #validation
         pass
+    finally:
+        if "db" in locals(): db.close()
+        if "cursor" in locals(): cursor.close()
+
 
 ####################SESSION CHECK############################
 @app.get("/session-check")
@@ -180,17 +237,46 @@ def session_check():
         return jsonify({"redirect": "/"})
     return jsonify({"redirect": None})
 
+####################TOKEN CHECK############################
+#fix after chatgpt
+# @app.get("/token-check")
+# def token_check():
+#     token = request.args.get("key")
+#     if not token:
+#         #raise exception
+#         return jsonify({"valid": False}), 400
+    
+#     try:
+#         db, cursor = x.db()
+#         q = "SELECT user_pk, user_token_created_at FROM users WHERE user_token=%s"
+#         cursor.execute(q,(token,))
+#         user = cursor.fetchone()
+
+#         if not user:
+#             #raise exception
+#             return jsonify({"valid": False}), 400
+        
+#         if int(time.time()) - user["user_token_created_at"] > 1800:
+#             #raise exception
+#             return jsonify({"valid": False, "expired": True}), 410
+#         return jsonify({"valid": True})
+#     except Exception as e:
+#         return jsonify({"valid": False}), 500
+#     finally:
+#         if "db" in locals(): db.close()
+#         if "cursor" in locals(): cursor.close()
+
+
 
 ####################VERIFY ACCOUNT############################
 @app.route("/verify-account", methods=["GET"])
 def verify_account():
     try:
         user_verification_key = x.validate_uuid4_without_dashes(request.args.get("key", ""))
-        ic(user_verification_key,"TROR DET ER LORT")
-        user_verifief_at = int(time.time())
+        user_verified_at = int(time.time())
         db, cursor = x.db()
-        q = "UPDATE users SET user_verification_key = '', user_verified_at = %s WHERE user_verification_key = %s"
-        cursor.execute(q,(user_verifief_at, user_verification_key))
+        q = "UPDATE users SET user_verification_key = NULL, user_verified_at = %s WHERE user_verification_key = %s"
+        cursor.execute(q,(user_verified_at, user_verification_key))
         db.commit()
         if cursor.rowcount != 1: raise Exception("Invalid key", 400)
         return redirect("http://127.0.0.1:3000/")

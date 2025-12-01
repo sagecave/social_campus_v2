@@ -66,6 +66,27 @@ def get_data():
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()
 
+###################USERS###################################
+@app.get("/post-owner")
+def get_post_owner(): 
+    try:
+        post_owner = request.args.get("owner")
+        q = "SELECT * FROM `users` WHERE user_pk = %s"
+        db,cursor = x.db()
+        post_owner = int(post_owner)
+        ic("OWNER OF THE POST", post_owner)
+        cursor.execute(q,(post_owner,))
+        owner = cursor.fetchone()
+        ic("XXXXX", owner)
+        return jsonify(owner)
+    except Exception as e:
+        ic(e)
+        pass
+    finally:
+        if "cursor" in locals(): cursor.close()
+        if "db" in locals(): db.close()
+
+
 #####################LOGIN###########################
 @app.route("/login-submit", methods=["GET","POST"])
 @x.no_cache
@@ -295,3 +316,20 @@ def verify_account():
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()
         
+
+####################POSTS############################
+@app.get("/posts")
+def posts():
+    try:
+        db,cursor = x.db()
+        q="SELECT * FROM `posts` ORDER BY `post_created_at` DESC LIMIT 10;"
+        cursor.execute(q)
+        posts = cursor.fetchall()
+        ic("XXXXX", posts)
+        return jsonify(posts)
+    except Exception as e:
+        ic(e)
+        pass
+    finally:
+        if "cursor" in locals(): cursor.close()
+        if "db" in locals(): db.close()

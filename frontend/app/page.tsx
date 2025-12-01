@@ -3,6 +3,7 @@ import LogoutForm from "@/components/auth-modules/logout/LogoutForm";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import "./globals.css";
+import PostContainer from "@/components/posts/PostContainer";
 type UserData = {
   user_first_name: string;
 };
@@ -51,6 +52,7 @@ export default function Home() {
       <p>{JSON.stringify(data.user_first_name)}</p>
       <p>pls = {data.user_first_name}</p>
       <LogoutForm></LogoutForm>
+      <PostContainer />
     </div>
   );
 }

@@ -1,6 +1,10 @@
 import Image from "next/image";
 import { useState } from "react";
-const CreatePost = () => {
+type postData = {
+  setNewFetch: React.Dispatch<React.SetStateAction<boolean>>;
+  newFetch: boolean;
+};
+const CreatePost = ({ setNewFetch, newFetch }: postData) => {
   const [postText, setPostText] = useState<string>("");
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -18,12 +22,16 @@ const CreatePost = () => {
       }
       const data = await response.json();
       console.log("data login form", data);
+
       //   måske redirect so den updatere
       //   router.push(typeof data === "string" ? data : data.redirect ?? "/");
     } catch (err) {
       console.error("Error during login:", err);
       // Make alert to a user-friendly notification in the future
       alert("Post failed");
+    } finally {
+      setNewFetch(!newFetch);
+      console.log(newFetch, "new fetch true or falsk");
     }
   };
   return (

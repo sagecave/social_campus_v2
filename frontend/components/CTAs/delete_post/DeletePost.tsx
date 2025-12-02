@@ -3,8 +3,10 @@ import Image from "next/image";
 
 type postData = {
   post_pk: number;
+  setNewFetch: React.Dispatch<React.SetStateAction<boolean>>;
+  newFetch: boolean;
 };
-const DeletePost = ({ post_pk }: postData) => {
+const DeletePost = ({ post_pk, setNewFetch, newFetch }: postData) => {
   const deletingPost = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
@@ -23,6 +25,8 @@ const DeletePost = ({ post_pk }: postData) => {
     } catch (err) {
       console.error("Error during logout:", err);
       alert("like failed");
+    } finally {
+      setNewFetch(!newFetch);
     }
   };
   return (

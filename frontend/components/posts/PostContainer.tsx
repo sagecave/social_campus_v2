@@ -10,7 +10,11 @@ type PostCardProps = {
   user_first_name: string;
   post_pk: number;
 };
-const Post_container = () => {
+type PostContainerProps = {
+  setNewFetch: React.Dispatch<React.SetStateAction<boolean>>;
+  newFetch: boolean;
+};
+const Post_container = ({ newFetch, setNewFetch }: PostContainerProps) => {
   const [data, setData] = useState<PostCardProps[] | null>(null);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
@@ -30,14 +34,14 @@ const Post_container = () => {
       }
     };
     loadPosts();
-  }, []);
+  }, [newFetch]);
   if (loading) return <p>Loading...</p>;
   if (!data) return <p>No data received</p>;
 
   return (
     <section className="justify-self-center">
       {data.map((data, i) => (
-        <PostCard key={i} post_text={data.post_text} user_fk={data.user_fk} post_created_at={data.post_created_at} post_pk={data.post_pk} />
+        <PostCard key={i} setNewFetch={setNewFetch} newFetch={newFetch} post_text={data.post_text} user_fk={data.user_fk} post_created_at={data.post_created_at} post_pk={data.post_pk} />
       ))}
     </section>
   );

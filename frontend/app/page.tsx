@@ -15,6 +15,7 @@ export default function Home() {
   const router = useRouter();
   const [data, setData] = useState<UserData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [newFetch, setNewFetch] = useState(true);
 
   useEffect(() => {
     const loadUserData = async () => {
@@ -54,9 +55,9 @@ export default function Home() {
     <>
       <Aside_navigation user_first_name={data.user_first_name} user_last_name={data.user_last_name}></Aside_navigation>
       <main className=" col-start-2">
-        <CreatePost></CreatePost>
+        <CreatePost setNewFetch={setNewFetch} newFetch={newFetch}></CreatePost>
         <section className=" col-start-2">
-          <PostContainer />
+          <PostContainer setNewFetch={setNewFetch} newFetch={newFetch} />
         </section>
       </main>
     </>

@@ -6,8 +6,10 @@ type modalState = {
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   post_pk: number;
   post_text: string;
+  setNewFetch: React.Dispatch<React.SetStateAction<boolean>>;
+  newFetch: boolean;
 };
-const UpdatePostModal = ({ setIsModalOpen, isModalOpen, post_pk, post_text }: modalState) => {
+const UpdatePostModal = ({ setIsModalOpen, isModalOpen, post_pk, post_text, setNewFetch, newFetch }: modalState) => {
   const [postText, setPostText] = useState<string>("");
 
   useEffect(() => {
@@ -36,6 +38,9 @@ const UpdatePostModal = ({ setIsModalOpen, isModalOpen, post_pk, post_text }: mo
       console.error("Error during login:", err);
       // Make alert to a user-friendly notification in the future
       alert("Post failed");
+    } finally {
+      setNewFetch(!newFetch);
+      setIsModalOpen(!isModalOpen);
     }
   };
   return (

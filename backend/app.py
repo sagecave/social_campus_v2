@@ -342,7 +342,7 @@ def posts():
 
 
 ####################CREATE POST############################
-@app.post("/create_post")
+@app.post("/create-post")
 def create_post():
     try:
         db,cursor = x.db()
@@ -360,6 +360,33 @@ def create_post():
     except Exception as e:
         ic(e)
         return jsonify({"postStatus": "It did not work"})
+    finally:
+        if "cursor" in locals(): cursor.close()
+        if "db" in locals(): db.close()
+
+
+####################UPDATE POST############################
+@app.patch("/update-post")
+def update_post():
+    try:
+        db,cursor= x.db()
+        data = request.get_json()
+        post_text = data.get("postText","")
+        post_pk = data.get("post_pk","")
+        user = session.get("user", "")
+        user_pk = user.get("user_pk","")
+        post_updated_at = int(time.time())
+        q ="UPDATE `posts` SET `post_text`=%s,`post_updated_at`=%s WHERE post_pk =%s"
+        ic(user_pk,"USER PK")
+        ic(post_text, "Updated Text")
+        ic(post_pk, "post pk")
+        ic(post_updated_at,"TIME")
+        cursor.execute(q,(post_text,post_updated_at,post_pk))
+        db.commit()
+        return jsonify({"postStatus": "Post is updated"})
+    except Exception as e:
+        ic(e)
+        pass
     finally:
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()
@@ -386,5 +413,5 @@ def comment_post():
         ic(e)
         pass
     finally:
-        if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()
+        if "cursor" in locals(): cursor.close()

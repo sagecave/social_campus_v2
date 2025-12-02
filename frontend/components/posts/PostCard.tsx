@@ -3,6 +3,9 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Like from "@/components/CTAs/like_cta/Like";
 import Comment from "@/components/CTAs/comment_cta/Comment";
+import UpdatePost from "@/components/CTAs/update_post/UpdatePost";
+import DeletePost from "@/components/CTAs/delete_post/DeletePost";
+
 type PostCardProps = {
   post_text: string;
   user_fk: number;
@@ -11,9 +14,10 @@ type PostCardProps = {
   user_first_name?: string;
   user_last_name?: string;
   user_id?: number;
+  post_pk: number;
 };
 
-const PostCard = ({ post_text, user_fk, post_created_at }: PostCardProps) => {
+const PostCard = ({ post_text, user_fk, post_created_at, post_pk }: PostCardProps) => {
   const [owner, setOnwer] = useState<PostCardProps | null>(null);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
@@ -73,6 +77,8 @@ const PostCard = ({ post_text, user_fk, post_created_at }: PostCardProps) => {
       <div className="flex gap-2">
         <Like />
         <Comment />
+        <UpdatePost post_pk={post_pk} post_text={post_text} />
+        <DeletePost />
       </div>
     </article>
   );

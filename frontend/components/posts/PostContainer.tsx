@@ -8,6 +8,7 @@ type PostCardProps = {
   user_fk: number;
   post_created_at: number;
   user_first_name: string;
+  post_pk: number;
 };
 const Post_container = () => {
   const [data, setData] = useState<PostCardProps[] | null>(null);
@@ -36,7 +37,7 @@ const Post_container = () => {
   return (
     <section className="justify-self-center">
       {data.map((data, i) => (
-        <PostCard key={i} post_text={data.post_text} user_fk={data.user_fk} post_created_at={data.post_created_at} />
+        <PostCard key={i} post_text={data.post_text} user_fk={data.user_fk} post_created_at={data.post_created_at} post_pk={data.post_pk} />
       ))}
     </section>
   );

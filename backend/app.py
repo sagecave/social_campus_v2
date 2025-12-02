@@ -1,3 +1,9 @@
+
+from colorama import init as colorama_init
+colorama_init(strip=True, convert=False)
+
+
+import sys
 from flask import Flask, render_template, request, session, redirect, url_for, jsonify
 from flask_cors import CORS
 from flask_session import Session
@@ -16,8 +22,8 @@ import json
 # This request is for e.g to make a call to a docs sheet
 # import requests 
 
-
-
+def raw_print(*args, **kwargs):
+    sys.__stdout__.write(" ".join(map(str, args)) + "\n")
 from icecream import ic
 ic.configureOutput(prefix=f'----- | ', includeContext=True)
 
@@ -327,6 +333,34 @@ def posts():
         posts = cursor.fetchall()
         ic("XXXXX", posts)
         return jsonify(posts)
+    except Exception as e:
+        ic(e)
+        pass
+    finally:
+        if "cursor" in locals(): cursor.close()
+        if "db" in locals(): db.close()
+
+
+####################CREATE POST############################
+####################LIKE############################
+@app.post("/like-post")
+def like_post():
+    try:
+        db,cursor = x.db()
+        pass
+    except Exception as e:
+        ic(e)
+        pass
+    finally:
+        if "cursor" in locals(): cursor.close()
+        if "db" in locals(): db.close()
+
+####################COMMENTS############################
+@app.post("/post-comments")
+def comment_post():
+    try:
+        db,cursor = x.db()
+        pass
     except Exception as e:
         ic(e)
         pass

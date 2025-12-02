@@ -1,52 +1,66 @@
 @import "tailwindcss";
 
-
 @theme {
-    /* Purple accent color */
-    --color-accent-purple: #6E44FF;
+  /* Purple accent color */
+  --color-accent-purple: #6e44ff;
+  /* Purple accent color */
+  --color-accent-purple-light: #bcb1ff;
 
-    /* secound accent color red */
-    --color-accent-red: #EF7A85;
-    /* main background color */
-    --color-main-bg-white: #F9F9F9;
+  --color-accent-purple-light-white: #e1dcff;
 
-    /* main text color */
-    --color-text-dark-gray: #1F1F1F;
+  /* secound accent color red */
+  --color-accent-red: #ef7a85;
+  /* main background color */
+  --color-main-bg-white: #f9f9f9;
 
-    /* labels color */
-    --color-label-dark-gray: #5C5C5C;
+  /* main text color */
+  --color-text-dark-gray: #1f1f1f;
 
-    /* link text none click */
-    --color-link-light-gray: #6E6E6E;
+  /* border color */
+  --color-border-grey: #c1c1c1;
 
-    /* text inside, inputs */
-    --color-light-gray: #777777;
+  /* labels color */
+  --color-label-dark-gray: #5c5c5c;
 
-    /* color inside a border full white */
-    --color-inside-border-white: #FFFFFF;
+  /* link text none click */
+  --color-link-light-gray: #6e6e6e;
 
-    /* Border color for main bg white - signup & login */
-    --color-border-light-gray: #D9D9D9;
+  --color-postname: #2d2d2d;
+  /* text inside, inputs */
+  --color-light-gray: #777777;
 
-    /* px for the borders */
-    --spacing-border-px: 1px;
+  /* color inside a border full white */
+  --color-inside-border-white: #ffffff;
 
-    /* border radius */
-    --radius-border-form: 10px;
+  /* Border color for main bg white - signup & login */
+  --color-border-light-gray: #d9d9d9;
+
+  /* px for the borders */
+  --spacing-border-px: 1px;
+
+  /* border radius */
+  --radius-border-form: 10px;
+
+  --color-button-text: #282828;
 }
 
-
-h1,h2,h3,h5 {
-    font-family: 'poppins' ;
+h1,
+h2,
+h3,
+h5 {
+  font-family: "poppins";
 }
 button {
-    cursor: pointer;
+  cursor: pointer;
 }
-label,p,a, input, button{
-    font-family: 'inter';
+label,
+p,
+a,
+input,
+button {
+  font-family: "inter";
 }
 
-
-label{
-    padding:0rem 1rem
+label {
+  padding: 0rem 1rem;
 }

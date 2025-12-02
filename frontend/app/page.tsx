@@ -1,9 +1,11 @@
 "use client";
-import LogoutForm from "@/components/auth-modules/logout/LogoutForm";
+
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import "./globals.css";
 import PostContainer from "@/components/posts/PostContainer";
+import Aside_navigation from "@/components/navigation/Aside_navigation";
+
 type UserData = {
   user_first_name: string;
 };
@@ -47,12 +49,17 @@ export default function Home() {
   if (loading) return <p>Loading...</p>;
   if (!data) return <p>No data received</p>;
   return (
-    <div>
-      <h1>Data from Flask:</h1>
-      <p>{JSON.stringify(data.user_first_name)}</p>
-      <p>pls = {data.user_first_name}</p>
-      <LogoutForm></LogoutForm>
-      <PostContainer />
-    </div>
+    <>
+      <Aside_navigation></Aside_navigation>
+      <main className=" col-start-2">
+        <section className=" col-start-2">
+          <h1>Data from Flask:</h1>
+          <p>{JSON.stringify(data.user_first_name)}</p>
+          <p>pls = {data.user_first_name}</p>
+
+          <PostContainer />
+        </section>
+      </main>
+    </>
   );
 }

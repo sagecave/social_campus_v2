@@ -390,6 +390,25 @@ def update_post():
     finally:
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()
+
+####################DELETE POST############################
+@app.delete("/delete-post")
+def delete_post():
+   
+    try:
+        db,cursor = x.db()
+        post_pk = request.args.get("post_id")
+
+        q="DELETE FROM `posts` WHERE post_pk = %s"
+        cursor.execute(q,(post_pk,))
+        db.commit()
+        return jsonify({"postStatus": "Post is deleted"})
+    except Exception as e:
+        ic(e)
+        return jsonify({"postStatus": "Post did not deleted"})
+    finally:
+        if "cursor" in locals(): cursor.close()
+        if "db" in locals(): db.close()
 ####################LIKE############################
 @app.post("/like-post")
 def like_post():

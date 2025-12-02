@@ -78,7 +78,7 @@ const PostCard = ({ post_text, user_fk, post_created_at, post_pk }: PostCardProp
         <Like />
         <Comment />
         <UpdatePost post_pk={post_pk} post_text={post_text} />
-        <DeletePost />
+        <DeletePost post_pk={post_pk} />
       </div>
     </article>
   );

@@ -1,7 +1,12 @@
 import Link from "next/link";
 import Image from "next/image";
 import LogoutForm from "../auth-modules/logout/LogoutForm";
-const Aside_navigation = () => {
+
+type userData = {
+  user_first_name: string;
+  user_last_name: string;
+};
+const Aside_navigation = ({ user_first_name, user_last_name }: userData) => {
   return (
     <nav className=" col-start-1 p-4 border-r-1 border-border-grey">
       <header className="flex gap-2 items-center">
@@ -16,7 +21,7 @@ const Aside_navigation = () => {
         </li>
         <li className="flex gap-2  hover:bg-accent-purple-light-white rounded-2xl  px-4 py-2  font-medium text-button-text">
           <Link className="flex gap-2 text-[1.2rem]" href="/profile">
-            <Image src="/profile.svg" alt="Picture of the author" width={30} height={30} /> Profile
+            <Image src="/profile.svg" alt="Picture of the author" width={30} height={30} /> {user_first_name} {user_last_name}
           </Link>
         </li>
 

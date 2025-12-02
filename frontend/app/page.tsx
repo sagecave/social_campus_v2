@@ -5,9 +5,11 @@ import { useRouter } from "next/navigation";
 import "./globals.css";
 import PostContainer from "@/components/posts/PostContainer";
 import Aside_navigation from "@/components/navigation/Aside_navigation";
+import CreatePost from "@/components/posts/CreatePost";
 
 type UserData = {
   user_first_name: string;
+  user_last_name: string;
 };
 export default function Home() {
   const router = useRouter();
@@ -50,13 +52,10 @@ export default function Home() {
   if (!data) return <p>No data received</p>;
   return (
     <>
-      <Aside_navigation></Aside_navigation>
+      <Aside_navigation user_first_name={data.user_first_name} user_last_name={data.user_last_name}></Aside_navigation>
       <main className=" col-start-2">
+        <CreatePost></CreatePost>
         <section className=" col-start-2">
-          <h1>Data from Flask:</h1>
-          <p>{JSON.stringify(data.user_first_name)}</p>
-          <p>pls = {data.user_first_name}</p>
-
           <PostContainer />
         </section>
       </main>

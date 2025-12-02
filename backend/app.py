@@ -54,12 +54,12 @@ def get_data():
     user = session.get("user", "")
     if not user: return redirect("http://127.0.0.1:3000/login")
     ic("Session after login:", session)
-    if not user: 
-        return jsonify({"redirect": "/login"})
+    # if not user: 
+    #     return jsonify({"redirect": "/login"})
    
 
     try:
-        q = "SELECT user_first_name FROM `users` WHERE user_pk = %s"
+        q = "SELECT user_first_name, user_last_name FROM `users` WHERE user_pk = %s"
         db,cursor = x.db()
         cursor.execute(q,(user["user_pk"],))
         user = cursor.fetchone()
@@ -342,6 +342,27 @@ def posts():
 
 
 ####################CREATE POST############################
+@app.post("/create_post")
+def create_post():
+    try:
+        db,cursor = x.db()
+        data = request.get_json()
+        post_text = data.get("postText","")
+        user = session.get("user", "")
+        user_pk = user.get("user_pk","")
+        post_created_at = int(time.time())
+        q = "INSERT INTO `posts`(`post_text`, `post_created_at`, `user_fk`) VALUES (%s,%s,%s)"
+        cursor.execute(q,(post_text, post_created_at, user_pk ))
+        db.commit()
+        ic("Session check user:", user_pk)
+        ic("POST YES",post_text)
+        return jsonify({"postStatus": "It worked"})
+    except Exception as e:
+        ic(e)
+        return jsonify({"postStatus": "It did not work"})
+    finally:
+        if "cursor" in locals(): cursor.close()
+        if "db" in locals(): db.close()
 ####################LIKE############################
 @app.post("/like-post")
 def like_post():

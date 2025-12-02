@@ -1,9 +1,10 @@
+"use client";
 import Image from "next/image";
 
 type postData = {
   post_pk: number;
 };
-const deletePost = ({ post_pk }: postData) => {
+const DeletePost = ({ post_pk }: postData) => {
   const deletingPost = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
@@ -36,4 +37,4 @@ const deletePost = ({ post_pk }: postData) => {
   );
 };
 
-export default deletePost;
+export default DeletePost;

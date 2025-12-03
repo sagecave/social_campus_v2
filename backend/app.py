@@ -59,7 +59,7 @@ def get_data():
    
 
     try:
-        q = "SELECT user_first_name, user_last_name FROM `users` WHERE user_pk = %s"
+        q = "SELECT user_first_name, user_last_name, user_email, user_username FROM `users` WHERE user_pk = %s"
         db,cursor = x.db()
         cursor.execute(q,(user["user_pk"],))
         user = cursor.fetchone()
@@ -126,16 +126,16 @@ def login_submit():
             if not check_password_hash(user["user_password"], user_password):
                 raise Exception(("Invalid password"), 400)
             
-            if user["user_verification_key"] != "":
+            if user["user_verification_key"] != None:
                 raise Exception ("user not verified")
             user.pop("user_password")
             session["user"] = user  
         
-            redirect_url = "/"
-            return jsonify(redirect_url)
+           
+            return jsonify({"redirect": "/"})
         except Exception as e:
             ic(e)
-            pass
+            return jsonify({"redirect": "/login"})
         finally:
             if "cursor" in locals(): cursor.close()
             if "db" in locals(): db.close()
@@ -434,3 +434,51 @@ def comment_post():
     finally:
         if "db" in locals(): db.close()
         if "cursor" in locals(): cursor.close()
+
+####################UPDATE PROFILE############################
+@app.patch("/update-profile")
+def update_profile():
+    try:
+        db,cursor = x.db()
+        user = session.get("user", "")
+        data = request.get_json()
+        user_email = data.get("email","")
+        user_username = data.get("username","")
+        user_first_name = data.get("firstName","")
+        user_last_name = data.get("lastName","")
+
+        user_first_name = x.validate_user_first_name(user_first_name)   
+        user_username = x.validate_user_username(user_username)
+        user_email = x.validate_user_email(user_email)
+        user_last_name = x.validate_user_last_name(user_last_name)
+     
+        q ="UPDATE `users` SET `user_first_name`=%s,`user_last_name`=%s,`user_username`=%s,`user_email`=%s WHERE user_pk = %s"
+        cursor.execute(q,(user_first_name,user_last_name,user_username,user_email,user["user_pk"]))
+        # remeber to validate
+        db.commit()
+        return jsonify({"postStatus": "Profile is update"})
+    except Exception as e:
+        ic(e)
+        pass
+    finally:
+        if "cursor" in locals(): cursor.close()
+        if "db" in locals(): db.close()
+
+####################UPDATE PROFILE############################
+@app.delete("/delete-profile")
+def delete_profile():
+    try:
+        db,cursor = x.db()
+        user = session.get("user", "")
+       
+        q ="DELETE FROM `users` WHERE user_pk = %s"
+        cursor.execute(q,(user["user_pk"],))
+        db.commit()
+        session.clear()
+        return redirect("http://127.0.0.1:3000/login")
+    except Exception as e:
+        ic(e)
+        pass
+    finally:
+        if "cursor" in locals(): cursor.close()
+        if "db" in locals(): db.close()

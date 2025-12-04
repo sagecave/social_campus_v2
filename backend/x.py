@@ -105,3 +105,9 @@ def validate_uuid4_without_dashes(uuid4 = ""):
     uuid4 = uuid4.strip()
     if not re.match(REGEX_UUID4_WITHOUT_DASHES, uuid4): raise Exception(error, 400)
     return uuid4
+
+############IMAGE CHECK##################
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS

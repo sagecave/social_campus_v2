@@ -10,6 +10,7 @@ import CreatePost from "@/components/posts/CreatePost";
 type UserData = {
   user_first_name: string;
   user_last_name: string;
+  user_avatar: string;
 };
 export default function Home() {
   const router = useRouter();
@@ -57,7 +58,7 @@ export default function Home() {
       <main className=" col-start-2">
         <CreatePost setNewFetch={setNewFetch} newFetch={newFetch}></CreatePost>
         <section className=" col-start-2">
-          <PostContainer setNewFetch={setNewFetch} newFetch={newFetch} />
+          <PostContainer user_avatar={data.user_avatar} setNewFetch={setNewFetch} newFetch={newFetch} />
         </section>
       </main>
     </>

@@ -5,12 +5,14 @@ import { useRouter } from "next/navigation";
 import ProfileForm from "@/components/profile_form/ProfileForm";
 import Aside_navigation from "@/components/navigation/Aside_navigation";
 import DeleteProfile from "@/components/CTAs/delete_account/DeleteAccount";
+import ProfileImageUpdate from "@/components/profile_form/ProfileImageUpdate";
 
 type UserData = {
   user_first_name: string;
   user_last_name: string;
   user_email: string;
   user_username: string;
+  user_avatar: string;
 };
 
 const Profile = () => {
@@ -59,6 +61,8 @@ const Profile = () => {
       <main className=" col-start-2">
         <section>
           <h1>profile</h1>
+          <ProfileImageUpdate user_avatar={data.user_avatar} />
+
           <ProfileForm user_first_name={data.user_first_name} user_last_name={data.user_last_name} user_email={data.user_email} user_username={data.user_username}></ProfileForm>
           <DeleteProfile />
         </section>

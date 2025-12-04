@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
+
 type UserData = {
   user_first_name: string;
   user_last_name: string;
@@ -61,7 +61,6 @@ const ProfileForm = ({ user_first_name, user_last_name, user_username, user_emai
 
   return (
     <div>
-      <Image src="/socialCampus_logo.png" alt="Picture of the author" width={50} height={50} />
       <form className="flex flex-col justify-self-center w-[inherit] max-w-160 gap-4 place-items-center" onSubmit={handleSubmit}>
         <div className="flex flex-col w-full">
           <label className="text-label-dark-gray font-bold">Username</label>

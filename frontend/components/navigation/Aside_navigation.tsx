@@ -20,8 +20,10 @@ const Aside_navigation = ({ user_first_name, user_last_name }: userData) => {
           </Link>
         </li>
         <li className="flex gap-2  hover:bg-accent-purple-light-white rounded-2xl  px-4 py-2  font-medium text-button-text">
-          <Link className="flex gap-2 text-[1.2rem]" href="/profile">
-            <Image src="/profile.svg" alt="Picture of the author" width={30} height={30} /> {user_first_name} {user_last_name}
+          <Link className="flex gap-2 text-[1.2rem] capitalize" href="/profile">
+            <Image src="/profile.svg" alt="Picture of the author" width={30} height={30} />
+            {/* <img className=" rounded-full" src={`http://127.0.0.1/uploads/${user_avatar}`} alt="profil billede" width={50} height={50} /> */}
+            {user_first_name} {user_last_name}
           </Link>
         </li>
 

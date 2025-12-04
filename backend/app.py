@@ -4,11 +4,12 @@ colorama_init(strip=True, convert=False)
 
 
 import sys
-from flask import Flask, render_template, request, session, redirect, url_for, jsonify
+from flask import Flask, request, session, redirect, jsonify, flash, url_for, send_from_directory
 from flask_cors import CORS
 from flask_session import Session
 from werkzeug.security import generate_password_hash
 from werkzeug.security import check_password_hash
+from werkzeug.utils import secure_filename
 import x 
 import send_emails
 import time
@@ -27,14 +28,17 @@ def raw_print(*args, **kwargs):
 from icecream import ic
 ic.configureOutput(prefix=f'----- | ', includeContext=True)
 
+UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), "uploads")
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/uploads', static_folder='uploads'   )
 
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 CORS(app, supports_credentials=True, origins=["http://127.0.0.1:3000"],allow_headers=["Content-Type"], expose_headers=["Content-Type"])
 
 app.config["SECRET_KEY"] = "your_fixed_secret_key"
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['MAX_CONTENT_LENGTH'] = 1 * 1024 * 1024  
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
 
@@ -58,15 +62,17 @@ def get_data():
     #     return jsonify({"redirect": "/login"})
    
 
-    try:
-        q = "SELECT user_first_name, user_last_name, user_email, user_username FROM `users` WHERE user_pk = %s"
+    try:    
+        q = "SELECT user_first_name, user_last_name, user_email, user_username, user_avatar FROM `users` WHERE user_pk = %s"
         db,cursor = x.db()
         cursor.execute(q,(user["user_pk"],))
         user = cursor.fetchone()
         ic("XXXXX", user)
+        
         return jsonify(user)
     except Exception as e:
         ic(e)
+        # session.clear()
         pass
     finally:
         if "cursor" in locals(): cursor.close()
@@ -464,7 +470,7 @@ def update_profile():
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()
 
-####################UPDATE PROFILE############################
+####################DELETE PROFILE############################
 @app.delete("/delete-profile")
 def delete_profile():
     try:
@@ -482,3 +488,75 @@ def delete_profile():
     finally:
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()
+
+####################UPDATE IMAGE############################
+# @app.route('/', methods=['GET', 'POST'])
+# def upload_file():
+#     if request.method == 'POST':
+#         # check if the post request has the file part
+#         if 'file' not in request.files:
+#             flash('No file part')
+#             return jsonify({"PictureStatus": "picture is not a file"})
+#             # return redirect(request.url)
+#         file = request.files['file']
+#         # If the user does not select a file, the browser submits an
+#         # empty file without a filename.
+#         if file.filename == '':
+#             flash('No selected file')
+#             return jsonify({"PictureStatus": "file not selected"})
+#             # return redirect(request.url)
+#         if file and x.allowed_file(file.filename):
+#             filename = secure_filename(file.filename)
+#             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+#             return jsonify({"PictureStatus": "File is uploaded"})
+#             # return redirect(url_for('download_file', name=filename))
+
+####################UPDATE IMAGE############################
+@app.patch("/update-profile-avatar")
+def update_profile_avatar():
+    try:
+        db,cursor = x.db()
+        user = session.get("user", "")
+        user_pk = user.get("user_pk","")
+        file = request.files.get("profileAvatar","")
+        user_avatar_name = request.form.get("imageName","")
+        # file = user_avatar
+        ic(file,"VALUES")
+        if not file:
+            ic(file,"THE AVATAR not a file?")
+            ic(user_avatar_name,"TO DATABASE")
+            flash('No file part')
+            return jsonify({"PictureStatus": "picture is not a file"})
+            # return redirect(request.url)
+     
+        # If the user does not select a file, the browser submits an
+        # empty file without a filename.
+        if file.filename == '':
+            ic(file,"UN QUE")
+            flash('No selected file')
+            return jsonify({"PictureStatus": "file not selected"})
+            # return redirect(request.url)
+        if file and x.allowed_file(file.filename):
+            format = os.path.splitext(secure_filename(file.filename))[1]
+            unique_name = f"{uuid.uuid4()}{format}"
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], unique_name))
+            q ="UPDATE `users` SET `user_avatar`=%s WHERE user_pk = %s"
+            cursor.execute(q,(unique_name,user_pk))
+            # remeber to validate
+            db.commit()
+            return jsonify({"PictureStatus": "File is uploaded"})
+            # return redirect(url_for('download_file', name=filename))
+      
+        return jsonify({"postStatus": "Profile is update"})
+    except Exception as e:
+        ic(e)
+        pass
+    finally:
+        if "cursor" in locals(): cursor.close()
+        if "db" in locals(): db.close()
+
+
+####################GET IMAGE############################
+@app.route("/uploads/<filename>")
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)

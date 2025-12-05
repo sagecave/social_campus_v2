@@ -420,6 +420,7 @@ def delete_post():
 def like_post():
     try:
         db,cursor = x.db()
+        q="SELECT COUNT(user_fk) AS total_likes FROM posts_likes GROUP BY post_fk = 21;"
         pass
     except Exception as e:
         ic(e)
@@ -428,12 +429,83 @@ def like_post():
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()
 
-####################COMMENTS############################
+####################SEND COMMENTS############################
 @app.post("/post-comments")
 def comment_post():
     try:
+        user = session.get("user", "")
+ 
+        user_pk = user.get("user_pk","")
         db,cursor = x.db()
+        data = request.get_json()
+        post_pk = data.get("post_pk","") 
+        postText = data.get("postText","") 
+      
+        q="INSERT INTO `posts_comments`(`post_fk`, `user_fk`, `comment_text`) VALUES (%s,%s,%s);"
+
+        cursor.execute(q,(post_pk,user_pk,postText))
+        db.commit()
+        return jsonify({"comment send": "true"})
+    except Exception as e:
+        ic(e)
         pass
+    finally:
+        if "db" in locals(): db.close()
+        if "cursor" in locals(): cursor.close()
+
+
+
+####################COMMENTS############################
+@app.get("/comments")
+def comments():
+    try:
+        db,cursor= x.db()
+        post_pk =22
+        post_pk = request.args.get("post_id")
+        q="SELECT * FROM `posts_comments` WHERE post_fk = %s"
+        cursor.execute(q,(post_pk,))
+        post = cursor.fetchall()
+        ic(post,"check fetch")
+     
+        return jsonify(post)
+       
+    except Exception as e:
+        ic(e, "COMMENTS")
+        pass
+    finally:
+        if "cursor" in locals(): cursor.close()
+        if "db" in locals(): db.close()
+
+####################COMMENT OWNER############################
+@app.get("/comments-owner")
+def comments_owner():
+    try:
+        db,cursor= x.db()
+       
+        post_pk = request.args.get("user_id")
+        q="SELECT * FROM `users` WHERE user_pk = %s"
+        cursor.execute(q,(post_pk,))
+        post = cursor.fetchall()
+        ic(post,"check fetch")
+     
+        return jsonify(post)
+    except Exception as e:
+        ic(e)
+        pass
+    finally:
+        if "cursor" in locals(): cursor.close()
+        if "db" in locals(): db.close()
+####################COMMENTS NUMBER############################
+@app.get("/post-comments-number")
+def comment_post_number():
+    try:
+        db,cursor = x.db()
+        post_pk = request.args.get("postId")
+
+        q="SELECT COUNT(comment_pk) AS total_comments FROM posts_comments WHERE post_fk = %s"
+        cursor.execute(q,(post_pk,))
+        total_comments = cursor.fetchone() 
+        return jsonify(total_comments)
     except Exception as e:
         ic(e)
         pass

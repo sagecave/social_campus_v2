@@ -416,18 +416,94 @@ def delete_post():
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()
 ####################LIKE############################
-@app.post("/like-post")
-def like_post():
+@app.get("/like")
+def like():
     try:
         db,cursor = x.db()
-        q="SELECT COUNT(user_fk) AS total_likes FROM posts_likes GROUP BY post_fk = 21;"
-        pass
+        post_pk = request.args.get("post_id")
+        # q="SELECT COUNT(user_fk) AS total_likes FROM posts_likes GROUP BY post_fk = 21;"
+        q="SELECT COUNT(user_fk) AS likeCount FROM posts_likes WHERE post_fk = %s"
+        cursor.execute(q,(post_pk,))
+        user_has_liked = cursor.fetchall()
+
+        return jsonify(user_has_liked)
     except Exception as e:
         ic(e)
         pass
     finally:
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()
+
+
+####################POST LIKE############################
+@app.post("/like-post")
+def like_post():
+    try:
+        db,cursor = x.db()
+        user = session.get("user", "")
+        data = request.get_json()
+        user_pk = user.get("user_pk","")
+        post_pk = data.get("post_pk","")
+      
+        q="INSERT INTO `posts_likes`(`post_fk`, `user_fk`) VALUES (%s,%s)"
+        cursor.execute(q,(post_pk,user_pk))
+        db.commit()
+
+        return jsonify({"postStatus": "Post did not deleted"})
+    except Exception as e:
+        ic(e)
+        
+        pass
+    finally:
+        if "cursor" in locals(): cursor.close()
+        if "db" in locals(): db.close()
+        ic(user_pk, "USER_PK LIKES")
+        ic(post_pk, "POST_PK LIKES")
+
+####################LIKE CHECK############################
+@app.get("/like-check")
+def like_check():
+    try:
+        db,cursor = x.db()
+        user = session.get("user", "")
+        user_pk = user.get("user_pk","")
+        post_pk = request.args.get("post_id")
+        q="SELECT EXISTS( SELECT 1 FROM posts_likes WHERE post_fk = %s AND user_fk = %s ) AS liked;"
+        cursor.execute(q,(post_pk,user_pk))
+        user_like_status = cursor.fetchall()
+
+        return jsonify(user_like_status)
+    except Exception as e:
+        ic(e)
+        
+        pass
+    finally:
+        if "cursor" in locals(): cursor.close()
+        if "db" in locals(): db.close()
+      
+
+####################DELETE LIKE############################
+@app.delete("/like-delete")
+def like_delete():
+    try:
+        db,cursor = x.db()
+        user = session.get("user", "")
+        user_pk = user.get("user_pk","")
+        post_pk = request.args.get("post_id")
+        q="DELETE FROM `posts_likes` WHERE post_fk=%s AND user_fk = %s;"
+        cursor.execute(q,(post_pk,user_pk))
+        
+        db.commit()
+        return jsonify({"postStatus": "Post did not deleted"})
+    except Exception as e:
+        ic(e)
+        
+        pass
+    finally:
+        if "cursor" in locals(): cursor.close()
+        if "db" in locals(): db.close()
+  
+
 
 ####################SEND COMMENTS############################
 @app.post("/post-comments")

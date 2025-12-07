@@ -4,7 +4,7 @@ type PostCardProps = {
   user_fk: number;
   // user_education?: string;
   // post_created_at: number;
-  user_first_name: string;
+
   // user_last_name?: string;
   // user_id?: number;
   // post_pk: number;
@@ -13,8 +13,11 @@ type PostCardProps = {
   // user_avatar: string;
   comment_text: string;
 };
+type userData = {
+  user_first_name: string;
+};
 const CommentsCard = ({ comment_text, user_fk }: PostCardProps) => {
-  const [owner, setOnwer] = useState<PostCardProps | null>(null);
+  const [owner, setOnwer] = useState<userData | null>(null);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const loadPosts = async () => {

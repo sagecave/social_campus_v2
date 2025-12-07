@@ -79,7 +79,7 @@ const PostCard = ({ post_text, user_fk, post_created_at, post_pk, setNewFetch, n
 
       <p>{post_text}</p>
       <div className="flex gap-2">
-        <Like />
+        <Like post_pk={post_pk} />
         <Comment post_pk={post_pk} />
         <UpdatePost post_pk={post_pk} post_text={post_text} setNewFetch={setNewFetch} newFetch={newFetch} />
         <DeletePost post_pk={post_pk} setNewFetch={setNewFetch} newFetch={newFetch} />

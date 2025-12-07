@@ -11,8 +11,13 @@ type User = {
   user_first_name: string;
   user_last_name: string;
 };
-const SearchUser = () => {
+type modalStatus = {
+  modalOpen: boolean;
+  setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+};
+const SearchUser = ({ modalOpen, setModalOpen }: modalStatus) => {
   const [searchInput, setSearchInput] = useState<string>("");
+
   const [searchOutput, setSearchOutput] = useState<User[]>([]);
   useEffect(() => {
     const handleSearch = async () => {
@@ -74,7 +79,7 @@ const SearchUser = () => {
       >
         <h2 className="p-3 text-[1.2rem] font-semibold text-accent-purple">Search for users</h2>
         {searchOutput.map((user, i) => (
-          <UserCards key={i} user_avatar={user.user_avatar} user_first_name={user.user_first_name} user_last_name={user.user_last_name} user_username={user.user_username} />
+          <UserCards key={i} user_pk={user.user_pk} user_avatar={user.user_avatar} user_first_name={user.user_first_name} user_last_name={user.user_last_name} user_username={user.user_username} />
         ))}
 
         <div></div>
@@ -89,9 +94,9 @@ const SearchUser = () => {
             placeholder="Make a search by username"
           ></input>
           <div className="flex gap-2 flex-row-reverse">
-            {/* <button onClick={() => setIsModalOpen(!isModalOpen)} className="border-1 self-end w-fit bg-inside-border-white border-border-grey bottom-4 right-4 flex gap-2 hover:bg-accent-purple-light-white py-2 px-4 rounded-3xl items-center mt-2">
+            <button onClick={() => setModalOpen(!modalOpen)} className="border-1 self-end w-fit bg-inside-border-white border-border-grey bottom-4 right-4 flex gap-2 hover:bg-accent-purple-light-white py-2 px-4 rounded-3xl items-center mt-2">
               Close
-            </button> */}
+            </button>
           </div>
         </form>
       </div>

@@ -748,3 +748,65 @@ def search_random_users():
     finally:
         if "db" in locals(): db.close
         if "cursor" in locals(): cursor.close
+
+####################FOLLOW USER############################
+@app.post("/follow-user")
+def follow_user():
+    try:
+        db,cursor=x.db()
+        data = request.get_json()
+        following_id = data.get("user_pk","")
+        user = session.get("user", "")
+        follower_id = user.get("user_pk","")
+        q="INSERT INTO `followers`(`follower_id`, `following_id`) VALUES (%s,%s)"
+        cursor.execute(q,(follower_id,following_id))
+        db.commit()
+        return jsonify({"followingStatus": "following is working"})
+    except Exception as e:
+        ic(e)
+        pass
+    finally:
+        if "db" in locals(): db.close()
+        if "cursor" in locals(): cursor.close()
+
+####################UNFOLLOW USER############################
+@app.delete("/unfollow-user")
+def unfollow_user():
+    try:
+        db,cursor = x.db()
+        user = session.get("user", "")
+        follower_id = user.get("user_pk","")
+        following_id= request.args.get("follower_id")
+        ic(follower_id, "FOLLOWER")
+        ic(following_id, "FOLLOWING")
+        q="DELETE FROM `followers` WHERE follower_id = %s AND following_id = %s"
+        cursor.execute(q,(follower_id,following_id))
+        db.commit()
+        return jsonify({"unlikeStatus":"working"})
+    except Exception as e:
+        ic(e)
+        pass
+    finally:
+        if "db" in locals(): db.close()
+        if "cursor" in locals(): cursor.close()
+####################FOLLOWING CHECK############################
+@app.get("/following-check")
+def following_check():
+    try:
+        db,cursor = x.db()
+        user = session.get("user", "")
+        follower_id = user.get("user_pk","")
+        following_id = request.args.get("follower_id")
+        q="SELECT EXISTS( SELECT 1 FROM followers WHERE follower_id = %s AND following_id = %s ) AS followed;"
+        cursor.execute(q,(follower_id,following_id))
+        user_follow_status = cursor.fetchall()
+
+        return jsonify(user_follow_status)
+    except Exception as e:
+        ic(e)
+        
+        pass
+    finally:
+        if "cursor" in locals(): cursor.close()
+        if "db" in locals(): db.close()
+      

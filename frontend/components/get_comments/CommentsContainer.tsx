@@ -16,6 +16,7 @@ type PostContainerProps = {
   post_pk: number;
   newFetch: boolean;
 };
+
 const CommentsContainer = ({ post_pk, newFetch }: PostContainerProps) => {
   const [data, setData] = useState<PostCardProps[] | null>(null);
   const [loading, setLoading] = useState(true);

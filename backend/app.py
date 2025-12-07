@@ -708,3 +708,43 @@ def update_profile_avatar():
 @app.route("/uploads/<filename>")
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+
+####################SEARCH USERS############################
+@app.get("/search-users")
+def search_users():
+    try:
+        db,cursor = x.db()
+        search_input = request.args.get("search_input")
+        q=" SELECT * FROM users WHERE user_username LIKE CONCAT('%', %s, '%')"
+        cursor.execute(q,(search_input,))
+        search_result = cursor.fetchall()
+        for user in search_result:
+            user.pop("user_password", None)
+        return(search_result)
+    except Exception as e:
+        ic(e)
+        pass
+    finally:
+        if "db" in locals(): db.close
+        if "cursor" in locals(): cursor.close
+
+####################GET RANDOM USERS############################
+@app.get("/search_random-users")
+def search_random_users():
+    try:
+        db,cursor = x.db()
+        user = session.get("user", "")
+        user_pk = user.get("user_pk","")
+        q=" SELECT * FROM `users` WHERE user_pk != %s ORDER BY RAND() LIMIT 3"
+        cursor.execute(q,(user_pk,))
+        search_result = cursor.fetchall()
+        for user in search_result:
+            user.pop("user_password", None)
+        return(search_result)
+    except Exception as e:
+        ic(e)
+        pass
+    finally:
+        if "db" in locals(): db.close
+        if "cursor" in locals(): cursor.close

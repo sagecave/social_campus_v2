@@ -151,6 +151,12 @@ def login_submit():
             return jsonify({"redirect": "/"})
         except Exception as e:
             ic(e)     
+            if "Inavlid email" in str(e):
+                return jsonify({"redirect": "/login",
+                    "status":"Invalid email or password"}),500
+            if "Invalid password" in str(e):
+                return jsonify({"redirect": "/login",
+                    "status":"Invalid email or password"}),500
             return jsonify({"redirect": "/login",
                             "status":"An error occurred"}),500
         finally:
@@ -208,10 +214,35 @@ def signup_submit():
             ic(e)
             if "db" in locals():
                 db.rollback()
+            if "invalid_email" in str(e):
+                return jsonify({
+                    "redirect": "/login", 
+                    "status": "Invalid email "
+                }), 400
+            if "first name min 2 max 20 characters" in str(e):
+                return jsonify({
+                    "redirect": "/login", 
+                    "status": "First name must be between 2 and 20 characters"
+                }), 400
+            if "User name to small" in str(e):
+                return jsonify({
+                    "redirect": "/login", 
+                    "status": "Username must be between 2 and 20 characters"
+                }), 400
+            if "last name min 2 max 20 characters" in str(e):
+                return jsonify({
+                    "redirect": "/login", 
+                    "status": "Last name must be between 2 and 20 characters"
+                }), 400
             if "Duplicate entry" in str(e):
                 return jsonify({
                     "redirect": "/login", 
                     "status": "Email or username already registered"
+                }), 400
+            if "Invalid email or password" in str(e):
+                return jsonify({
+                    "redirect": "/login", 
+                    "status": "Password must be between 6 and 50 characters"
                 }), 400
             return jsonify({"redirect": "/login",
                             "status":"An error occurred, signup failed"}),500
@@ -276,7 +307,7 @@ def update_pasword():
             db.rollback()
   
         if "Invalid email or password" in str(e):
-            return jsonify({"redirect": "","status":"Password is either to long or to small"}),400
+            return jsonify({"redirect": "","status":"Password must be between 6 and 50 characters"}),400
         return jsonify({"redirect": "/login","status":"An error occurred"}),500
     finally:
         if "db" in locals(): db.close()
@@ -806,15 +837,15 @@ def update_profile_avatar():
         user_pk = user.get("user_pk","")
         file = request.files.get("profileAvatar","")
         user_avatar_name = request.form.get("imageName","")
-        # file = user_avatar
-        ic(file,"VALUES")
+    
+        if not user_avatar_name:
+            return jsonify({"status": "file not selected"})
         if not file:
             ic(file,"THE AVATAR not a file?")
             ic(user_avatar_name,"TO DATABASE")
-            flash('No file part')
-            return jsonify({"PictureStatus": "picture is not a file"})
+            return jsonify({"status": "file not selected"})
             # return redirect(request.url)
-     
+
         # If the user does not select a file, the browser submits an
         # empty file without a filename.
         if file.filename == '':

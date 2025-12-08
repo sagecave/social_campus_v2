@@ -2,6 +2,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import UpdatePostModal from "@/components/modal/UpdatePostModal";
+
 type postData = {
   post_pk: number;
   post_text: string;

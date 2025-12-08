@@ -2,12 +2,12 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-
+import ErrorHandlingModal from "@/components/modal/ErrorHandlingModal";
 const LoginForm = () => {
   const router = useRouter();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-
+  const [errorMessageGet, setErrorMessageGet] = useState<string>("");
   useEffect(() => {
     const checkSession = async () => {
       try {
@@ -19,12 +19,11 @@ const LoginForm = () => {
         });
         if (!response.ok) {
           const data = await response.json();
-          console.warn("Signup error:", data);
-          alert(data.status);
+          setErrorMessageGet(data.status);
         }
         if (response.ok) {
           const data = await response.json();
-          console.log("Session check data:", data);
+          setErrorMessageGet(data.status);
           if (data.redirect) {
             router.push("/");
           }
@@ -52,24 +51,24 @@ const LoginForm = () => {
 
       if (!response.ok) {
         const data = await response.json();
-        console.warn("Signup error:", data);
-        alert(data.status);
+        setErrorMessageGet(data.status);
       }
       if (response.ok) {
         const data = await response.json();
-        console.log("data login form", data);
+        setErrorMessageGet(data.status);
 
         router.push(typeof data === "string" ? data : data.redirect ?? "/");
       }
     } catch (err) {
       console.error("Error during login:", err);
       // Make alert to a user-friendly notification in the future
-      alert("Login failed");
+      setErrorMessageGet("Login failed");
     }
   };
 
   return (
     <form className="flex flex-col justify-self-center w-[inherit] max-w-160 gap-4 place-items-center" onSubmit={handleSubmit}>
+      <ErrorHandlingModal errorMessageGet={errorMessageGet} setErrorMessageGet={setErrorMessageGet} />
       <div className="flex flex-col w-full">
         <label className="text-label-dark-gray font-bold">E-mail</label>
         <input

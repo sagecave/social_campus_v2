@@ -1,11 +1,13 @@
 import Image from "next/image";
 import { useState } from "react";
+import ErrorHandlingModal from "@/components/modal/ErrorHandlingModal";
 type postData = {
   setNewFetch: React.Dispatch<React.SetStateAction<boolean>>;
   newFetch: boolean;
 };
 const CreatePost = ({ setNewFetch, newFetch }: postData) => {
   const [postText, setPostText] = useState<string>("");
+  const [errorMessageGet, setErrorMessageGet] = useState<string>("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -18,12 +20,11 @@ const CreatePost = ({ setNewFetch, newFetch }: postData) => {
       });
       if (!response.ok) {
         const data = await response.json();
-        console.warn("Signup error:", data);
-        alert(data.status);
+        setErrorMessageGet(data.status);
       }
       if (response.ok) {
         const data = await response.json();
-        console.log("data login form", data);
+        setErrorMessageGet(data.status);
       }
 
       //   måske redirect so den updatere
@@ -39,6 +40,7 @@ const CreatePost = ({ setNewFetch, newFetch }: postData) => {
   };
   return (
     <section className="justify-self-center mt-10 ">
+      <ErrorHandlingModal errorMessageGet={errorMessageGet} setErrorMessageGet={setErrorMessageGet} />
       <form className="p-4 border-border-grey border-1 rounded-3xl flex flex-col " onSubmit={handleSubmit}>
         <textarea onChange={(e) => setPostText(e.target.value)} style={{ resize: "none" }} className=" border-border-grey" rows={5} cols={53} name="createPost" id="createPost" placeholder="Post an update about your day or studies…"></textarea>
         <button className="border-1 self-end w-fit bg-inside-border-white border-border-grey bottom-4 right-4 flex gap-2 hover:bg-accent-purple-light-white py-2 px-4 rounded-3xl items-center mt-2">

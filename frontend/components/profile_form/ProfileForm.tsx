@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import ErrorHandlingModal from "@/components/modal/ErrorHandlingModal";
 
 type UserData = {
   user_first_name: string;
@@ -10,11 +11,12 @@ type UserData = {
 };
 const ProfileForm = ({ user_first_name, user_last_name, user_username, user_email }: UserData) => {
   const router = useRouter();
+
   const [email, setEmail] = useState<string>(user_email);
   const [username, setUsername] = useState<string>(user_username);
   const [firstName, setFirstName] = useState<string>(user_first_name);
   const [lastName, setLastName] = useState<string>(user_last_name);
-
+  const [errorMessageGet, setErrorMessageGet] = useState<string>("");
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -26,12 +28,11 @@ const ProfileForm = ({ user_first_name, user_last_name, user_username, user_emai
       });
       if (!response.ok) {
         const data = await response.json();
-        console.warn("Signup error:", data);
-        alert(data.status);
+        setErrorMessageGet(data.status);
       }
       if (response.ok) {
-        const data = await response.json();
-        console.log("data login form", data);
+        // const data = await response.json();
+        setErrorMessageGet("You have updated your profile");
         //   router.push(typeof data === "string" ? data : data.redirect ?? "/");
       }
     } catch (err) {
@@ -51,12 +52,11 @@ const ProfileForm = ({ user_first_name, user_last_name, user_username, user_emai
         });
         if (!response.ok) {
           const data = await response.json();
-          console.warn("Signup error:", data);
-          alert(data.status);
+          setErrorMessageGet(data.status);
         }
         if (response.ok) {
           const data = await response.json();
-          console.log("Session check data:", data);
+          setErrorMessageGet(data.status);
           // if (data.redirect) {
           //   //   router.push("/");
 
@@ -71,6 +71,7 @@ const ProfileForm = ({ user_first_name, user_last_name, user_username, user_emai
 
   return (
     <div>
+      <ErrorHandlingModal errorMessageGet={errorMessageGet} setErrorMessageGet={setErrorMessageGet} />
       <form className="flex flex-col justify-self-center w-[inherit] max-w-160 gap-4 place-items-center" onSubmit={handleSubmit}>
         <div className="flex flex-col w-full">
           <label className="text-label-dark-gray font-bold">Username</label>

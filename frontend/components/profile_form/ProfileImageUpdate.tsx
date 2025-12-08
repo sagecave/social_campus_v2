@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import ErrorHandlingModal from "@/components/modal/ErrorHandlingModal";
 type UserData = {
   user_avatar: string;
 };
@@ -11,6 +12,7 @@ const ProfileForm = ({ user_avatar }: UserData) => {
   const [profileAvatar, setProfileAvatar] = useState<File | null>(null);
   const [imageName, setImageName] = useState<string>(user_avatar || "");
   const [imageNameE, setImageNameE] = useState<string>(user_avatar || "");
+  const [errorMessageGet, setErrorMessageGet] = useState<string>("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,12 +33,12 @@ const ProfileForm = ({ user_avatar }: UserData) => {
       });
       if (!response.ok) {
         const data = await response.json();
-        console.warn("Signup error:", data);
-        alert(data.status);
+        setErrorMessageGet(data.status);
       }
       if (response.ok) {
         const data = await response.json();
         console.log("data login form", data);
+        setErrorMessageGet(data.status);
         //   router.push(typeof data === "string" ? data : data.redirect ?? "/");
       }
     } catch (err) {
@@ -71,6 +73,7 @@ const ProfileForm = ({ user_avatar }: UserData) => {
 
   return (
     <div>
+      <ErrorHandlingModal errorMessageGet={errorMessageGet} setErrorMessageGet={setErrorMessageGet} />
       {/* jeg er igang med at få dette image, så det kommer fra database i stedet for */}
       <img className=" rounded-full" src={`http://127.0.0.1/uploads/${imageNameE}`} alt={imageNameE} width={50} height={50} />
       {/* <Image src={"http://127.0.0.1/uploads/0b8f19cd-f8bf-43a6-886a-1be53fe89c60.png"} alt={imageName} width={50} height={50} /> */}

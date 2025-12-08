@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import ErrorHandlingModal from "@/components/modal/ErrorHandlingModal";
 const SignUpForm = () => {
   const router = useRouter();
   const [email, setEmail] = useState<string>("");
@@ -10,6 +11,7 @@ const SignUpForm = () => {
   const [lastName, setLastName] = useState<string>("");
   const [education, setEducation] = useState<string>("");
   const [shcool, setSchool] = useState<string>("");
+  const [errorMessageGet, setErrorMessageGet] = useState<string>("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,11 +25,13 @@ const SignUpForm = () => {
       if (!response.ok) {
         const data = await response.json();
         console.warn("Signup error:", data);
-        alert(data.status);
+        setErrorMessageGet(data.status);
+        // alert(data.status);
       }
       if (response.ok) {
         const data = await response.json();
         console.log("data login form", data);
+        setErrorMessageGet(data.status);
         router.push(typeof data === "string" ? data : data.redirect ?? "/");
       }
     } catch (err) {
@@ -45,10 +49,17 @@ const SignUpForm = () => {
           headers: { "Content-Type": "application/json" },
           credentials: "include",
         });
-        const data = await response.json();
-        console.log("Session check data:", data);
-        if (data.redirect) {
-          router.push("/");
+        if (!response.ok) {
+          const data = await response.json();
+          console.warn("Signup error:", data);
+          // alert(data.status);
+        }
+        if (response.ok) {
+          const data = await response.json();
+          console.log("Session check data:", data);
+          if (data.redirect) {
+            router.push("/");
+          }
         }
       } catch (err) {
         console.error("Error during session check:", err);
@@ -59,6 +70,7 @@ const SignUpForm = () => {
 
   return (
     <form className="flex flex-col justify-self-center w-[inherit] max-w-160 gap-4 place-items-center" onSubmit={handleSubmit}>
+      <ErrorHandlingModal errorMessageGet={errorMessageGet} setErrorMessageGet={setErrorMessageGet} />
       <div className="flex flex-col w-full">
         <label className="text-label-dark-gray font-bold">Username</label>
         <input

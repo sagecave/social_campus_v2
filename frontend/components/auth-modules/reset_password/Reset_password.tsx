@@ -1,9 +1,11 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
+import ErrorHandlingModal from "@/components/modal/ErrorHandlingModal";
 const Reset_password = () => {
   const router = useRouter();
+  const [errorMessageGet, setErrorMessageGet] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const params = useSearchParams();
   const token = params.get("key");
@@ -40,12 +42,11 @@ const Reset_password = () => {
 
       if (!response.ok) {
         const data = await response.json();
-        console.warn("Signup error:", data);
-        alert(data.status);
+        setErrorMessageGet(data.status);
       }
       if (response.ok) {
         const data = await response.json();
-        console.log("data login form", data);
+        setErrorMessageGet(data.status);
         router.push(typeof data === "string" ? data : data.redirect ?? "/");
       }
     } catch (err) {
@@ -60,6 +61,7 @@ const Reset_password = () => {
   //   if (!valid) return <p>Invalid or expired link.</p>;
   return (
     <form className="flex flex-col justify-self-center w-[inherit] max-w-160 gap-4 place-items-center" onSubmit={handleSubmit}>
+      <ErrorHandlingModal errorMessageGet={errorMessageGet} setErrorMessageGet={setErrorMessageGet} />
       <div className="flex flex-col w-full">
         <label className="text-label-dark-gray font-bold">New password</label>
         <input

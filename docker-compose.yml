@@ -1,4 +1,3 @@
-
 services:
   backend:
     build:
@@ -8,7 +7,7 @@ services:
     depends_on:
       - mariadb
     ports:
-      - "80:80"  
+      - "80:80"
     volumes:
       - ./backend:/app
 
@@ -18,12 +17,10 @@ services:
       dockerfile: Dockerfile
     container_name: social_campus_nextjs
     ports:
-      - "3000:3000"  
+      - "3000:3000"
     volumes:
       - ./frontend:/app
-      - /app/node_modules
       - /app/.next
-
 
   mariadb:
     image: mariadb:10.6.20

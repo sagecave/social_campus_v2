@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import ErrorHandlingModal from "@/components/modal/ErrorHandlingModal";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -24,6 +25,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <ErrorHandlingModal />
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-main-bg-white grid grid-cols-[300px_minmax(600px,1fr)_300px]`}>{children}</body>
     </html>
   );

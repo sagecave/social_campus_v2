@@ -31,11 +31,14 @@ const CommentsModal = ({ post_pk, isModalOpen, setIsModalOpen }: commentData) =>
       });
 
       if (!response.ok) {
-        const text = await response.text();
-        throw new Error(`HTTP ${response.status}: ${text}`);
+        const data = await response.json();
+        console.warn("Signup error:", data);
+        alert(data.status);
       }
-      const data = await response.json();
-      console.log("data logout form", data);
+      if (response.ok) {
+        const data = await response.json();
+        console.log("data logout form", data);
+      }
     } catch (err) {
       console.error("Error during logout:", err);
       alert("like failed");

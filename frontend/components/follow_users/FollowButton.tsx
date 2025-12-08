@@ -16,12 +16,15 @@ const FollowButton = ({ user_pk }: userData) => {
           credentials: "include",
         });
         if (!response.ok) {
-          const text = await response.text();
-          throw new Error(`HTTP ${response.status}: ${text}`);
+          const data = await response.json();
+          console.warn("Signup error:", data);
+          alert(data.status);
         }
-        const data = await response.json();
-        console.log(data);
-        setFollowStatus(data[0].followed);
+        if (response.ok) {
+          const data = await response.json();
+          console.log(data);
+          setFollowStatus(data[0].followed);
+        }
       } catch (err) {
         console.error("Error during logout:", err);
         alert("follow check failed failed");
@@ -40,14 +43,17 @@ const FollowButton = ({ user_pk }: userData) => {
           credentials: "include",
         });
         if (!response.ok) {
-          const text = await response.text();
-          throw new Error(`HTTP ${response.status}: ${text}`);
+          const data = await response.json();
+          console.warn("Signup error:", data);
+          alert(data.status);
         }
-        const data = await response.json();
-        setFollowFetchUpdate(!followFetchUpdate);
-        setMessage(data);
+        if (response.ok) {
+          const data = await response.json();
+          setFollowFetchUpdate(!followFetchUpdate);
+          setMessage(data);
 
-        console.log(data, "WHAT IS IN THIS");
+          console.log(data, "WHAT IS IN THIS");
+        }
       } catch (err) {
         console.error("Error during logout:", err);
         alert("following failed");
@@ -61,12 +67,15 @@ const FollowButton = ({ user_pk }: userData) => {
           credentials: "include",
         });
         if (!response.ok) {
-          const text = await response.text();
-          throw new Error(`HTTP ${response.status}: ${text}`);
+          const data = await response.json();
+          console.warn("Signup error:", data);
+          alert(data.status);
         }
-        const data = await response.json();
-        setFollowFetchUpdate(!followFetchUpdate);
-        setMessage(data);
+        if (response.ok) {
+          const data = await response.json();
+          setFollowFetchUpdate(!followFetchUpdate);
+          setMessage(data);
+        }
       } catch (err) {
         console.error("Error during logout:", err);
         alert("unfollowing failed");

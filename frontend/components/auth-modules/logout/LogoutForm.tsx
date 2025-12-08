@@ -13,12 +13,15 @@ const LogoutForm = () => {
       });
 
       if (!response.ok) {
-        const text = await response.text();
-        throw new Error(`HTTP ${response.status}: ${text}`);
+        const data = await response.json();
+        console.warn("Signup error:", data);
+        alert(data.status);
       }
-      const data = await response.json();
-      console.log("data logout form", data);
-      router.push(typeof data === "string" ? data : data.redirect ?? "/");
+      if (response.ok) {
+        const data = await response.json();
+        console.log("data logout form", data);
+        router.push(typeof data === "string" ? data : data.redirect ?? "/");
+      }
     } catch (err) {
       console.error("Error during logout:", err);
       alert("Logout failed");

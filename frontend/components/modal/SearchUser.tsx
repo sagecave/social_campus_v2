@@ -29,8 +29,9 @@ const SearchUser = ({ modalOpen, setModalOpen }: modalStatus) => {
             credentials: "include",
           });
           if (!response.ok) {
-            const text = await response.text();
-            throw new Error(`HTTP ${response.status}: ${text}`);
+            const data = await response.json();
+            console.warn("Signup error:", data);
+            alert(data.status);
           }
           if (response.ok) {
             const data = await response.json();
@@ -51,8 +52,9 @@ const SearchUser = ({ modalOpen, setModalOpen }: modalStatus) => {
             credentials: "include",
           });
           if (!response.ok) {
-            const text = await response.text();
-            throw new Error(`HTTP ${response.status}: ${text}`);
+            const data = await response.json();
+            console.warn("Signup error:", data);
+            alert(data.status);
           }
           if (response.ok) {
             const data = await response.json();

@@ -31,8 +31,15 @@ const PostCard = ({ post_text, user_fk, post_created_at, post_pk, setNewFetch, n
           headers: { "Content-Type": "application/json" },
           credentials: "include",
         });
-        const data = await postData.json();
-        setOnwer(data);
+        if (!postData.ok) {
+          const data = await postData.json();
+          alert(data.status);
+        }
+        if (postData.ok) {
+          const data = await postData.json();
+          console.log(data, "POST OWNER");
+          setOnwer(data.owner);
+        }
       } catch (err) {
         console.error(err);
       } finally {

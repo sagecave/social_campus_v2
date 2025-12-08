@@ -38,8 +38,15 @@ export default function Home() {
           headers: { "Content-Type": "application/json" },
           credentials: "include",
         });
-        const json = await userData.json();
-        setData(json);
+        if (!userData.ok) {
+          const data = await userData.json();
+          console.warn("Signup error:", data);
+          alert(data.status);
+        }
+        if (userData.ok) {
+          const data = await userData.json();
+          setData(data);
+        }
       } catch (err) {
         console.error(err);
         router.push("/login");

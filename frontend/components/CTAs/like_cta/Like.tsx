@@ -22,12 +22,15 @@ const Link = ({ post_pk }: postData) => {
         });
 
         if (!response.ok) {
-          const text = await response.text();
-          throw new Error(`HTTP ${response.status}: ${text}`);
+          const data = await response.json();
+          console.warn("Signup error:", data);
+          alert(data.status);
         }
-        const data = await response.json();
-        setLikeCount(data[0].likeCount);
-        console.log("LIKED THIS POST", data[0].likeCount);
+        if (response.ok) {
+          const data = await response.json();
+          setLikeCount(data[0].likeCount);
+          console.log("LIKED THIS POST", data[0].likeCount);
+        }
       } catch (err) {
         console.error("Error during logout:", err);
         alert("like failed");
@@ -71,15 +74,18 @@ const Link = ({ post_pk }: postData) => {
           credentials: "include",
         });
         if (!response.ok) {
-          const text = await response.text();
-          throw new Error(`HTTP ${response.status}: ${text}`);
+          const data = await response.json();
+          console.warn("Signup error:", data);
+          alert(data.status);
         }
-        const data = await response.json();
-        // const likeTotal = data[0].likeCount;
-        // setLikeCount(likeTotal);
-        console.log("LIKED THIS POST", data);
-        if (data && data[0] && typeof data[0].likeCount === "number") {
-          setLikeCount(data[0].likeCount);
+        if (response.ok) {
+          const data = await response.json();
+          // const likeTotal = data[0].likeCount;
+          // setLikeCount(likeTotal);
+          console.log("LIKED THIS POST", data);
+          if (data && data[0] && typeof data[0].likeCount === "number") {
+            setLikeCount(data[0].likeCount);
+          }
         }
       } catch (err) {
         console.error("Error during logout:", err);

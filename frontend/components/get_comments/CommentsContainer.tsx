@@ -29,8 +29,15 @@ const CommentsContainer = ({ post_pk, newFetch }: PostContainerProps) => {
           headers: { "Content-Type": "application/json" },
           credentials: "include",
         });
-        const json = await postData.json();
-        setData(json);
+        if (!postData.ok) {
+          const data = await postData.json();
+          console.warn("Signup error:", data);
+          alert(data.status);
+        }
+        if (postData.ok) {
+          const json = await postData.json();
+          setData(json);
+        }
       } catch (err) {
         console.error(err);
       } finally {

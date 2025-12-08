@@ -17,10 +17,17 @@ const LoginForm = () => {
           headers: { "Content-Type": "application/json" },
           credentials: "include",
         });
-        const data = await response.json();
-        console.log("Session check data:", data);
-        if (data.redirect) {
-          router.push("/");
+        if (!response.ok) {
+          const data = await response.json();
+          console.warn("Signup error:", data);
+          alert(data.status);
+        }
+        if (response.ok) {
+          const data = await response.json();
+          console.log("Session check data:", data);
+          if (data.redirect) {
+            router.push("/");
+          }
         }
       } catch (err) {
         console.error("Error during session check:", err);
@@ -44,14 +51,16 @@ const LoginForm = () => {
       });
 
       if (!response.ok) {
-        const text = await response.text();
-        throw new Error(`HTTP ${response.status}: ${text}`);
+        const data = await response.json();
+        console.warn("Signup error:", data);
+        alert(data.status);
       }
+      if (response.ok) {
+        const data = await response.json();
+        console.log("data login form", data);
 
-      const data = await response.json();
-      console.log("data login form", data);
-
-      router.push(typeof data === "string" ? data : data.redirect ?? "/");
+        router.push(typeof data === "string" ? data : data.redirect ?? "/");
+      }
     } catch (err) {
       console.error("Error during login:", err);
       // Make alert to a user-friendly notification in the future

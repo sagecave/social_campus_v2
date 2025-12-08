@@ -35,13 +35,20 @@ const Profile = () => {
           return;
         }
 
-        const userData = await fetch("http://127.0.0.1:80/user-data", {
+        const response = await fetch("http://127.0.0.1:80/user-data", {
           method: "GET",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
         });
-        const json = await userData.json();
-        setData(json);
+        if (!response.ok) {
+          const data = await response.json();
+          console.warn("Signup error:", data);
+          alert(data.status);
+        }
+        if (response.ok) {
+          const json = await response.json();
+          setData(json);
+        }
       } catch (err) {
         console.error(err);
         router.push("/login");

@@ -27,9 +27,16 @@ const CommentsCard = ({ comment_text, user_fk }: PostCardProps) => {
           headers: { "Content-Type": "application/json" },
           credentials: "include",
         });
-        const data = await postData.json();
-        console.log(data, "OWNER COMMENTS");
-        setOnwer(data[0]);
+        if (!postData.ok) {
+          const data = await postData.json();
+          console.warn("Signup error:", data);
+          alert(data.status);
+        }
+        if (postData.ok) {
+          const data = await postData.json();
+          console.log(data, "OWNER COMMENTS");
+          setOnwer(data[0]);
+        }
       } catch (err) {
         console.error(err);
       } finally {

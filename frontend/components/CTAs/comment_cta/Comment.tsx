@@ -26,12 +26,16 @@ const Comment = ({ post_pk }: commentData) => {
         });
 
         if (!response.ok) {
-          const text = await response.text();
-          throw new Error(`HTTP ${response.status}: ${text}`);
+          const data = await response.json();
+          console.warn("Signup error:", data);
+          alert(data.status);
         }
-        const data = await response.json();
-        console.log("COMMENTS", data);
-        setTotalComments(data.total_comments);
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log("COMMENTS", data);
+          setTotalComments(data.total_comments);
+        }
       } catch (err) {
         console.error("Error during logout:", err);
         alert("like failed");

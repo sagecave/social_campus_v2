@@ -1,13 +1,13 @@
 "use client";
 import { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+// import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 
 const Forgot_password = () => {
   const router = useRouter();
   const [email, setEmail] = useState<string>("");
-  const params = useSearchParams();
-  const token = params.get("key");
+  // const params = useSearchParams();
+  // const token = params.get("key");
   //   const [valid, setValid] = useState(false);
 
   //   useEffect(() => {
@@ -53,18 +53,19 @@ const Forgot_password = () => {
       });
 
       if (!response.ok) {
-        const text = await response.text();
-        throw new Error(`HTTP ${response.status}: ${text}`);
+        const data = await response.json();
+        console.warn("Reset password error:", data);
+        alert(data.status);
       }
-
-      const data = await response.json();
-      console.log("data login form", data);
-
-      router.push(typeof data === "string" ? data : data.redirect ?? "/");
+      if (response.ok) {
+        const data = await response.json();
+        console.log("data login form", data);
+        router.push(typeof data === "string" ? data : data.redirect ?? "/");
+      }
     } catch (err) {
       console.error("Error during login:", err);
       // Make alert to a user-friendly notification in the future
-      alert("Login failed");
+      alert("Reset password failed");
     }
   };
   //   if (!valid) return <p>Invalid or expired link.</p>;

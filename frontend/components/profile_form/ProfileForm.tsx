@@ -25,12 +25,15 @@ const ProfileForm = ({ user_first_name, user_last_name, user_username, user_emai
         credentials: "include",
       });
       if (!response.ok) {
-        const text = await response.text();
-        throw new Error(`HTTP ${response.status}: ${text}`);
+        const data = await response.json();
+        console.warn("Signup error:", data);
+        alert(data.status);
       }
-      const data = await response.json();
-      console.log("data login form", data);
-      //   router.push(typeof data === "string" ? data : data.redirect ?? "/");
+      if (response.ok) {
+        const data = await response.json();
+        console.log("data login form", data);
+        //   router.push(typeof data === "string" ? data : data.redirect ?? "/");
+      }
     } catch (err) {
       console.error("Error during login:", err);
       // Make alert to a user-friendly notification in the future
@@ -46,12 +49,19 @@ const ProfileForm = ({ user_first_name, user_last_name, user_username, user_emai
           headers: { "Content-Type": "application/json" },
           credentials: "include",
         });
-        const data = await response.json();
-        console.log("Session check data:", data);
-        // if (data.redirect) {
-        //   //   router.push("/");
+        if (!response.ok) {
+          const data = await response.json();
+          console.warn("Signup error:", data);
+          alert(data.status);
+        }
+        if (response.ok) {
+          const data = await response.json();
+          console.log("Session check data:", data);
+          // if (data.redirect) {
+          //   //   router.push("/");
 
-        // }
+          // }
+        }
       } catch (err) {
         console.error("Error during session check:", err);
       }

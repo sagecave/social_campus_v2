@@ -24,11 +24,12 @@ const SignUpForm = ({ firstNameContent, usernameContent, signupContent, password
   const [education, setEducation] = useState<string>("");
   const [shcool, setSchool] = useState<string>("");
   const [errorMessageGet, setErrorMessageGet] = useState<string>("");
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://127.0.0.1:80/signup-submit", {
+      const response = await fetch(`${apiUrl}/signup-submit`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password, username, firstName, lastName, education, shcool }),
@@ -56,7 +57,7 @@ const SignUpForm = ({ firstNameContent, usernameContent, signupContent, password
     const checkSession = async () => {
       try {
         console.log("Checking session status...");
-        const response = await fetch("http://127.0.0.1:80/session-check", {
+        const response = await fetch(`${apiUrl}/session-check`, {
           method: "GET",
           headers: { "Content-Type": "application/json" },
           credentials: "include",

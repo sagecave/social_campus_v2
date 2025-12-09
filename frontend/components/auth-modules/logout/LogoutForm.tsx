@@ -9,11 +9,12 @@ type DictionaryType = {
 const LogoutForm = ({ logout }: DictionaryType) => {
   const router = useRouter();
   const [errorMessageGet, setErrorMessageGet] = useState<string>("");
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://127.0.0.1:80/logout-submit", {
+      const response = await fetch(`${apiUrl}/logout-submit`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

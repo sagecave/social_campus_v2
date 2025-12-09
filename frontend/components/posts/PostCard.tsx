@@ -76,7 +76,7 @@ const PostCard = ({ post_text, user_fk, post_created_at, post_pk, setNewFetch, n
     <article className="flex flex-col gap-4 p-4 max-w-[500px] min-w-[320px]">
       <div className="flex justify-between">
         <div className="flex gap-4">
-          <img className=" rounded-full" src={`http://127.0.0.1/uploads/${user_avatar}`} alt="profil billede" width={50} height={50} />
+          <img className=" rounded-full" src={`http://127.0.0.1/uploads/${owner.user_avatar}`} alt="profil billede" width={50} height={50} />
           {/* <Image className=" rounded-b-full" src="/socialCampus_logo.png" alt="Picture of the author" width={30} height={30} /> */}
           <div>
             <p className=" text-[1rem] text-postname">

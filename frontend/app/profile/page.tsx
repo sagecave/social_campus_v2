@@ -46,6 +46,7 @@ const Profile = () => {
         }
         if (response.ok) {
           const json = await response.json();
+
           setData(json);
         }
       } catch (err) {

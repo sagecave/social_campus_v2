@@ -6,6 +6,7 @@ import ProfileForm from "@/components/profile_form/ProfileForm";
 import Aside_navigation from "@/components/navigation/Aside_navigation";
 import DeleteProfile from "@/components/CTAs/delete_account/DeleteAccount";
 import ProfileImageUpdate from "@/components/profile_form/ProfileImageUpdate";
+import ProfilePasswordPage from "@/components/pageLayout/profile_page/ProfilePasswordPage";
 
 type UserData = {
   user_first_name: string;
@@ -66,13 +67,7 @@ const Profile = () => {
     <>
       <Aside_navigation user_first_name={data.user_first_name} user_last_name={data.user_last_name}></Aside_navigation>
       <main className=" col-start-2">
-        <section>
-          <h1>profile</h1>
-          <ProfileImageUpdate user_avatar={data.user_avatar} />
-
-          <ProfileForm user_first_name={data.user_first_name} user_last_name={data.user_last_name} user_email={data.user_email} user_username={data.user_username}></ProfileForm>
-          <DeleteProfile />
-        </section>
+        <ProfilePasswordPage user_avatar={data.user_avatar} user_first_name={data.user_last_name} user_last_name={data.user_last_name} user_email={data.user_email} user_username={data.user_username} />
       </main>
     </>
   );

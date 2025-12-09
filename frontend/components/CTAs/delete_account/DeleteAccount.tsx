@@ -6,7 +6,10 @@ import Image from "next/image";
 //   newFetch: boolean;
 // };
 // const DeleteProfile = ({ setNewFetch, newFetch }: postData)
-const DeleteProfile = () => {
+type DictionaryType = {
+  delete_account: string;
+};
+const DeleteProfile = ({ delete_account }: DictionaryType) => {
   const deletingAccount = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
@@ -37,7 +40,7 @@ const DeleteProfile = () => {
       <form className="pointer " onSubmit={deletingAccount}>
         <button className="flex gap-2" type="submit">
           <Image className=" " src="/delete.svg" alt="Picture of the author" width={25} height={25} />
-          <p>Delete account</p>
+          <p>{delete_account}</p>
         </button>
       </form>
     </div>

@@ -5,8 +5,10 @@ import Image from "next/image";
 import ErrorHandlingModal from "@/components/modal/ErrorHandlingModal";
 type UserData = {
   user_avatar: string;
+  change_your_avatar: string;
+  change_avatar: string;
 };
-const ProfileForm = ({ user_avatar }: UserData) => {
+const ProfileForm = ({ user_avatar, change_your_avatar, change_avatar }: UserData) => {
   const router = useRouter();
 
   const [profileAvatar, setProfileAvatar] = useState<File | null>(null);
@@ -80,19 +82,19 @@ const ProfileForm = ({ user_avatar }: UserData) => {
       {/* <Image src={profileAvatar} alt="Picture of the author" width={50} height={50} /> */}
       <form className="flex flex-col justify-self-center w-[inherit] max-w-160 gap-4 place-items-center" onSubmit={handleSubmit}>
         <div className="flex flex-col w-full">
-          <label className="text-label-dark-gray font-bold">Avatar</label>
+          <label className="text-label-dark-gray font-bold">{change_avatar}</label>
           <input
             className=" px-4 py-6 bg-inside-border-white border-2 rounded-border-form border-border-light-gray h-12 placeholder:text-light-gray caret-accent-purple w-full"
             type="file"
             name="userAvatar"
-            placeholder="Avatar"
+            placeholder={change_avatar}
             onChange={(e) => setProfileAvatar(e.target.files?.[0] || null)}
             // onChange={(e) => setProfileAvatar(e.currentTarget.files?.[0] || null)}
           ></input>
         </div>
 
         <button className="bg-linear-to-r w-auto from-accent-purple to-accent-red rounded-full px-24 py-4 mt-6 text-inside-border-white font-bold text-[1.5rem] bg-[length:300%_100%] bg-left hover:bg-right transition-all duration-500" type="submit">
-          Change your avatar
+          {change_your_avatar}
         </button>
       </form>
     </div>

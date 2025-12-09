@@ -6,6 +6,7 @@ import "./globals.css";
 import PostContainer from "@/components/posts/PostContainer";
 import Aside_navigation from "@/components/navigation/Aside_navigation";
 import CreatePost from "@/components/posts/CreatePost";
+import FrontPageContent from "@/components/pageLayout/front_page/FrontPageContent";
 
 type UserData = {
   user_first_name: string;
@@ -63,10 +64,7 @@ export default function Home() {
     <>
       <Aside_navigation user_first_name={data.user_first_name} user_last_name={data.user_last_name}></Aside_navigation>
       <main className=" col-start-2">
-        <CreatePost setNewFetch={setNewFetch} newFetch={newFetch}></CreatePost>
-        <section className=" col-start-2">
-          <PostContainer user_avatar={data.user_avatar} setNewFetch={setNewFetch} newFetch={newFetch} />
-        </section>
+        <FrontPageContent user_avatar={data.user_avatar} setNewFetch={setNewFetch} newFetch={newFetch} />
       </main>
     </>
   );

@@ -1,0 +1,402 @@
+{
+    "h1_login": {
+        "english": "Welcome to",
+        "danish": "Velkommen til",
+        "spanish": "Bienvenido a"
+    },
+    "span_login": {
+        "english": "Social campus",
+        "danish": "Socialt campus",
+        "spanish": "Campus social"
+    },
+    "email": {
+        "english": "E-mail",
+        "danish": "E-mail",
+        "spanish": "Correo electrónico"
+    },
+    "password": {
+        "english": "Password",
+        "danish": "Adgangskode",
+        "spanish": "Contraseña"
+    },
+    "forgot_password": {
+        "english": "Forgot password?",
+        "danish": "Glemt adgangskode?",
+        "spanish": "Olvidaste tu contraseña?"
+    },
+    "login": {
+        "english": "Login",
+        "danish": "Log ind",
+        "spanish": "Iniciar sesión"
+    },
+    "dont_have_account": {
+        "english": "Don´t have an account",
+        "danish": "Har du ikke en konto",
+        "spanish": "No tienes una cuenta"
+    },
+    "signup": {
+        "english": "signup",
+        "danish": "Opret",
+        "spanish": "Registrarse"
+    },
+    "Login_failed": {
+        "english": "Login failed",
+        "danish": "Log ind mislykkedes",
+        "spanish": "Error al iniciar sesión"
+    },
+    "Invalid_email_or_password": {
+        "english": "Invalid email or password",
+        "danish": "Ugyldig e-mail eller adgangskode",
+        "spanish": "Correo electrónico o contraseña no válidos"
+    },
+    "An_error_occurred": {
+        "english": "An error occurred",
+        "danish": "Der opstod en fejl",
+        "spanish": "Ocurrió un error"
+    },
+    "user_not_verified": {
+        "english": "User not verified",
+        "danish": "Bruger ikke bekræftet",
+        "spanish": "Usuario no verificado"
+    },
+    "invalid_password": {
+        "english": "Invalid password",
+        "danish": "Ugyldig adgangskode",
+        "spanish": "Contraseña inválida"
+    },
+    "invalid_email": {
+        "english": "Invalid email",
+        "danish": "Ugyldig e-mail",
+        "spanish": "Correo electrónico inválido"
+    },
+    "password_length_requirement": {
+        "english": "Password must be between 6 and 50 characters",
+        "danish": "Adgangskoden skal være mellem 6 og 50 tegn",
+        "spanish": "La contraseña debe tener entre 6 y 50 caracteres"
+    },
+    "first_name_length_requirement": {
+        "english": "First name must be between 2 and 20 characters",
+        "danish": "Fornavn skal være mellem 2 og 20 tegn",
+        "spanish": "El nombre debe tener entre 2 y 20 caracteres"
+    },
+    "username_length_requirement": {
+        "english": "Username must be between 2 and 20 characters",
+        "danish": "Brugernavn skal være mellem 2 og 20 tegn",
+        "spanish": "El nombre de usuario debe tener entre 2 y 20 caracteres"
+    },
+    "last_name_length_requirement": {
+        "english": "Last name must be between 2 and 20 characters",
+        "danish": "Efternavn skal være mellem 2 og 20 tegn",
+        "spanish": "El apellido debe tener entre 2 og 20 caracteres"
+    },
+    "email_or_username_registered": {
+        "english": "Email or username already registered",
+        "danish": "E-mail eller brugernavn er allerede registreret",
+        "spanish": "El correo o nombre de usuario ya está registrado"
+    },
+    "must_be_logged_in": {
+        "english": "You must be logged in",
+        "danish": "Du skal være logget ind",
+        "spanish": "Debes iniciar sesión"
+    },
+    "likes_not_found": {
+        "english": "Likes not found",
+        "danish": "Likes blev ikke fundet",
+        "spanish": "No se encontraron \"me gusta\""
+    },
+    "invalid_user": {
+        "english": "Invalid user",
+        "danish": "Ugyldig bruger",
+        "spanish": "Usuario inválido"
+    },
+    "invalid_post": {
+        "english": "Invalid post",
+        "danish": "Ugyldigt opslag",
+        "spanish": "Publicación inválida"
+    },
+    "following_is_working": {
+        "english": "Following is working",
+        "danish": "Følger virker",
+        "spanish": "Seguir está funcionando"
+    },
+    "user_unfollowed": {
+        "english": "User unfollowed",
+        "danish": "Bruger er ikke længere fulgt",
+        "spanish": "Usuario dejado de seguir"
+    },
+    "post_sent_success": {
+        "english": "Success, post is sent",
+        "danish": "Succes, opslag er sendt",
+        "spanish": "Éxito, la publicación ha sido enviada"
+    },
+    "owner_not_found": {
+        "english": "Owner not found",
+        "danish": "Ejer blev ikke fundet",
+        "spanish": "Propietario no encontrado"
+    },
+    "post_owner_invalid": {
+        "english": "Post owner is invalid",
+        "danish": "Opslagets ejer er ugyldig",
+        "spanish": "El propietario de la publicación es inválido"
+    },
+    "user_info_not_found": {
+        "english": "User information not found",
+        "danish": "Brugeroplysninger blev ikke fundet",
+        "spanish": "Información del usuario no encontrada"
+    },
+    "logout_success": {
+        "english": "Logout success",
+        "danish": "Du er logget ud",
+        "spanish": "Cierre de sesión exitoso"
+    },
+    "account_created_success": {
+        "english": "You have successfully created an account",
+        "danish": "Du har oprettet en konto",
+        "spanish": "Has creado una cuenta con éxito"
+    },
+    "password_reset_email_sent": {
+        "english": "We have sent you an email to reset your password",
+        "danish": "Vi har sendt dig en e-mail for at nulstille din adgangskode",
+        "spanish": "Te hemos enviado un correo para restablecer tu contraseña"
+    },
+    "new_password_not_found": {
+        "english": "User new password was not found",
+        "danish": "Brugerens nye adgangskode blev ikke fundet",
+        "spanish": "No se encontró la nueva contraseña del usuario"
+    },
+    "new_password_created": {
+        "english": "You have created a new password",
+        "danish": "Du har oprettet en ny adgangskode",
+        "spanish": "Has creado una nueva contraseña"
+    },
+    "verification_key_not_found": {
+        "english": "Verification key not found",
+        "danish": "Verifikationsnøgle blev ikke fundet",
+        "spanish": "Clave de verificación no encontrada"
+    },
+    "post_info_not_found": {
+        "english": "Post information not found",
+        "danish": "Oplysninger om opslaget blev ikke fundet",
+        "spanish": "Información de la publicación no encontrada"
+    },
+    "post_text_empty": {
+        "english": "Post text cannot be empty",
+        "danish": "Opslagstekst kan ikke være tom",
+        "spanish": "El texto de la publicación no puede estar vacío"
+    },
+    "not_post_owner": {
+        "english": "You don’t own this post",
+        "danish": "Du ejer ikke dette opslag",
+        "spanish": "No eres el propietario de esta publicación"
+    },
+    "post_not_liked": {
+        "english": "This post is not liked",
+        "danish": "Dette opslag er ikke liket",
+        "spanish": "Esta publicación no tiene \"me gusta\""
+    },
+    "file_not_selected": {
+        "english": "File not selected",
+        "danish": "Fil ikke valgt",
+        "spanish": "Archivo no seleccionado"
+    },
+    "file_uploaded": {
+        "english": "File is uploaded",
+        "danish": "Filen er uploadet",
+        "spanish": "El archivo ha sido subido"
+    },
+    "profile_updated": {
+        "english": "Profile is updated",
+        "danish": "Profilen er opdateret",
+        "spanish": "El perfil ha sido actualizado"
+    },
+    "invalid_or_expired_token": {
+        "english": "Invalid or expired token",
+        "danish": "Ugyldig eller udløbet token",
+        "spanish": "Token inválido o caducado"
+    },
+    "post_was_made": {
+        "english": "Post was made",
+        "danish": "Opslaget er oprettet",
+        "spanish": "La publicación fue realizada"
+    },
+    "post_is_updated": {
+        "english": "Post is updated",
+        "danish": "Opslaget er opdateret",
+        "spanish": "La publicación ha sido actualizada"
+    },
+    "post_is_deleted": {
+        "english": "Post is deleted",
+        "danish": "Opslaget er slettet",
+        "spanish": "La publicación ha sido eliminada"
+    },
+    "post_not_deleted": {
+        "english": "Post did not delete",
+        "danish": "Opslaget blev ikke slettet",
+        "spanish": "La publicación no fue eliminada"
+    },
+    "post_liked": {
+        "english": "You have liked a post",
+        "danish": "Du har liket et opslag",
+        "spanish": "Has dado \"me gusta\" a una publicación"
+    },
+    "comment_sent": {
+        "english": "You have sent a comment",
+        "danish": "Du har sendt en kommentar",
+        "spanish": "Has enviado un comentario"
+    },
+    "enter_email": {
+        "english": "Enter your email",
+        "danish": "Indtast din e-mail",
+        "spanish": "Introduce tu correo electrónico"
+    },
+    "already_have_account": {
+        "english": "Already have an account?",
+        "danish": "Har du allerede en konto?",
+        "spanish": "Ya tienes una cuenta?"
+    },
+    "reset_password": {
+        "english": "Reset your password",
+        "danish": "Nulstil din adgangskode",
+        "spanish": "Restablece tu contraseña"
+    },
+    "be_part_of": {
+        "english": "Be part of",
+        "danish": "Vær en del af",
+        "spanish": "Sé parte de"
+    },
+    "username": {
+        "english": "Username",
+        "danish": "Brugernavn",
+        "spanish": "Nombre de usuario"
+    },
+    "first_name": {
+        "english": "First name",
+        "danish": "Fornavn",
+        "spanish": "Nombre"
+    },
+    "last_name": {
+        "english": "Last name",
+        "danish": "Efternavn",
+        "spanish": "Apellido"
+    },
+    "education": {
+        "english": "Education",
+        "danish": "Uddannelse",
+        "spanish": "Educación"
+    },
+    "school": {
+        "english": "School",
+        "danish": "Skole",
+        "spanish": "Escuela"
+    },
+    "forgot_password_question": {
+        "english": "Forgot your password?",
+        "danish": "Glemt din adgangskode?",
+        "spanish": "Olvidaste tu contraseña?"
+    },
+    "change_it_here": {
+        "english": "Change it here",
+        "danish": "Skift den her",
+        "spanish": "Cámbiala aquí"
+    },
+    "change_password": {
+        "english": "Change your password",
+        "danish": "Skift din adgangskode",
+        "spanish": "Cambia tu contraseña"
+    },
+    "new_password": {
+        "english": "New password",
+        "danish": "Ny adgangskode",
+        "spanish": "Nueva contraseña"
+    },
+    "enter_new_password": {
+        "english": "Enter your new password",
+        "danish": "Indtast din nye adgangskode",
+        "spanish": "Ingresa tu nueva contraseña"
+    },
+    "home": {
+        "english": "Home",
+        "danish": "Hjem",
+        "spanish": "Inicio"
+    },
+    "search": {
+        "english": "Search",
+        "danish": "Søg",
+        "spanish": "Buscar"
+    },
+    "close": {
+        "english": "Close",
+        "danish": "Luk",
+        "spanish": "Cerrar"
+    },
+    "search_for_users": {
+        "english": "Search for users",
+        "danish": "Søg efter brugere",
+        "spanish": "Buscar usuarios"
+    },
+    "unfollow": {
+        "english": "Unfollow",
+        "danish": "Afmeld",
+        "spanish": "Dejar de seguir"
+    },
+    "follow": {
+        "english": "Follow",
+        "danish": "Følg",
+        "spanish": "Seguir"
+    },
+    "logout": {
+        "english": "Logout",
+        "danish": "Log ud",
+        "spanish": "Cerrar sesión"
+    },
+    "update_post": {
+        "english": "Update Post",
+        "danish": "Opdater opslag",
+        "spanish": "Actualizar publicación"
+    },
+    "make_comment": {
+        "english": "Make your comment",
+        "danish": "Skriv din kommentar",
+        "spanish": "Haz tu comentario"
+    },
+    "edit_post": {
+        "english": "Edit your post",
+        "danish": "Rediger dit opslag",
+        "spanish": "Edita tu publicación"
+    },
+    "post": {
+        "english": "Post",
+        "danish": "Opslag",
+        "spanish": "Publicar"
+    },
+    "post_update_placeholder": {
+        "english": "Post an update about your day or studies…",
+        "danish": "Skriv en opdatering om din dag eller studier…",
+        "spanish": "Publica una actualización sobre tu día o estudios…"
+    },
+    "change_avatar": {
+        "english": "Change avatar",
+        "danish": "Skift avatar",
+        "spanish": "Cambiar avatar"
+    },
+    "change_your_avatar": {
+        "english": "Change your avatar",
+        "danish": "Skift din avatar",
+        "spanish": "Cambia tu avatar"
+    },
+    "delete_account": {
+        "english": "Delete account",
+        "danish": "Slet konto",
+        "spanish": "Eliminar cuenta"
+    },
+    "update_profile": {
+        "english": "Update profile",
+        "danish": "Opdater profil",
+        "spanish": "Actualizar perfil"
+    },
+    "profile": {
+        "english": "Profile",
+        "danish": "Profil",
+        "spanish": "Perfil"
+    }
+}

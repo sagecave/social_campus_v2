@@ -4,12 +4,15 @@ import Image from "next/image";
 import CommentsModal from "@/components/modal/CommentsModal";
 type commentData = {
   post_pk: number;
+  post: string;
+  make_comment: string;
+  close: string;
 
   // post_text: string;
   // setNewFetch: React.Dispatch<React.SetStateAction<boolean>>;
   // newFetch: boolean;
 };
-const Comment = ({ post_pk }: commentData) => {
+const Comment = ({ post_pk, post, make_comment, close }: commentData) => {
   const [totalComments, setTotalComments] = useState<number>(0);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
@@ -46,7 +49,7 @@ const Comment = ({ post_pk }: commentData) => {
 
   return (
     <div className=" hover:bg-accent-purple-light w-fit  rounded-4xl py-2 px-4 pointer">
-      {isModalOpen && <CommentsModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} post_pk={post_pk} />}
+      {isModalOpen && <CommentsModal post={post} make_comment={make_comment} close={close} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} post_pk={post_pk} />}
 
       <button className="flex gap-2" onClick={toggleModal} type="submit">
         <Image className=" " src="/message_icon.svg" alt="Picture of the author" width={25} height={25} />

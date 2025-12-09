@@ -18,9 +18,14 @@ type PostCardProps = {
   setNewFetch: React.Dispatch<React.SetStateAction<boolean>>;
   newFetch: boolean;
   user_avatar: string;
+  update_post: string;
+  make_comment: string;
+  edit_post: string;
+  close: string;
+  post: string;
 };
 
-const PostCard = ({ post_text, user_fk, post_created_at, post_pk, setNewFetch, newFetch, user_avatar }: PostCardProps) => {
+const PostCard = ({ post_text, user_fk, post_created_at, post_pk, setNewFetch, newFetch, user_avatar, update_post, make_comment, edit_post, post, close }: PostCardProps) => {
   const [owner, setOnwer] = useState<PostCardProps | null>(null);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
@@ -33,7 +38,6 @@ const PostCard = ({ post_text, user_fk, post_created_at, post_pk, setNewFetch, n
         });
         if (!postData.ok) {
           const data = await postData.json();
-          alert(data.status);
         }
         if (postData.ok) {
           const data = await postData.json();
@@ -87,8 +91,8 @@ const PostCard = ({ post_text, user_fk, post_created_at, post_pk, setNewFetch, n
       <p>{post_text}</p>
       <div className="flex gap-2">
         <Like post_pk={post_pk} />
-        <Comment post_pk={post_pk} />
-        <UpdatePost post_pk={post_pk} post_text={post_text} setNewFetch={setNewFetch} newFetch={newFetch} />
+        <Comment post={post} make_comment={make_comment} close={close} post_pk={post_pk} />
+        <UpdatePost edit_post={edit_post} update_post={update_post} close={close} post_pk={post_pk} post_text={post_text} setNewFetch={setNewFetch} newFetch={newFetch} />
         <DeletePost post_pk={post_pk} setNewFetch={setNewFetch} newFetch={newFetch} />
       </div>
     </article>

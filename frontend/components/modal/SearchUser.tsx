@@ -14,8 +14,13 @@ type User = {
 type modalStatus = {
   modalOpen: boolean;
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  close: string;
+  search_for_users: string;
+  unfollow: string;
+  follow: string;
 };
-const SearchUser = ({ modalOpen, setModalOpen }: modalStatus) => {
+
+const SearchUser = ({ modalOpen, setModalOpen, unfollow, follow, search_for_users, close }: modalStatus) => {
   const [searchInput, setSearchInput] = useState<string>("");
 
   const [searchOutput, setSearchOutput] = useState<User[]>([]);
@@ -54,7 +59,6 @@ const SearchUser = ({ modalOpen, setModalOpen }: modalStatus) => {
           if (!response.ok) {
             const data = await response.json();
             console.warn("Signup error:", data);
-            alert(data.status);
           }
           if (response.ok) {
             const data = await response.json();
@@ -74,33 +78,31 @@ const SearchUser = ({ modalOpen, setModalOpen }: modalStatus) => {
     e.preventDefault();
   };
   return (
-    <section className=" relative">
+    <section className=" ">
       <div
         className="absolute  left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 
                    bg-inside-border-white border border-border-grey rounded-xl px-4 pt-2 pb-10"
       >
-        <h2 className="p-3 text-[1.2rem] font-semibold text-accent-purple">Search for users</h2>
-        {searchOutput.map((user, i) => (
-          <UserCards key={i} user_pk={user.user_pk} user_avatar={user.user_avatar} user_first_name={user.user_first_name} user_last_name={user.user_last_name} user_username={user.user_username} />
-        ))}
-
-        <div></div>
+        <h2 className="p-3 text-[1.2rem] font-semibold text-accent-purple">{search_for_users}</h2>
         <form onSubmit={searchSubmit} className="p-4 border-border-grey border-1 rounded-3xl flex flex-col ">
-          <label className="text-label-dark-gray font-bold">Search for users</label>
+          <label className="text-label-dark-gray font-bold">{search_for_users}</label>
           <input
             className=" px-4 py-6 bg-inside-border-white border-2 rounded-border-form border-border-light-gray h-12 placeholder:text-light-gray caret-accent-purple w-full"
             onChange={(e) => setSearchInput(e.target.value)}
             type="text"
             name="searchForUser"
             id="searchForUser"
-            placeholder="Make a search by username"
+            placeholder={search_for_users}
           ></input>
           <div className="flex gap-2 flex-row-reverse">
             <button onClick={() => setModalOpen(!modalOpen)} className="border-1 self-end w-fit bg-inside-border-white border-border-grey bottom-4 right-4 flex gap-2 hover:bg-accent-purple-light-white py-2 px-4 rounded-3xl items-center mt-2">
-              Close
+              {close}
             </button>
           </div>
         </form>
+        {searchOutput.map((user, i) => (
+          <UserCards unfollow={unfollow} follow={follow} key={i} user_pk={user.user_pk} user_avatar={user.user_avatar} user_first_name={user.user_first_name} user_last_name={user.user_last_name} user_username={user.user_username} />
+        ))}
       </div>
     </section>
   );

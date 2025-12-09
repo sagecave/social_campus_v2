@@ -1,9 +1,13 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 // import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
+type DictionaryType = {
+  emailContent: string;
+  reset_password: string;
+};
 
-const Forgot_password = () => {
+const Forgot_password = ({ emailContent, reset_password }: DictionaryType) => {
   const router = useRouter();
   const [email, setEmail] = useState<string>("");
   // const params = useSearchParams();
@@ -72,19 +76,19 @@ const Forgot_password = () => {
   return (
     <form className="flex flex-col justify-self-center w-[inherit] max-w-160 gap-4 place-items-center" onSubmit={handleSubmit}>
       <div className="flex flex-col w-full">
-        <label className="text-label-dark-gray font-bold">E-mail</label>
+        <label className="text-label-dark-gray font-bold">{emailContent}</label>
         <input
           className=" px-4 py-6 bg-inside-border-white border-2 rounded-border-form border-border-light-gray h-12 placeholder:text-light-gray caret-accent-purple w-full"
           type="email"
           name="email"
           value={email}
-          placeholder="E-mail"
+          placeholder={emailContent}
           onChange={(e) => setEmail(e.target.value)}
         />
       </div>
 
       <button className="bg-linear-to-r w-auto from-accent-purple to-accent-red rounded-full px-24 py-4 mt-6 text-inside-border-white font-bold text-[1.5rem] bg-[length:300%_100%] bg-left hover:bg-right transition-all duration-500" type="submit">
-        Reset your password
+        {reset_password}
       </button>
     </form>
   );

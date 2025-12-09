@@ -2,8 +2,10 @@
 import { useState, useEffect } from "react";
 type userData = {
   user_pk: number;
+  unfollow: string;
+  follow: string;
 };
-const FollowButton = ({ user_pk }: userData) => {
+const FollowButton = ({ user_pk, unfollow, follow }: userData) => {
   const [followStatus, setFollowStatus] = useState<number>(0);
   const [followFetchUpdate, setFollowFetchUpdate] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
@@ -87,7 +89,7 @@ const FollowButton = ({ user_pk }: userData) => {
     <div className={followStatus ? "bg-accent-purple-light   w-fit  rounded-4xl py-2 px-4 pointer" : " hover:bg-accent-purple-light w-fit  rounded-4xl py-2 px-4 pointer"}>
       <form className="pointer " onSubmit={likePost}>
         <button className="flex gap-2" type="submit">
-          {followStatus ? <p>Unfollow</p> : <p>Follow</p>}
+          {followStatus ? <p>{unfollow}</p> : <p>{follow}</p>}
         </button>
       </form>
     </div>

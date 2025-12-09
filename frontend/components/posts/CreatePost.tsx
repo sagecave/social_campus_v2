@@ -4,8 +4,10 @@ import ErrorHandlingModal from "@/components/modal/ErrorHandlingModal";
 type postData = {
   setNewFetch: React.Dispatch<React.SetStateAction<boolean>>;
   newFetch: boolean;
+  post: string;
+  post_update_placeholder: string;
 };
-const CreatePost = ({ setNewFetch, newFetch }: postData) => {
+const CreatePost = ({ setNewFetch, newFetch, post, post_update_placeholder }: postData) => {
   const [postText, setPostText] = useState<string>("");
   const [errorMessageGet, setErrorMessageGet] = useState<string>("");
 
@@ -42,10 +44,10 @@ const CreatePost = ({ setNewFetch, newFetch }: postData) => {
     <section className="justify-self-center mt-10 ">
       <ErrorHandlingModal errorMessageGet={errorMessageGet} setErrorMessageGet={setErrorMessageGet} />
       <form className="p-4 border-border-grey border-1 rounded-3xl flex flex-col " onSubmit={handleSubmit}>
-        <textarea onChange={(e) => setPostText(e.target.value)} style={{ resize: "none" }} className=" border-border-grey" rows={5} cols={53} name="createPost" id="createPost" placeholder="Post an update about your day or studies…"></textarea>
+        <textarea onChange={(e) => setPostText(e.target.value)} style={{ resize: "none" }} className=" border-border-grey" rows={5} cols={53} name="createPost" id="createPost" placeholder={post_update_placeholder}></textarea>
         <button className="border-1 self-end w-fit bg-inside-border-white border-border-grey bottom-4 right-4 flex gap-2 hover:bg-accent-purple-light-white py-2 px-4 rounded-3xl items-center mt-2">
           <Image className="" src="/sendPost.svg" alt="Picture of the author" width={30} height={30} />
-          Post
+          {post}
         </button>
       </form>
     </section>

@@ -3,7 +3,12 @@ import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import ErrorHandlingModal from "@/components/modal/ErrorHandlingModal";
-const Reset_password = () => {
+type DictionaryType = {
+  change_password: string;
+  new_password: string;
+  enter_new_password: string;
+};
+const Reset_password = ({ change_password, new_password, enter_new_password }: DictionaryType) => {
   const router = useRouter();
   const [errorMessageGet, setErrorMessageGet] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -63,19 +68,19 @@ const Reset_password = () => {
     <form className="flex flex-col justify-self-center w-[inherit] max-w-160 gap-4 place-items-center" onSubmit={handleSubmit}>
       <ErrorHandlingModal errorMessageGet={errorMessageGet} setErrorMessageGet={setErrorMessageGet} />
       <div className="flex flex-col w-full">
-        <label className="text-label-dark-gray font-bold">New password</label>
+        <label className="text-label-dark-gray font-bold">{new_password}</label>
         <input
           className=" px-4 py-6 bg-inside-border-white border-2 rounded-border-form border-border-light-gray h-12 placeholder:text-light-gray caret-accent-purple w-full"
           type="password"
           name="password"
           value={password}
-          placeholder="Enter you new password"
+          placeholder={enter_new_password}
           onChange={(e) => setPassword(e.target.value)}
         />
       </div>
 
       <button className="bg-linear-to-r w-auto from-accent-purple to-accent-red rounded-full px-24 py-4 mt-6 text-inside-border-white font-bold text-[1.5rem] bg-[length:300%_100%] bg-left hover:bg-right transition-all duration-500" type="submit">
-        Change your password
+        {change_password}
       </button>
     </form>
   );

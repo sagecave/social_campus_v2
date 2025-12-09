@@ -14,8 +14,13 @@ type PostContainerProps = {
   setNewFetch: React.Dispatch<React.SetStateAction<boolean>>;
   newFetch: boolean;
   user_avatar: string;
+  update_post: string;
+  make_comment: string;
+  edit_post: string;
+  close: string;
+  post: string;
 };
-const Post_container = ({ newFetch, setNewFetch, user_avatar }: PostContainerProps) => {
+const Post_container = ({ newFetch, setNewFetch, user_avatar, update_post, make_comment, edit_post, post, close }: PostContainerProps) => {
   const [data, setData] = useState<PostCardProps[] | null>(null);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
@@ -49,7 +54,21 @@ const Post_container = ({ newFetch, setNewFetch, user_avatar }: PostContainerPro
   return (
     <section className="justify-self-center">
       {data.map((data, i) => (
-        <PostCard key={i} user_avatar={user_avatar} setNewFetch={setNewFetch} newFetch={newFetch} post_text={data.post_text} user_fk={data.user_fk} post_created_at={data.post_created_at} post_pk={data.post_pk} />
+        <PostCard
+          key={i}
+          update_post={update_post}
+          make_comment={make_comment}
+          edit_post={edit_post}
+          post={post}
+          user_avatar={user_avatar}
+          setNewFetch={setNewFetch}
+          newFetch={newFetch}
+          post_text={data.post_text}
+          user_fk={data.user_fk}
+          post_created_at={data.post_created_at}
+          post_pk={data.post_pk}
+          close={close}
+        />
       ))}
     </section>
   );

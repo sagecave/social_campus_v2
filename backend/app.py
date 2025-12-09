@@ -15,6 +15,7 @@ import send_emails
 import time
 import uuid
 import secrets
+import requests
 import os
 import io
 import csv
@@ -32,6 +33,8 @@ UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), "uploads")
 
 app = Flask(__name__, static_url_path='/uploads', static_folder='uploads'   )
 
+DICTIONARY_FILE = os.path.join(os.path.dirname(__file__), "dictionary.json")
+
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 CORS(app, supports_credentials=True, origins=["http://127.0.0.1:3000"],allow_headers=["Content-Type"], expose_headers=["Content-Type"])
 
@@ -39,7 +42,6 @@ app.config["SECRET_KEY"] = "your_fixed_secret_key"
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['MAX_CONTENT_LENGTH'] = 1 * 1024 * 1024  
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
 
 
 Session(app)
@@ -50,6 +52,20 @@ def global_variables():
         # dictionary = dictionary,
         x = x
     )
+
+
+
+@app.get("/dictionary")
+def get_dictionary():
+    try:
+        with open(DICTIONARY_FILE, "r", encoding="utf-8") as f:
+            data = json.load(f)
+            lan = "spanish"
+        return jsonify(data,lan), 200
+    except FileNotFoundError:
+        return jsonify({"status": "Dictionary not found"}), 404
+    except Exception as e:
+        return jsonify({"status": "An error occurred", "error": str(e)}), 500
 ###################USER DATA FOR HOME###################################
 # TODO: change the url name to make more sense this is the home page
 @app.get("/user-data")
@@ -74,7 +90,7 @@ def get_data():
         return jsonify(user)
     except Exception as e:
         ic(e)
-        return jsonify({"status":"An error occurred"}),500
+        return jsonify({"status":x.lans("An_error_occurred")}),500
         # session.clear()
     finally:
         if "cursor" in locals(): cursor.close()
@@ -86,25 +102,25 @@ def get_post_owner():
     try:
         post_owner = request.args.get("owner")
         if not post_owner:
-            return jsonify({"status":"Owner of this post is not found"}),400
+            return jsonify({"status":x.lans("owner_not_found")}),400
         q = "SELECT * FROM `users` WHERE user_pk = %s"
 
         try:
             post_owner = int(post_owner)
         except ValueError:
-            return({"status":"Post owner is invalid"}),400
+            return({"status":x.lans("post_owner_invalid")}),400
         db,cursor = x.db()
         cursor.execute(q,(post_owner,))
         owner = cursor.fetchone()
         if not owner:
-            return jsonify({"status":"Owner not found"}),404
+            return jsonify({"status":x.lans("owner_not_found")}),404
         return jsonify({
-            "status": "Success post is send",
+            "status": x.lans("post_sent_success"),
             "owner": owner
         }), 200
     except Exception as e:
         ic(e)
-        return jsonify({"status":"An error occurred"}),500
+        return jsonify({"status":x.lans("An_error_occurred")}),500
     finally:
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()
@@ -126,7 +142,7 @@ def login_submit():
         try:
             data = request.get_json()
             if not data:
-                return jsonify({"redirect":"/login" ,"status":"User information not found"}),400
+                return jsonify({"redirect":"/login" ,"status":x.lans("user_info_not_found")}),400
             user_email = data.get("email")
             user_email = x.validate_user_email(user_email)
             user_password = data.get("password")
@@ -137,13 +153,13 @@ def login_submit():
             cursor.execute(q,(user_email,))
             user = cursor.fetchone()  
   
-            if not user: raise Exception(("Inavlid email"), 400)   
+            if not user: raise Exception(x.lans("invalid_email"), 400)   
 
             if not check_password_hash(user["user_password"], user_password):
-                raise Exception(("Invalid password"), 400)
+                raise Exception(x.lans("invalid_password"), 400)
             
             if user["user_verification_key"] != None:
-                raise Exception ("user not verified")
+                raise Exception (x.lans("user_not_verified"))
             user.pop("user_password")
             session["user"] = user  
         
@@ -153,12 +169,13 @@ def login_submit():
             ic(e)     
             if "Inavlid email" in str(e):
                 return jsonify({"redirect": "/login",
-                    "status":"Invalid email or password"}),500
+                   "status": x.lans("Invalid_email_or_password")}),500
+           
             if "Invalid password" in str(e):
                 return jsonify({"redirect": "/login",
-                    "status":"Invalid email or password"}),500
+                    "status": x.lans("Invalid_email_or_password")}),500
             return jsonify({"redirect": "/login",
-                            "status":"An error occurred"}),500
+                            "status":x.lans("An_error_occurred")}),500
         finally:
             if "cursor" in locals(): cursor.close()
             if "db" in locals(): db.close()
@@ -170,10 +187,10 @@ def logout():
         session.clear()
       
         return jsonify({"redirect": "/login",
-                        "status":"Logout success"}),200
+                        "status":x.lans("logout_success")}),200
     except Exception as e:
         ic(e)
-        return jsonify({"status":"An error occurred"}),500
+        return jsonify({"status":x.lans("An_error_occurred")}),500
     
            
        
@@ -187,7 +204,7 @@ def signup_submit():
             data = request.get_json()
             if not data:
                 return jsonify({"redirect":"/signup"
-                ,"status":"User information not found"}),400
+                ,"status":x.lans("user_info_not_found")}),400
             user_first_name = data.get("firstName")
             user_last_name = data.get("lastName")
             user_username = data.get("username")
@@ -209,7 +226,7 @@ def signup_submit():
             db.commit()
             send_emails.send_verify_email(user_email, user_verification_key)
             return jsonify({"redirect": "/",
-                            "status":"You have successfully created an account"}),200
+                            "status":x.lans("account_created_success")}),200
         except Exception as e: 
             ic(e)
             if "db" in locals():
@@ -217,35 +234,35 @@ def signup_submit():
             if "invalid_email" in str(e):
                 return jsonify({
                     "redirect": "/login", 
-                    "status": "Invalid email "
+                    "status": x.lans("invalid_email")
                 }), 400
             if "first name min 2 max 20 characters" in str(e):
                 return jsonify({
                     "redirect": "/login", 
-                    "status": "First name must be between 2 and 20 characters"
+                    "status": x.lans("first_name_length_requirement")
                 }), 400
             if "User name to small" in str(e):
                 return jsonify({
                     "redirect": "/login", 
-                    "status": "Username must be between 2 and 20 characters"
+                    "status": x.lans("username_length_requirement")
                 }), 400
             if "last name min 2 max 20 characters" in str(e):
                 return jsonify({
                     "redirect": "/login", 
-                    "status": "Last name must be between 2 and 20 characters"
+                    "status": x.lans("last_name_length_requirement")
                 }), 400
             if "Duplicate entry" in str(e):
                 return jsonify({
                     "redirect": "/login", 
-                    "status": "Email or username already registered"
+                    "status": x.lans("email_or_username_registered")
                 }), 400
             if "Invalid email or password" in str(e):
                 return jsonify({
                     "redirect": "/login", 
-                    "status": "Password must be between 6 and 50 characters"
+                    "status": x.lans("password_length_requirement")
                 }), 400
             return jsonify({"redirect": "/login",
-                            "status":"An error occurred, signup failed"}),500
+                            "status":x.lans("An_error_occurred")}),500
         finally:
             if "cursor" in locals(): cursor.close()
             if "db" in locals(): db.close()
@@ -257,7 +274,7 @@ def forgot_password():
         data = request.get_json()
         if not data:
             return jsonify({"redirect":"/login"
-                ,"status":"User email was not found"}),400
+                ,"status":x.lans("invalid_email")}),400
         user_email = data.get("email")
         user_email = x.validate_user_email(user_email)
         user_token = secrets.token_urlsafe(32)
@@ -268,14 +285,14 @@ def forgot_password():
         db.commit()
         send_emails.password_reset_email(user_email, user_token)
         return jsonify({"redirect": "/login",
-                        "status":"We have sent you an email to reset your password"}),200
+                        "status":x.lans("password_reset_email_sent")}),200
     except Exception as e:
         ic("PASSWORD WRONG",e)
         if "db" in locals():
             db.rollback()
         if "Invalid email or password" in str(e):
-            return jsonify({"redirect": "","status":"Email is does not exists"}),400
-        return jsonify({"redirect": "/login","status":"An error occurred"}),500
+            return jsonify({"redirect": "","status":x.lans("invalid_email")}),400
+        return jsonify({"redirect": "/login","status":x.lans("An_error_occurred")}),500
     finally:
         if "db" in locals(): db.close()
         if "cursor" in locals(): cursor.close()
@@ -288,7 +305,7 @@ def update_pasword():
         data = request.get_json()
         if not data:
             return jsonify({"redirect":"/login"
-                ,"status":"User new password was not found"}),400
+                ,"status":x.lans("new_password_not_found")}),400
         user_token = data.get("token")
         user_new_password = data.get("password")
         user_new_password = x.validate_user_password(user_new_password)
@@ -299,16 +316,16 @@ def update_pasword():
         db.commit()
         if cursor.rowcount == 0:
             # Token invalid or already used
-            return jsonify({"status": "Invalid or expired token"}), 400
-        return jsonify({"redirect": "/login","status":"You have created a new password"}),200
+            return jsonify({"status": x.lans("invalid_or_expired_token")}), 400
+        return jsonify({"redirect": "/login","status":x.lans("new_password_created")}),200
     except Exception as e:
         ic(e)
         if "db" in locals():
             db.rollback()
   
         if "Invalid email or password" in str(e):
-            return jsonify({"redirect": "","status":"Password must be between 6 and 50 characters"}),400
-        return jsonify({"redirect": "/login","status":"An error occurred"}),500
+            return jsonify({"redirect": "","status":x.lans("password_length_requirement")}),400
+        return jsonify({"redirect": "/login","status":x.lans("An_error_occurred")}),500
     finally:
         if "db" in locals(): db.close()
         if "cursor" in locals(): cursor.close()
@@ -362,7 +379,7 @@ def verify_account():
         user_verification_key = x.validate_uuid4_without_dashes(request.args.get("key", ""))
 
         if not user_verification_key:
-            return jsonify({"redirect":"/login","status":"Verification key not found"}),400
+            return jsonify({"redirect":"/login","status":x.lans("verification_key_not_found")}),400
         user_verified_at = int(time.time())
         db, cursor = x.db()
         q = "UPDATE users SET user_verification_key = NULL, user_verified_at = %s WHERE user_verification_key = %s"
@@ -395,7 +412,7 @@ def posts():
         return jsonify(posts),200
     except Exception as e:
         ic(e)
-        return jsonify({"status":"An error occurred"}),500
+        return jsonify({"status":x.lans("An_error_occurred")}),500
     finally:
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()
@@ -408,7 +425,7 @@ def create_post():
         db,cursor = x.db()
         data = request.get_json()
         if not data:
-            return jsonify({"status":"Post information not found"}),400
+            return jsonify({"status":x.lans("post_info_not_found")}),400
         post_text = data.get("postText","")
         user = session.get("user", "")
         user_pk = user.get("user_pk","")
@@ -416,12 +433,12 @@ def create_post():
         q = "INSERT INTO `posts`(`post_text`, `post_created_at`, `user_fk`) VALUES (%s,%s,%s)"
         cursor.execute(q,(post_text, post_created_at, user_pk ))
         db.commit()
-        return jsonify({"status": "Post was made"}),200
+        return jsonify({"status": x.lans("post_was_made")}),200
     except Exception as e:
         ic(e)
         if "db" in locals():
             db.rollback()
-        return jsonify({"status": "An error occurred"}),500
+        return jsonify({"status": x.lans("An_error_occurred")}),500
     finally:
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()
@@ -434,32 +451,32 @@ def update_post():
         db,cursor= x.db()
         data = request.get_json()
         if not data:
-            return jsonify({"status":"Post update information not found"}),400
+            return jsonify({"status":x.lans("post_info_not_found")}),400
         post_text = data.get("postText","")
         post_text = post_text.strip()
         if not post_text:
-            return jsonify({"status":"Post text cannot be empty"}),400
+            return jsonify({"status":x.lans("post_text_empty")}),400
             
         post_pk = data.get("post_pk","")
         user = session.get("user", "")
         if not user:
-            return jsonify({"status": "You must be logged in"}), 401
+            return jsonify({"status": x.lans("must_be_logged_in")}), 401
         user_pk = user.get("user_pk","")
         post_updated_at = int(time.time())
         q="SELECT 1 FROM `posts` WHERE post_pk = %s AND user_fk = %s"
         cursor.execute(q,(post_pk, user_pk))
         if not cursor.fetchone():
-            return jsonify({"status":"You don´t own this post"}),403
+            return jsonify({"status":x.lans("not_post_owner")}),403
 
         q ="UPDATE `posts` SET `post_text`=%s,`post_updated_at`=%s WHERE post_pk =%s AND user_fk = %s"
         cursor.execute(q,(post_text,post_updated_at,post_pk, user_pk))
         db.commit()
-        return jsonify({"status": "Post is updated"}),200
+        return jsonify({"status": x.lans("post_is_updated")}),200
     except Exception as e:
         ic(e)
         if "db" in locals():
             db.rollback()
-        return jsonify({"status": "PAn error occurred"}),500
+        return jsonify({"status": x.lans("An_error_occurred")}),500
     finally:
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()
@@ -472,24 +489,24 @@ def delete_post():
         db,cursor = x.db()
         user = session.get("user", "")
         if not user:
-            return jsonify({"status": "You must be logged in"}), 401
+            return jsonify({"status": x.lans("must_be_logged_in")}), 401
         user_pk = user.get("user_pk","")
         post_pk = request.args.get("post_id")
         if not post_pk:
-            return jsonify ({"status":"Post not found"}),400
+            return jsonify ({"status":x.lans("post_info_not_found")}),400
         q = "SELECT 1 FROM posts WHERE post_pk = %s AND user_fk = %s"
         cursor.execute(q,(post_pk, user_pk))
         if not cursor.fetchone():
-            return jsonify({"status":"You don´t own this post"}),403
+            return jsonify({"status":x.lans("not_post_owner")}),403
         q="DELETE FROM `posts` WHERE post_pk = %s AND user_fk = %s"
         cursor.execute(q,(post_pk, user_pk))
         db.commit()
-        return jsonify({"postStatus": "Post is deleted"}),200
+        return jsonify({"postStatus": x.lans("post_is_deleted")}),200
     except Exception as e:
         ic(e)
         if "db" in locals():
             db.rollback()
-        return jsonify({"postStatus": "Post did not deleted"}),500
+        return jsonify({"postStatus": x.lans("post_not_deleted")}),500
     finally:
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()
@@ -503,7 +520,7 @@ def like():
         try:
             post_pk = int(post_pk)
         except(TypeError, ValueError):
-            return jsonify({"status": "Invalid post"}), 400
+            return jsonify({"status": x.lans("invalid_post")}), 400
        
         q="SELECT COUNT(user_fk) AS likeCount FROM posts_likes WHERE post_fk = %s"
         cursor.execute(q,(post_pk,))
@@ -512,7 +529,7 @@ def like():
         return jsonify(user_has_liked),200
     except Exception as e:
         ic(e)
-        return jsonify({"status": "PAn error occurred"}),500
+        return jsonify({"status": x.lans("An_error_occurred")}),500
     finally:
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()
@@ -525,10 +542,10 @@ def like_post():
         db,cursor = x.db()
         user = session.get("user", "")
         if not user:
-            return jsonify({"redirect":"/login","status":"You must be logged in"}),401
+            return jsonify({"redirect":"/login","status":x.lans("must_be_logged_in")}),401
         data = request.get_json()
         if not data:
-            return jsonify({"status":"Likes not found"}),400
+            return jsonify({"status":x.lans("likes_not_found")}),400
         user_pk = user.get("user_pk","")
         post_pk = data.get("post_pk","")
       
@@ -536,12 +553,12 @@ def like_post():
         cursor.execute(q,(post_pk,user_pk))
         db.commit()
 
-        return jsonify({"status": "You have liked a post"}),200
+        return jsonify({"status": x.lans("post_liked")}),200
     except Exception as e:
         ic(e)
         if "db" in locals():
             db.rollback()
-        return jsonify({"status": "PAn error occurred"}),500
+        return jsonify({"status": x.lans("An_error_occurred")}),500
     finally:
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()
@@ -554,17 +571,17 @@ def like_check():
         db,cursor = x.db()
         user = session.get("user", "")
         if not user:
-            return jsonify({"status":"You must be logged in"})
+            return jsonify({"status":x.lans("must_be_logged_in")})
         user_pk = user.get("user_pk","")
         post_pk = request.args.get("post_id")
         try:
             user_pk = int(user_pk)
         except (ValueError, TypeError):
-            return jsonify({"status": "Invalid user"}), 400
+            return jsonify({"status": x.lans("invalid_user")}), 400
         try:
             post_pk = int(post_pk)
         except (ValueError, TypeError):
-            return jsonify({"status": "Invalid post"}), 400
+            return jsonify({"status": x.lans("invalid_post")}), 400
 
         q="SELECT EXISTS( SELECT 1 FROM posts_likes WHERE post_fk = %s AND user_fk = %s ) AS liked;"
         cursor.execute(q,(post_pk,user_pk))
@@ -574,7 +591,7 @@ def like_check():
     except Exception as e:
         ic(e)
         
-        return jsonify({"status": "PAn error occurred"}),500
+        return jsonify({"status": x.lans("An_error_occurred")}),500
     finally:
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()
@@ -587,31 +604,31 @@ def like_delete():
         db,cursor = x.db()
         user = session.get("user", "")
         if not user:
-            return jsonify({"status":"You must be logged in"})
+            return jsonify({"status":x.lans("must_be_logged_in")})
         user_pk = user.get("user_pk","")
         try:
             user_pk = int(user_pk)
         except (ValueError, TypeError):
-            return jsonify({"status": "Invalid user"}), 400
+            return jsonify({"status": x.lans("invalid_user")}), 400
         post_pk = request.args.get("post_id")
         try:
             post_pk = int(post_pk)
         except (ValueError, TypeError):
-            return jsonify({"status": "Invalid post"}), 400
+            return jsonify({"status": x.lans("invalid_post")}), 400
         q="SELECT 1 FROM `posts_likes` WHERE post_fk=%s AND user_fk = %s;"
         cursor.execute(q,(post_pk,user_pk))
         if not cursor.fetchone():
-            return jsonify({"status":"This post is not liked"}),400
+            return jsonify({"status":x.lans("post_not_liked")}),400
         q="DELETE FROM `posts_likes` WHERE post_fk=%s AND user_fk = %s;"
         cursor.execute(q,(post_pk,user_pk))
         
         db.commit()
-        return jsonify({"status": "Post did not deleted"}),200
+        return jsonify({"status": x.lans("post_is_deleted")}),200
     except Exception as e:
         ic(e)
         if "db" in locals():
             db.rollback()
-        return jsonify({"status": "An error occurred"}),500
+        return jsonify({"status": x.lans("An_error_occurred")}),500
     finally:
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()
@@ -624,33 +641,33 @@ def comment_post():
     try:
         user = session.get("user", "")
         if not user:
-            return jsonify({"status":"You must be logged in"})
+            return jsonify({"status":x.lans("must_be_logged_in")})
         user_pk = user.get("user_pk","")
         try:
             user_pk = int(user_pk)
         except (ValueError, TypeError):
-            return jsonify({"status": "Invalid user"}), 400
+            return jsonify({"status": x.lans("invalid_user")}), 400
         db,cursor = x.db()
         data = request.get_json()
         post_pk = data.get("post_pk","")
         try:
             post_pk = int(post_pk)
         except (ValueError, TypeError):
-            return jsonify({"status": "Invalid post"}), 400
+            return jsonify({"status": x.lans("invalid_post")}), 400
         postText = data.get("postText","").strip()
         if not postText:
-            return jsonify({"status": "You can’t comment an empty post"}), 400
+            return jsonify({"status": x.lans("post_text_empty")}), 400
       
         q="INSERT INTO `posts_comments`(`post_fk`, `user_fk`, `comment_text`) VALUES (%s,%s,%s);"
 
         cursor.execute(q,(post_pk,user_pk,postText))
         db.commit()
-        return jsonify({"status": "You have sent a comment"}),200
+        return jsonify({"status": x.lans("comment_sent")}),200
     except Exception as e:
         ic(e)
         if "db" in locals():
             db.rollback()
-        return jsonify({"status": "An error occurred"}),500
+        return jsonify({"status": x.lans("An_error_occurred")}),500
     finally:
         if "db" in locals(): db.close()
         if "cursor" in locals(): cursor.close()
@@ -666,7 +683,7 @@ def comments():
         try:
             post_pk = int(post_pk)
         except (ValueError, TypeError):
-            return jsonify({"status": "Invalid post"}), 400
+            return jsonify({"status": x.lans("invalid_post")}), 400
         q="SELECT * FROM `posts_comments` WHERE post_fk = %s"
         cursor.execute(q,(post_pk,))
         post = cursor.fetchall()
@@ -676,7 +693,7 @@ def comments():
        
     except Exception as e:
         ic(e, "COMMENTS")
-        return jsonify({"status": "An error occurred"}),500
+        return jsonify({"status": x.lans("An_error_occurred")}),500
     finally:
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()
@@ -691,14 +708,14 @@ def comments_owner():
         try:
             post_pk = int(post_pk)
         except (ValueError, TypeError):
-            return jsonify({"status": "Invalid post"}), 400
+            return jsonify({"status": x.lans("invalid_post")}), 400
         q="SELECT * FROM `users` WHERE user_pk = %s"
         cursor.execute(q,(post_pk,))
         post = cursor.fetchall()
         return jsonify(post),200
     except Exception as e:
         ic(e)
-        return jsonify({"status": "An error occurred"}),500
+        return jsonify({"status": x.lans("An_error_occurred")}),500
     finally:
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()
@@ -711,14 +728,14 @@ def comment_post_number():
         try:
             post_pk = int(post_pk)
         except (ValueError, TypeError):
-            return jsonify({"status": "Invalid post"}), 400
+            return jsonify({"status": x.lans("invalid_post")}), 400
         q="SELECT COUNT(comment_pk) AS total_comments FROM posts_comments WHERE post_fk = %s"
         cursor.execute(q,(post_pk,))
         total_comments = cursor.fetchone() 
         return jsonify(total_comments),200
     except Exception as e:
         ic(e)
-        return jsonify({"status": "An error occurred"}),500
+        return jsonify({"status": x.lans("An_error_occurred")}),500
     finally:
         if "db" in locals(): db.close()
         if "cursor" in locals(): cursor.close()
@@ -730,11 +747,11 @@ def update_profile():
         db,cursor = x.db()
         user = session.get("user", "")
         if not user:
-            return jsonify({"status":"You must be logged in"}),401
+            return jsonify({"status":x.lans("must_be_logged_in")}),401
       
         data = request.get_json()
         if not data:
-            return jsonify({"status":"Likes not found"}),400
+            return jsonify({"status":x.lans("likes_not_found")}),400
         user_email = data.get("email","")
         user_username = data.get("username","")
         user_first_name = data.get("firstName","")
@@ -749,7 +766,7 @@ def update_profile():
         cursor.execute(q,(user_first_name,user_last_name,user_username,user_email,user["user_pk"]))
         # remeber to validate
         db.commit()
-        return jsonify({"postStatus": "Profile is update"})
+        return jsonify({"postStatus": x.lans("post_is_updated")})
     except Exception as e:
         ic(e)
         if "db" in locals():
@@ -757,29 +774,29 @@ def update_profile():
         if "Duplicate entry" in str(e):
                 return jsonify({
              
-                    "status": "Email or username already registered"
+                    "status": x.lans("email_or_username_registered")
                 }), 400
         if "first name min 2 max 20 characters" in str(e):
                 return jsonify({
                 
-                    "status": "First name min 2 max 20 characters"
+                    "status": x.lans("first_name_length_requirement")
                 }), 400
         if "last name min 2 max 20 characters" in str(e):
                 return jsonify({
                     
-                    "status": "Last name min 2 max 20 characters"
+                    "status": x.lans("last_name_length_requirement")
                 }), 400
         if "invalid_email" in str(e):
                 return jsonify({
                     
-                    "status": "Invalid email"
+                    "status": x.lans("invalid_email")
                 }), 400
         if "User name to small" in str(e):
                 return jsonify({
                     
-                    "status": "Username min 2 max 20 characters"
+                    "status": x.lans("username_length_requirement")
                 }), 400
-        return jsonify({"status": "An error occurred"}),500
+        return jsonify({"status": x.lans("An_error_occurred")}),500
     finally:
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()
@@ -791,7 +808,7 @@ def delete_profile():
         db,cursor = x.db()
         user = session.get("user", "")
         if not user:
-            return jsonify({"status":"You must be logged in"}),401
+            return jsonify({"status":x.lans("must_be_logged_in")}),401
         q ="DELETE FROM `users` WHERE user_pk = %s"
         cursor.execute(q,(user["user_pk"],))
         db.commit()
@@ -801,7 +818,7 @@ def delete_profile():
         ic(e)
         if "db" in locals():
             db.rollback()
-        return jsonify({"status": "An error occurred"}),500
+        return jsonify({"status": x.lans("An_error_occurred")}),500
     finally:
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()
@@ -839,17 +856,17 @@ def update_profile_avatar():
         user_avatar_name = request.form.get("imageName","")
     
         if not user_avatar_name:
-            return jsonify({"status": "file not selected"})
+            return jsonify({"status": x.lans("file_not_selected")})
         if not file:
             ic(file,"THE AVATAR not a file?")
             ic(user_avatar_name,"TO DATABASE")
-            return jsonify({"status": "file not selected"})
+            return jsonify({"status": x.lans("file_not_selected")})
             # return redirect(request.url)
 
         # If the user does not select a file, the browser submits an
         # empty file without a filename.
         if file.filename == '':
-            return jsonify({"status": "file not selected"})
+            return jsonify({"status": x.lans("file_not_selected")})
             # return redirect(request.url)
         if file and x.allowed_file(file.filename):
             format = os.path.splitext(secure_filename(file.filename))[1]
@@ -858,15 +875,15 @@ def update_profile_avatar():
             q ="UPDATE `users` SET `user_avatar`=%s WHERE user_pk = %s"
             cursor.execute(q,(unique_name,user_pk))
             db.commit()
-            return jsonify({"status": "File is uploaded"})
+            return jsonify({"status": x.lans("file_uploaded")})
 
       
-        return jsonify({"status": "Profile is update"})
+        return jsonify({"status": x.lans("profile_updated")})
     except Exception as e:
         ic(e)
         if "db" in locals():
             db.rollback()
-        return jsonify({"status": "An error occurred"}),500
+        return jsonify({"status": x.lans("An_error_occurred")}),500
     finally:
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()
@@ -892,7 +909,7 @@ def search_users():
         return(search_result)
     except Exception as e:
         ic(e)
-        return jsonify({"status": "An error occurred"}),500
+        return jsonify({"status": x.lans("An_error_occurred")}),500
     finally:
         if "db" in locals(): db.close
         if "cursor" in locals(): cursor.close
@@ -904,12 +921,12 @@ def search_random_users():
         db,cursor = x.db()
         user = session.get("user", "")
         if not user:
-            return jsonify({"status":"You must be logged in"}),401
+            return jsonify({"status":x.lans("must_be_logged_in")}),401
         user_pk = user.get("user_pk","")
         try:
             user_pk = int(user_pk)
         except(ValueError,TypeError):
-            return jsonify({"status": "Invalid user"}), 400 
+            return jsonify({"status": x.lans("invalid_user")}), 400 
 
         q=" SELECT * FROM `users` WHERE user_pk != %s ORDER BY RAND() LIMIT 3"
         cursor.execute(q,(user_pk,))
@@ -919,7 +936,7 @@ def search_random_users():
         return(search_result),200
     except Exception as e:
         ic(e)
-        return jsonify({"status": "An error occurred"}),500
+        return jsonify({"status": x.lans("An_error_occurred")}),500
     finally:
         if "db" in locals(): db.close
         if "cursor" in locals(): cursor.close
@@ -931,25 +948,25 @@ def follow_user():
         db,cursor=x.db()
         data = request.get_json()
         if not data:
-            return jsonify({"status":"Likes not found"}),400
+            return jsonify({"status":x.lans("likes_not_found")}),400
         following_id = data.get("user_pk","")
         user = session.get("user", "")
         if not user:
-            return jsonify({"status":"You must be logged in"}),401
+            return jsonify({"status":x.lans("must_be_logged_in")}),401
         follower_id = user.get("user_pk","")
         try:
             follower_id = int(follower_id)
         except(ValueError,TypeError):
-            return jsonify({"status": "Invalid user"}), 400 
+            return jsonify({"status": x.lans("invalid_user")}), 400 
         q="INSERT INTO `followers`(`follower_id`, `following_id`) VALUES (%s,%s)"
         cursor.execute(q,(follower_id,following_id))
         db.commit()
-        return jsonify({"followingStatus": "following is working"}),200
+        return jsonify({"status": x.lans("following_is_working")}),200
     except Exception as e:
         ic(e)
         if "db" in locals():
             db.rollback()
-        return jsonify({"status": "An error occurred"}),500
+        return jsonify({"status": x.lans("An_error_occurred")}),500
     finally:
         if "db" in locals(): db.close()
         if "cursor" in locals(): cursor.close()
@@ -961,26 +978,26 @@ def unfollow_user():
         db,cursor = x.db()
         user = session.get("user", "")
         if not user:
-            return jsonify({"status":"You must be logged in"}),401
+            return jsonify({"status":x.lans("must_be_logged_in")}),401
         follower_id = user.get("user_pk","")
         try:
             follower_id = int(follower_id)
         except(ValueError,TypeError):
-            return jsonify({"status": "Invalid user"}), 400 
+            return jsonify({"status": x.lans("invalid_user")}), 400 
         following_id= request.args.get("follower_id")
         try:
             following_id = int(following_id)
         except(ValueError,TypeError):
-            return jsonify({"status": "Invalid user"}), 400 
+            return jsonify({"status": x.lans("invalid_user")}), 400 
         q="DELETE FROM `followers` WHERE follower_id = %s AND following_id = %s"
         cursor.execute(q,(follower_id,following_id))
         db.commit()
-        return jsonify({"status":"User unfollowed"}),200
+        return jsonify({"status":x.lans("user_unfollowed")}),200
     except Exception as e:
         ic(e)
         if "db" in locals():
             db.rollback()
-        return jsonify({"status": "An error occurred"}),500
+        return jsonify({"status": x.lans("An_error_occurred")}),500
     finally:
         if "db" in locals(): db.close()
         if "cursor" in locals(): cursor.close()
@@ -991,25 +1008,77 @@ def following_check():
         db,cursor = x.db()
         user = session.get("user", "")
         if not user:
-            return jsonify({"status":"You must be logged in"}),401
+            return jsonify({"status":x.lans("must_be_logged_in")}),401
         follower_id = user.get("user_pk","")
         try:
             follower_id = int(follower_id)
         except(ValueError,TypeError):
-            return jsonify({"status": "Invalid user"}), 400 
+            return jsonify({"status": x.lans("invalid_user")}), 400 
         following_id = request.args.get("follower_id")
         try:
             following_id = int(following_id)
         except(ValueError,TypeError):
-            return jsonify({"status": "Invalid user"}), 400 
+            return jsonify({"status": x.lans("invalid_user")}), 400 
         q="SELECT EXISTS( SELECT 1 FROM followers WHERE follower_id = %s AND following_id = %s ) AS followed;"
         cursor.execute(q,(follower_id,following_id))
         user_follow_status = cursor.fetchall()
         return jsonify(user_follow_status),200
     except Exception as e:
         ic(e)
-        return jsonify({"status": "An error occurred"}),500
+        return jsonify({"status": x.lans("An_error_occurred")}),500
     finally:
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()
-      
+
+
+
+
+###############GET DATA FORM GOOGLE SHEET#############
+@app.get("/get-data-from-sheet")
+def get_data_from_sheet():
+    try:
+ 
+        # Check if the admin is running this end-point, else show error
+ 
+        # flaskwebmail
+        # Create a google sheet
+        # share and make it visible to "anyone with the link"
+        # In the link, find the ID of the sheet. Here: 1aPqzumjNp0BwvKuYPBZwel88UO-OC_c9AEMFVsCw1qU
+        # Replace the ID in the 2 places bellow
+        url= f"https://docs.google.com/spreadsheets/d/{x.google_spread_sheet_key}/export?format=csv&id={x.google_spread_sheet_key}"
+        res=requests.get(url=url)
+        # ic(res.text) # contains the csv text structure
+        csv_text = res.content.decode('utf-8')
+        csv_file = io.StringIO(csv_text) # Use StringIO to treat the string as a file
+       
+        # Initialize an empty list to store the data
+        data = {}
+ 
+        # Read the CSV data
+        reader = csv.DictReader(csv_file)
+        ic(reader)
+        # Convert each row into the desired structure
+        for row in reader:
+            item = {
+                    'english': row['english'],
+                    'danish': row['danish'],
+                    'spanish': row['spanish']
+               
+            }
+            # Append the dictionary to the list
+            data[row['key']] = (item)
+ 
+        # Convert the data to JSON
+        json_data = json.dumps(data, ensure_ascii=False, indent=4)
+        # ic(data)
+ 
+        # Save data to the file
+        with open("dictionary.json", 'w', encoding='utf-8') as f:
+            f.write(json_data)
+ 
+        return "ok"
+    except Exception as ex:
+        ic(ex)
+        return str(ex)
+    finally:
+        pass

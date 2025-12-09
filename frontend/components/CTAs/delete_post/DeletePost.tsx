@@ -27,7 +27,6 @@ const DeletePost = ({ post_pk, setNewFetch, newFetch }: postData) => {
       }
     } catch (err) {
       console.error("Error during logout:", err);
-      alert("like failed");
     } finally {
       setNewFetch(!newFetch);
     }

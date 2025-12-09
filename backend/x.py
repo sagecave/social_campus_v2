@@ -4,6 +4,7 @@ from email_validator import validate_email, EmailNotValidError
 import re 
 import json
 import smtplib
+import app
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
@@ -17,13 +18,16 @@ UPLOAD_ITEM_FOLDER = './images'
 google_spread_sheet_key = "1SUZ0gIwr5Zm67OsrKUWLJ2XBeHH0GPw_gemkVkXOHJ0"
 
 allowed_languages = ["english", "danish", "spanish"]
-default_language = "english"
+default_language = "danish"
 
 #############LANGUAGES##################
+# def lans(key,default_language):
 def lans(key):
+    # lan = session.get("language", default_language)
+    language = app.language_setting()
     with open("dictionary.json", 'r', encoding='utf-8') as file:
         data = json.load(file)
-    return data[key][default_language]
+    return data[key][language]
 
 ###########DATABASE###################
 def db():

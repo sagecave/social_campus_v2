@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import LoginForm from "@/components/auth-modules/login/LoginForm";
 import Image from "next/image";
 import Link from "next/link";
+
 type LanguageStrings = {
   english: string;
   danish: string;

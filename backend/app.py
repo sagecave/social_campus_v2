@@ -52,15 +52,29 @@ def global_variables():
         # dictionary = dictionary,
         x = x
     )
+################SET LANGUAGE################
+allowed_languages = ["english", "danish", "spanish"]
+default_language = "english" 
 
-
-
+@app.post("/set-language")
+def set_language():
+    data = request.get_json("language")
+    lan = data.get("language")
+    if lan not in allowed_languages:
+        return jsonify({"status": "invalid language"}), 400
+    session["language"] = lan
+    return jsonify({"status": "ok", "language": lan}), 200
+def language_setting():
+    lan = session.get("language", default_language)
+    return session.get("language", default_language)
+###################DICTIONARY###################################
 @app.get("/dictionary")
 def get_dictionary():
     try:
         with open(DICTIONARY_FILE, "r", encoding="utf-8") as f:
             data = json.load(f)
-            lan = "spanish"
+            lan= session.get("language",default_language)
+    
         return jsonify(data,lan), 200
     except FileNotFoundError:
         return jsonify({"status": "Dictionary not found"}), 404

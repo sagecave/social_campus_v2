@@ -4,21 +4,19 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 import Aside_navigation from "@/components/navigation/Aside_navigation";
-import ProfilePasswordPage from "@/components/pageLayout/profile_page/ProfilePasswordPage";
+import AdminPage from "@/components/pageLayout/admin_page/AdminPage";
 
 type UserData = {
   user_first_name: string;
   user_last_name: string;
-  user_email: string;
-  user_username: string;
   user_avatar: string;
 };
-
-const Profile = () => {
+export default function Home() {
   const router = useRouter();
   const [data, setData] = useState<UserData | null>(null);
   const [loading, setLoading] = useState(true);
-  //   const [newFetch, setNewFetch] = useState(true);
+  const [newFetch, setNewFetch] = useState(true);
+
   useEffect(() => {
     const loadUserData = async () => {
       try {
@@ -34,19 +32,19 @@ const Profile = () => {
           return;
         }
 
-        const response = await fetch("http://127.0.0.1:80/user-data", {
+        const userData = await fetch("http://127.0.0.1:80/user-data", {
           method: "GET",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
         });
-        if (!response.ok) {
-          const data = await response.json();
+        if (!userData.ok) {
+          const data = await userData.json();
           console.warn("Signup error:", data);
           alert(data.status);
         }
-        if (response.ok) {
-          const json = await response.json();
-          setData(json);
+        if (userData.ok) {
+          const data = await userData.json();
+          setData(data);
         }
       } catch (err) {
         console.error(err);
@@ -60,15 +58,12 @@ const Profile = () => {
 
   if (loading) return <p>Loading...</p>;
   if (!data) return <p>No data received</p>;
-
   return (
     <>
       <Aside_navigation user_first_name={data.user_first_name} user_last_name={data.user_last_name}></Aside_navigation>
       <main className=" col-start-2">
-        <ProfilePasswordPage user_avatar={data.user_avatar} user_first_name={data.user_last_name} user_last_name={data.user_last_name} user_email={data.user_email} user_username={data.user_username} />
+        <AdminPage />
       </main>
     </>
   );
-};
-
-export default Profile;
+}

@@ -92,3 +92,43 @@ def password_reset_email(user_email, user_token):
         raise Exception("cannot send email", 500)
     finally:
         pass
+
+############BLOCKED EMAIL##################
+def block_email(user_email):
+    try:
+        # Create a gmail fullflaskdemomail
+        # Enable (turn on) 2 step verification/factor in the google account manager
+        # Visit: https://myaccount.google.com/apppasswords
+        # Copy the key
+
+        # Email and password of the sender's Gmail account
+        sender_email = "andreassage@gmail.com"
+        password = "pthx nszm mlwm ydau"  # If 2FA is on, use an App Password instead
+
+        # Receiver email address
+        receiver_email = user_email
+        
+        # Create the email message
+        message = MIMEMultipart()
+        message["From"] = "Social Campus"
+        message["To"] = receiver_email
+        message["Subject"] = "your account is blocked"
+
+        # Body of the email
+        body = f"""You have been blocked"""
+        message.attach(MIMEText(body, "html"))
+
+        # Connect to Gmail's SMTP server and send the email
+        with smtplib.SMTP("smtp.gmail.com", 587) as server:
+            server.starttls()  # Upgrade the connection to secure
+            server.login(sender_email, password)
+            server.sendmail(sender_email, receiver_email, message.as_string())
+        print("Email sent successfully!")
+
+        return "email sent"
+        
+    except Exception as ex:
+        ic("Send email",ex)
+        raise Exception("cannot send email", 500)
+    finally:
+        pass

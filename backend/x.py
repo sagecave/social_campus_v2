@@ -17,7 +17,7 @@ UPLOAD_ITEM_FOLDER = './images'
 google_spread_sheet_key = "1SUZ0gIwr5Zm67OsrKUWLJ2XBeHH0GPw_gemkVkXOHJ0"
 
 allowed_languages = ["english", "danish", "spanish"]
-default_language = "spanish"
+default_language = "english"
 
 #############LANGUAGES##################
 def lans(key):

@@ -132,8 +132,9 @@ def get_post_owner():
 def login_submit():
     ic("request from login form")
     if request.method == "GET":
-
+        
         if session.get("user",""): 
+            
             return jsonify({"redirect": "/"})
         return jsonify({"redirect": "/login"})
         
@@ -159,7 +160,9 @@ def login_submit():
                 raise Exception(x.lans("invalid_password"), 400)
             
             if user["user_verification_key"] != None:
-                raise Exception (x.lans("user_not_verified"))
+                raise Exception ("user_not_verified")
+            if user["user_block_status"] != "notBlock":
+                raise Exception ("user_is_blocked")
             user.pop("user_password")
             session["user"] = user  
         
@@ -170,6 +173,14 @@ def login_submit():
             if "Inavlid email" in str(e):
                 return jsonify({"redirect": "/login",
                    "status": x.lans("Invalid_email_or_password")}),500
+            
+            if "user_is_blocked" in str(e):
+                return jsonify({
+                   "status": x.lans("user_is_blocked")}),500
+           
+            if "user_not_verified" in str(e):
+                return jsonify({
+                   "status": x.lans("user_not_verified")}),500
            
             if "Invalid password" in str(e):
                 return jsonify({"redirect": "/login",
@@ -1030,6 +1041,86 @@ def following_check():
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()
 
+###############ADMIN GET USERS#############
+@app.get("/admin-users")
+def admin_users():
+    try:
+
+        db,cursor = x.db()
+        user = session.get("user", "")
+        if not user:
+            return jsonify({"status":x.lans("must_be_logged_in")}),401
+        user_id = user.get("user_pk","")
+        user_role = user.get("user_role","")
+        ic(user_id)
+        q = "SELECT 1 FROM users WHERE user_pk=%s AND user_role='admin'"
+        cursor.execute(q, (user_id,))
+
+        row = cursor.fetchone()
+        if row is None:
+            return jsonify({"status": "You are not an admin"}), 403
+      
+        ic(user_role)
+        q="SELECT `user_pk`, `user_first_name`, `user_last_name`, `user_username`, `user_email`, `user_avatar`, `user_role`, `user_block_status` FROM `users` WHERE user_role = 'user'"
+        cursor.execute(q,)
+        allUser=cursor.fetchall()
+        ic(allUser,"all users")
+        return jsonify(allUser)
+    except Exception as e:
+        ic(e)
+        return jsonify({"status": x.lans("An_error_occurred")}),500
+    finally:
+        if "db" in locals(): db.close()
+        if "cursor" in locals(): cursor.close()
+###############ADMIN BLOCK USERS STATUS#############
+@app.post("/admin-block-users")
+def admin_block_users():
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({"status":x.lans("likes_not_found")}),400
+        user_pk = data.get("user_pk","")
+        user_email = data.get("user_email","")
+      
+        blockStatus = data.get("newStatus","")
+       
+        db,cursor = x.db()
+        q="UPDATE `users` SET `user_block_status`=%s WHERE user_pk = %s"
+        cursor.execute(q,(blockStatus,user_pk))
+        db.commit()
+        send_emails.block_email(user_email)
+        
+        return jsonify({"status":x.lans("user_is_blocked")}),200
+    except Exception as e:
+        ic(e)
+        return jsonify({"status": x.lans("An_error_occurred")}),500
+    finally:
+        if "db" in locals(): db.close()
+        if "cursor" in locals(): cursor.close()
+##############USERS BLOCK CHECK#############
+@app.get("/block-check")
+def block_check():
+    try:
+        db,cursor = x.db()
+       
+        user_id = request.args.get("user_id")
+        
+        try:
+            user_id = int(user_id)
+        except(ValueError,TypeError):
+            return jsonify({"status": x.lans("invalid_user")}), 400 
+        q="SELECT EXISTS(SELECT 1 FROM `users` WHERE user_pk = %s AND user_block_status = 'notBlock') AS userStatus"
+        cursor.execute(q, (user_id,))
+
+        user_block_status = cursor.fetchone()
+      
+        return jsonify(user_block_status),200
+    except Exception as e:
+        ic(e)
+        return jsonify({"status": x.lans("An_error_occurred")}),500
+    finally:
+        if "cursor" in locals(): cursor.close()
+        if "db" in locals(): db.close()
 
 
 

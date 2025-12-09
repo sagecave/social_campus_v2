@@ -398,5 +398,10 @@
         "english": "Profile",
         "danish": "Profil",
         "spanish": "Perfil"
+    },
+    "user_is_blocked": {
+        "english": "User is blocked",
+        "danish": "Bruger er blokeret",
+        "spanish": "Usuario está bloqueado"
     }
 }

@@ -19,10 +19,11 @@ const AdminControlPanel = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [fetchAgain, setFetchAgain] = useState<boolean>(true);
   const [errorMessageGet, setErrorMessageGet] = useState<string>("");
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   useEffect(() => {
     const loadPosts = async () => {
       try {
-        const postData = await fetch("http://127.0.0.1:80/admin-users", {
+        const postData = await fetch(`${apiUrl}/admin-users`, {
           method: "GET",
           headers: { "Content-Type": "application/json" },
           credentials: "include",

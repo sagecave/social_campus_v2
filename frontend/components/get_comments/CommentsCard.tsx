@@ -19,10 +19,11 @@ type userData = {
 const CommentsCard = ({ comment_text, user_fk }: PostCardProps) => {
   const [owner, setOnwer] = useState<userData | null>(null);
   const [loading, setLoading] = useState(true);
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   useEffect(() => {
     const loadPosts = async () => {
       try {
-        const postData = await fetch(`http://127.0.0.1:80/comments-owner?user_id=${user_fk}`, {
+        const postData = await fetch(`${apiUrl}/comments-owner?user_id=${user_fk}`, {
           method: "GET",
           headers: { "Content-Type": "application/json" },
           credentials: "include",

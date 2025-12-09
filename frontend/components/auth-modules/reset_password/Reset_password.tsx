@@ -14,6 +14,7 @@ const Reset_password = ({ change_password, new_password, enter_new_password }: D
   const [password, setPassword] = useState<string>("");
   const params = useSearchParams();
   const token = params.get("key");
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   //   const [valid, setValid] = useState(false);
   //   const [status, setStatus] = useState<"loading" | "invalid" | "expired" | "valid">("loading");
 
@@ -38,7 +39,7 @@ const Reset_password = ({ change_password, new_password, enter_new_password }: D
     e.preventDefault();
 
     try {
-      const response = await fetch("http://127.0.0.1:80/update-password", {
+      const response = await fetch(`${apiUrl}/update-password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ password, token }),

@@ -7,10 +7,11 @@ type postData = {
   newFetch: boolean;
 };
 const DeletePost = ({ post_pk, setNewFetch, newFetch }: postData) => {
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const deletingPost = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const response = await fetch(`http://127.0.0.1:80/delete-post?post_id=${post_pk}`, {
+      const response = await fetch(`${apiUrl}/delete-post?post_id=${post_pk}`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

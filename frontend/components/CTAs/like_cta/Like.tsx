@@ -64,10 +64,11 @@ const Link = ({ post_pk }: postData) => {
   }, [fetchAgain]);
 
   const likePost = async (e: React.FormEvent<HTMLFormElement>) => {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     e.preventDefault();
     if (likeStatus == 0) {
       try {
-        const response = await fetch("http://127.0.0.1:80/like-post", {
+        const response = await fetch(`${apiUrl}/like-post`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ post_pk }),
@@ -97,7 +98,7 @@ const Link = ({ post_pk }: postData) => {
     }
     if (likeStatus == 1) {
       try {
-        const response = await fetch(`http://127.0.0.1:80/like-delete?post_id=${post_pk}`, {
+        const response = await fetch(`${apiUrl}/like-delete?post_id=${post_pk}`, {
           method: "DELETE",
           headers: { "Content-Type": "application/json" },
           credentials: "include",

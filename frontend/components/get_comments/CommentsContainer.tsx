@@ -20,11 +20,12 @@ type PostContainerProps = {
 const CommentsContainer = ({ post_pk, newFetch }: PostContainerProps) => {
   const [data, setData] = useState<PostCardProps[] | null>(null);
   const [loading, setLoading] = useState(true);
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
     const loadPosts = async () => {
       try {
-        const postData = await fetch(`http://127.0.0.1:80/comments?post_id=${post_pk}`, {
+        const postData = await fetch(`${apiUrl}/comments?post_id=${post_pk}`, {
           method: "GET",
           headers: { "Content-Type": "application/json" },
           credentials: "include",

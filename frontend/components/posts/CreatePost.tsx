@@ -10,11 +10,11 @@ type postData = {
 const CreatePost = ({ setNewFetch, newFetch, post, post_update_placeholder }: postData) => {
   const [postText, setPostText] = useState<string>("");
   const [errorMessageGet, setErrorMessageGet] = useState<string>("");
-
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://127.0.0.1:80/create-post", {
+      const response = await fetch(`${apiUrl}/create-post`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ postText }),

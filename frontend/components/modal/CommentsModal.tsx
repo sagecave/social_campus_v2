@@ -18,6 +18,7 @@ type commentData = {
 const CommentsModal = ({ post_pk, isModalOpen, setIsModalOpen, post, make_comment, close }: commentData) => {
   const [postText, setPostText] = useState<string>("");
   const [newFetch, setNewFetch] = useState(true);
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   //   useEffect(() => {
   //     setPostText(post_text);
   //   }, [post_text]);
@@ -26,7 +27,7 @@ const CommentsModal = ({ post_pk, isModalOpen, setIsModalOpen, post, make_commen
     e.preventDefault();
     // skal post text op til databasen
     try {
-      const response = await fetch("http://127.0.0.1:80/post-comments", {
+      const response = await fetch(`${apiUrl}/post-comments`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ post_pk, postText }),

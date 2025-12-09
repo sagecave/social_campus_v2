@@ -15,6 +15,7 @@ type commentData = {
 const Comment = ({ post_pk, post, make_comment, close }: commentData) => {
   const [totalComments, setTotalComments] = useState<number>(0);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
@@ -22,7 +23,7 @@ const Comment = ({ post_pk, post, make_comment, close }: commentData) => {
   useEffect(() => {
     const loadUserData = async () => {
       try {
-        const response = await fetch(`http://127.0.0.1:80/post-comments-number?postId=${post_pk}`, {
+        const response = await fetch(`${apiUrl}/post-comments-number?postId=${post_pk}`, {
           method: "GET",
           headers: { "Content-Type": "application/json" },
           credentials: "include",

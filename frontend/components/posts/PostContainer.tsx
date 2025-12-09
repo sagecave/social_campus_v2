@@ -23,10 +23,11 @@ type PostContainerProps = {
 const Post_container = ({ newFetch, setNewFetch, user_avatar, update_post, make_comment, edit_post, post, close }: PostContainerProps) => {
   const [data, setData] = useState<PostCardProps[] | null>(null);
   const [loading, setLoading] = useState(true);
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   useEffect(() => {
     const loadPosts = async () => {
       try {
-        const postData = await fetch("http://127.0.0.1:80/posts", {
+        const postData = await fetch(`${apiUrl}/posts`, {
           method: "GET",
           headers: { "Content-Type": "application/json" },
           credentials: "include",

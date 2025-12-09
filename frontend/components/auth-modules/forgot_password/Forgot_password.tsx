@@ -10,6 +10,7 @@ type DictionaryType = {
 const Forgot_password = ({ emailContent, reset_password }: DictionaryType) => {
   const router = useRouter();
   const [email, setEmail] = useState<string>("");
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   // const params = useSearchParams();
   // const token = params.get("key");
   //   const [valid, setValid] = useState(false);
@@ -49,7 +50,7 @@ const Forgot_password = ({ emailContent, reset_password }: DictionaryType) => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://127.0.0.1:80/forgot-password", {
+      const response = await fetch(`${apiUrl}/forgot-password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),

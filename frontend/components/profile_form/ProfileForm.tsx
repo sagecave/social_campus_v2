@@ -23,10 +23,11 @@ const ProfileForm = ({ emailLan, update_profile, last_name, first_name, user_nam
   const [firstName, setFirstName] = useState<string>(user_first_name);
   const [lastName, setLastName] = useState<string>(user_last_name);
   const [errorMessageGet, setErrorMessageGet] = useState<string>("");
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://127.0.0.1:80/update-profile", {
+      const response = await fetch(`${apiUrl}/update-profile`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ emailContent, username, firstName, lastName }),
@@ -51,7 +52,7 @@ const ProfileForm = ({ emailLan, update_profile, last_name, first_name, user_nam
     const checkSession = async () => {
       try {
         console.log("Checking session status...");
-        const response = await fetch("http://127.0.0.1:80/session-check", {
+        const response = await fetch(`${apiUrl}/session-check`, {
           method: "GET",
           headers: { "Content-Type": "application/json" },
           credentials: "include",

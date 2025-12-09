@@ -15,7 +15,7 @@ const ProfileForm = ({ user_avatar, change_your_avatar, change_avatar }: UserDat
   const [imageName, setImageName] = useState<string>(user_avatar || "");
   const [imageNameE, setImageNameE] = useState<string>(user_avatar || "");
   const [errorMessageGet, setErrorMessageGet] = useState<string>("");
-
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -27,7 +27,7 @@ const ProfileForm = ({ user_avatar, change_your_avatar, change_avatar }: UserDat
         formData.append("imageName", imageName);
       }
 
-      const response = await fetch("http://127.0.0.1:80/update-profile-avatar", {
+      const response = await fetch(`${apiUrl}/update-profile-avatar`, {
         method: "PATCH",
 
         body: formData,
@@ -77,7 +77,7 @@ const ProfileForm = ({ user_avatar, change_your_avatar, change_avatar }: UserDat
     <div>
       <ErrorHandlingModal errorMessageGet={errorMessageGet} setErrorMessageGet={setErrorMessageGet} />
       {/* jeg er igang med at få dette image, så det kommer fra database i stedet for */}
-      <img className=" rounded-full" src={`http://127.0.0.1/uploads/${imageNameE}`} alt={imageNameE} width={50} height={50} />
+      <img className=" rounded-full" src={`${apiUrl}/uploads/${imageNameE}`} alt={imageNameE} width={50} height={50} />
       {/* <Image src={"http://127.0.0.1/uploads/0b8f19cd-f8bf-43a6-886a-1be53fe89c60.png"} alt={imageName} width={50} height={50} /> */}
       {/* <Image src={profileAvatar} alt="Picture of the author" width={50} height={50} /> */}
       <form className="flex flex-col justify-self-center w-[inherit] max-w-160 gap-4 place-items-center" onSubmit={handleSubmit}>

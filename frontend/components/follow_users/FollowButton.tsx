@@ -9,10 +9,11 @@ const FollowButton = ({ user_pk, unfollow, follow }: userData) => {
   const [followStatus, setFollowStatus] = useState<number>(0);
   const [followFetchUpdate, setFollowFetchUpdate] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   useEffect(() => {
     const followingCheck = async () => {
       try {
-        const response = await fetch(`http://127.0.0.1:80/following-check?follower_id=${user_pk}`, {
+        const response = await fetch(`${apiUrl}/following-check?follower_id=${user_pk}`, {
           method: "GET",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
@@ -38,7 +39,7 @@ const FollowButton = ({ user_pk, unfollow, follow }: userData) => {
     e.preventDefault();
     if (followStatus == 0) {
       try {
-        const response = await fetch("http://127.0.0.1:80/follow-user", {
+        const response = await fetch(`${apiUrl}/follow-user`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ user_pk }),
@@ -63,7 +64,7 @@ const FollowButton = ({ user_pk, unfollow, follow }: userData) => {
     }
     if (followStatus == 1) {
       try {
-        const response = await fetch(`http://127.0.0.1:80/unfollow-user?follower_id=${user_pk}`, {
+        const response = await fetch(`${apiUrl}/unfollow-user?follower_id=${user_pk}`, {
           method: "DELETE",
           headers: { "Content-Type": "application/json" },
           credentials: "include",

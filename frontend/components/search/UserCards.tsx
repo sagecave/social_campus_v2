@@ -10,9 +10,10 @@ type User = {
   user_pk: number;
 };
 const UserCards = ({ user_pk, user_username, user_avatar, user_first_name, user_last_name, unfollow, follow }: User) => {
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   return (
     <article>
-      <img className="" src={`http://127.0.0.1/uploads/${user_avatar}`} alt="Picture of the author" width={30} height={30} />
+      <img className="" src={`${apiUrl}/uploads/${user_avatar}`} alt="Picture of the author" width={30} height={30} />
       <p>{user_first_name}</p>
       <p>{user_last_name}</p>
       <p>{user_username}</p>

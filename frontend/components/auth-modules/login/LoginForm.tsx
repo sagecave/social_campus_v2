@@ -16,11 +16,12 @@ const LoginForm = ({ loginText, emailText, forgotPasswordText, passwordText, Log
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [errorMessageGet, setErrorMessageGet] = useState<string>("");
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   useEffect(() => {
     const checkSession = async () => {
       try {
         console.log("Checking session status...");
-        const response = await fetch("http://127.0.0.1:80/session-check", {
+        const response = await fetch(`${apiUrl}/session-check`, {
           method: "GET",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
@@ -47,7 +48,7 @@ const LoginForm = ({ loginText, emailText, forgotPasswordText, passwordText, Log
     e.preventDefault();
 
     try {
-      const response = await fetch("http://127.0.0.1:80/login-submit", {
+      const response = await fetch(`${apiUrl}/login-submit`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),

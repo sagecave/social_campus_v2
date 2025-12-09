@@ -28,10 +28,11 @@ type PostCardProps = {
 const PostCard = ({ post_text, user_fk, post_created_at, post_pk, setNewFetch, newFetch, user_avatar, update_post, make_comment, edit_post, post, close }: PostCardProps) => {
   const [owner, setOnwer] = useState<PostCardProps | null>(null);
   const [loading, setLoading] = useState(true);
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   useEffect(() => {
     const loadPosts = async () => {
       try {
-        const postData = await fetch(`http://127.0.0.1:80/post-owner?owner=${user_fk}`, {
+        const postData = await fetch(`${apiUrl}/post-owner?owner=${user_fk}`, {
           method: "GET",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
@@ -76,7 +77,7 @@ const PostCard = ({ post_text, user_fk, post_created_at, post_pk, setNewFetch, n
     <article className="flex flex-col gap-4 p-4 max-w-[500px] min-w-[320px]">
       <div className="flex justify-between">
         <div className="flex gap-4">
-          <img className=" rounded-full" src={`http://127.0.0.1/uploads/${owner.user_avatar}`} alt="profil billede" width={50} height={50} />
+          <img className=" rounded-full" src={`${apiUrl}/uploads/${owner.user_avatar}`} alt="profil billede" width={50} height={50} />
           {/* <Image className=" rounded-b-full" src="/socialCampus_logo.png" alt="Picture of the author" width={30} height={30} /> */}
           <div>
             <p className=" text-[1rem] text-postname">

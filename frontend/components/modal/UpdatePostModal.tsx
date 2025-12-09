@@ -16,7 +16,7 @@ type modalState = {
 const UpdatePostModal = ({ setIsModalOpen, isModalOpen, post_pk, post_text, setNewFetch, newFetch, update_post, edit_post, close }: modalState) => {
   const [postText, setPostText] = useState<string>("");
   const [errorMessageGet, setErrorMessageGet] = useState<string>("");
-
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   useEffect(() => {
     setPostText(post_text);
   }, [post_text]);
@@ -25,7 +25,7 @@ const UpdatePostModal = ({ setIsModalOpen, isModalOpen, post_pk, post_text, setN
     e.preventDefault();
 
     try {
-      const response = await fetch("http://127.0.0.1:80/update-post", {
+      const response = await fetch(`${apiUrl}/update-post`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ postText, post_pk }),

@@ -13,10 +13,11 @@ const BlockUnblockUser = ({ user_pk, user_block_status, setFetchAgain, fetchAgai
   const [blockStatus, SetblockStatus] = useState<boolean>(false);
   const [followStatus, setFollowStatus] = useState<number>(0);
   const [followFetchUpdate, setFollowFetchUpdate] = useState<boolean>(false);
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   useEffect(() => {
     const followingCheck = async () => {
       try {
-        const response = await fetch(`http://127.0.0.1:80/block-check?user_id=${user_pk}`, {
+        const response = await fetch(`${apiUrl}/block-check?user_id=${user_pk}`, {
           method: "GET",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
@@ -44,7 +45,7 @@ const BlockUnblockUser = ({ user_pk, user_block_status, setFetchAgain, fetchAgai
     const blockButton = user_block_status === "notBlock" ? true : false;
     SetblockStatus(blockButton);
     try {
-      const response = await fetch("http://127.0.0.1:80/admin-block-users", {
+      const response = await fetch(`${apiUrl}/admin-block-users`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ user_pk, newStatus, user_email }),

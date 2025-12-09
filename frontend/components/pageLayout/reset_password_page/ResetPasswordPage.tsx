@@ -17,11 +17,12 @@ type DictionaryType = {
 const ResetPasswordPage = () => {
   const [dictionary, setDictionary] = useState<DictionaryType | null>(null);
   const [language, setLanguage] = useState<"english" | "danish" | "spanish">("english");
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   useEffect(() => {
     const fetchDictionary = async () => {
       try {
         console.log("Fetching dictionary...");
-        const response = await fetch("http://127.0.0.1:80/dictionary", {
+        const response = await fetch(`${apiUrl}/dictionary`, {
           method: "GET",
           headers: { "Content-Type": "application/json" },
           credentials: "include",

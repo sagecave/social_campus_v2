@@ -24,11 +24,12 @@ const SearchUser = ({ modalOpen, setModalOpen, unfollow, follow, search_for_user
   const [searchInput, setSearchInput] = useState<string>("");
 
   const [searchOutput, setSearchOutput] = useState<User[]>([]);
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   useEffect(() => {
     const handleSearch = async () => {
       if (searchInput.length >= 1) {
         try {
-          const response = await fetch(`http://127.0.0.1:80/search-users?search_input=${searchInput}`, {
+          const response = await fetch(`${apiUrl}/search-users?search_input=${searchInput}`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
@@ -51,7 +52,7 @@ const SearchUser = ({ modalOpen, setModalOpen, unfollow, follow, search_for_user
       }
       if (searchInput.length == 0) {
         try {
-          const response = await fetch(`http://127.0.0.1:80/search_random-users`, {
+          const response = await fetch(`${apiUrl}/search_random-users`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
             credentials: "include",

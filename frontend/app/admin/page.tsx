@@ -16,11 +16,12 @@ export default function Home() {
   const [data, setData] = useState<UserData | null>(null);
   const [loading, setLoading] = useState(true);
   const [newFetch, setNewFetch] = useState(true);
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
     const loadUserData = async () => {
       try {
-        const sessionResponse = await fetch("http://127.0.0.1:80/session-check", {
+        const sessionResponse = await fetch(`${apiUrl}/session-check`, {
           method: "GET",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
@@ -32,7 +33,7 @@ export default function Home() {
           return;
         }
 
-        const userData = await fetch("http://127.0.0.1:80/user-data", {
+        const userData = await fetch(`${apiUrl}/user-data`, {
           method: "GET",
           headers: { "Content-Type": "application/json" },
           credentials: "include",

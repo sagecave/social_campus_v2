@@ -13,9 +13,10 @@ type userData = {
   fetchAgain: boolean;
 };
 const AdminUserCards = ({ fetchAgain, setFetchAgain, user_block_status, user_role, user_pk, user_email, user_username, user_avatar, user_first_name, user_last_name }: userData) => {
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   return (
     <article className="flex gap-10  ">
-      <img src={`http://127.0.0.1/uploads/${user_avatar}`} alt="pic" width={30} height={30} />
+      <img src={`${apiUrl}/uploads/${user_avatar}`} alt="pic" width={30} height={30} />
       <div className="flex flex-col">
         <h2 className=" font-semibold">User id</h2>
         <p>{user_pk}</p>

@@ -32,13 +32,13 @@ type DictionaryType = {
 const ProfilePasswordPage = ({ user_avatar, user_first_name, user_last_name, user_email, user_username }: UserData) => {
   const [dictionary, setDictionary] = useState<DictionaryType | null>(null);
   const [language, setLanguage] = useState<"english" | "danish" | "spanish">("english");
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  const apiUrlDict = process.env.NEXT_PUBLIC_API_URL_DICTIONARY;
 
   useEffect(() => {
     const fetchDictionary = async () => {
       try {
         console.log("Fetching dictionary...");
-        const response = await fetch(`${apiUrl}/dictionary`, {
+        const response = await fetch(`${apiUrlDict}/dictionary`, {
           method: "GET",
           headers: { "Content-Type": "application/json" },
           credentials: "include",

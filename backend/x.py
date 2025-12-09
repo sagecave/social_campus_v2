@@ -3,6 +3,7 @@ import mysql.connector
 from email_validator import validate_email, EmailNotValidError
 import re 
 import json
+import os
 import smtplib
 import app
 from email.mime.multipart import MIMEMultipart
@@ -14,6 +15,7 @@ from icecream import ic
 ic.configureOutput(prefix=f'----- | ', includeContext=True)
 
 UPLOAD_ITEM_FOLDER = './images'
+
 
 google_spread_sheet_key = "1SUZ0gIwr5Zm67OsrKUWLJ2XBeHH0GPw_gemkVkXOHJ0"
 

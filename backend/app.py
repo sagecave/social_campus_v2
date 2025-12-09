@@ -34,9 +34,9 @@ UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), "uploads")
 app = Flask(__name__, static_url_path='/uploads', static_folder='uploads'   )
 
 DICTIONARY_FILE = os.path.join(os.path.dirname(__file__), "dictionary.json")
-
+PageUrl = "http://127.0.0.1:3000"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-CORS(app, supports_credentials=True, origins=["http://127.0.0.1:3000"],allow_headers=["Content-Type"], expose_headers=["Content-Type"])
+CORS(app, supports_credentials=True, origins=[PageUrl],allow_headers=["Content-Type"], expose_headers=["Content-Type"])
 
 app.config["SECRET_KEY"] = "your_fixed_secret_key"
 app.config['SESSION_TYPE'] = 'filesystem'
@@ -87,7 +87,7 @@ def get_dictionary():
 def get_data(): 
     user = session.get("user", "")
     if not user:
-        return redirect("http://127.0.0.1:3000/login")
+        return redirect(f"{PageUrl}/login")
 
     # TODO: USE THIS INSTED OF THE ONE ABOVE
     # if not user: 
@@ -411,16 +411,16 @@ def verify_account():
         cursor.execute(q,(user_verified_at, user_verification_key))
         db.commit()
         if cursor.rowcount != 1: raise Exception("Invalid key", 400)
-        return redirect("http://127.0.0.1:3000/")
+        return redirect(f"{PageUrl}/")
     except Exception as ex:
         ic(ex)
         
         if "db" in locals(): db.rollback()
   
         if ex.args[1] == 400: 
-            return redirect("http://127.0.0.1:3000/login"),400
+            return redirect(f"{PageUrl}/login"),400
      
-        return redirect("http://127.0.0.1:3000/login"),400
+        return redirect(f"{PageUrl}/login"),400
     finally:
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()
@@ -838,7 +838,7 @@ def delete_profile():
         cursor.execute(q,(user["user_pk"],))
         db.commit()
         session.clear()
-        return redirect("http://127.0.0.1:3000/login")
+        return redirect(f"{PageUrl}/login")
     except Exception as e:
         ic(e)
         if "db" in locals():

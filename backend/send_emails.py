@@ -10,7 +10,8 @@ from email.mime.text import MIMEText
 from functools import wraps
 
 from icecream import ic
-PageUrl = "https://social-campus-v2.vercel.app"
+PageUrl = "https://127.0.0.1:3000"
+# PageUrl = "https://social-campus-v2.vercel.app"
 ############VERIFICATION OF USER EMAIL##################
 def send_verify_email(user_email, user_verification_key):
     try:

@@ -18,7 +18,7 @@ type UserData = {
 const ProfileForm = ({ emailLan, update_profile, last_name, first_name, user_name, user_first_name, user_last_name, user_username, user_email }: UserData) => {
   const router = useRouter();
 
-  const [emailContent, setEmail] = useState<string>(user_email);
+  const [emailContent, setEmailContent] = useState<string>(user_email);
   const [username, setUsername] = useState<string>(user_username);
   const [firstName, setFirstName] = useState<string>(user_first_name);
   const [lastName, setLastName] = useState<string>(user_last_name);
@@ -97,9 +97,9 @@ const ProfileForm = ({ emailLan, update_profile, last_name, first_name, user_nam
             className=" px-4 py-6 bg-inside-border-white border-2 rounded-border-form border-border-light-gray h-12 placeholder:text-light-gray caret-accent-purple w-full"
             type="text"
             name="email"
-            value={user_email}
+            value={emailContent}
             placeholder={emailLan}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => setEmailContent(e.target.value)}
           />
         </div>
 

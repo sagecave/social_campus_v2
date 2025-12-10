@@ -51,35 +51,13 @@ const ProfileForm = ({ user_avatar, change_your_avatar, change_avatar }: UserDat
       setImageNameE(imageName);
     }
   };
-  //   useEffect(() => {
-  //     const checkSession = async () => {
-  //       try {
-  //         console.log("Checking session status...");
-  //         const response = await fetch("http://127.0.0.1:80/session-check", {
-  //           method: "GET",
-  //           headers: { "Content-Type": "application/json" },
-  //           credentials: "include",
-  //         });
-  //         const data = await response.json();
-  //         console.log("Session check data:", data);
-  //         // if (data.redirect) {
-  //         //   //   router.push("/");
-
-  //         // }
-  //       } catch (err) {
-  //         console.error("Error during session check:", err);
-  //       }
-  //     };
-  //     checkSession();
-  //   }, []);
 
   return (
     <div>
       <ErrorHandlingModal errorMessageGet={errorMessageGet} setErrorMessageGet={setErrorMessageGet} />
       {/* jeg er igang med at få dette image, så det kommer fra database i stedet for */}
       <img className=" rounded-full" src={`${apiUrl}/uploads/${imageNameE}`} alt={imageNameE} width={50} height={50} />
-      {/* <Image src={"http://127.0.0.1/uploads/0b8f19cd-f8bf-43a6-886a-1be53fe89c60.png"} alt={imageName} width={50} height={50} /> */}
-      {/* <Image src={profileAvatar} alt="Picture of the author" width={50} height={50} /> */}
+
       <form className="flex flex-col justify-self-center w-[inherit] max-w-160 gap-4 place-items-center" onSubmit={handleSubmit}>
         <div className="flex flex-col w-full">
           <label className="text-label-dark-gray font-bold">{change_avatar}</label>

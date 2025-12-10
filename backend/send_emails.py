@@ -10,7 +10,7 @@ from email.mime.text import MIMEText
 from functools import wraps
 
 from icecream import ic
-
+PageUrl = "https://social-campus-v2.vercel.app"
 ############VERIFICATION OF USER EMAIL##################
 def send_verify_email(user_email, user_verification_key):
     try:
@@ -33,7 +33,7 @@ def send_verify_email(user_email, user_verification_key):
         message["Subject"] = "Please verify your account"
 
         # Body of the email
-        body = f"""To verify your account, please <a href="http://127.0.0.1:80/verify-account?key={user_verification_key}">click here</a>"""
+        body = f"""To verify your account, please <a href="{PageUrl}/verify-account?key={user_verification_key}">click here</a>"""
         message.attach(MIMEText(body, "html"))
 
         # Connect to Gmail's SMTP server and send the email
@@ -75,7 +75,7 @@ def password_reset_email(user_email, user_token):
         message["Subject"] = "Change your account password"
 
         # Body of the email
-        body = f"""To change your password please <a href="http://127.0.0.1:3000/reset_password?key={user_token}">click here</a>"""
+        body = f"""To change your password please <a href="{PageUrl}/reset_password?key={user_token}">click here</a>"""
         message.attach(MIMEText(body, "html"))
 
         # Connect to Gmail's SMTP server and send the email

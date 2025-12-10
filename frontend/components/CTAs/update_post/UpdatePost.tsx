@@ -20,26 +20,7 @@ const UpdatePost = ({ post_pk, post_text, setNewFetch, newFetch, edit_post, upda
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
-  //   const updateModalPost = async (e: React.FormEvent<HTMLFormElement>) => {
-  //     e.preventDefault();
-  // try {
-  //   const response = await fetch("http://127.0.0.1:80/post-comments", {
-  //     method: "POST",
-  //     headers: { "Content-Type": "application/json" },
-  //     credentials: "include",
-  //   });
 
-  //   if (!response.ok) {
-  //     const text = await response.text();
-  //     throw new Error(`HTTP ${response.status}: ${text}`);
-  //   }
-  //   const data = await response.json();
-  //   console.log("data logout form", data);
-  // } catch (err) {
-  //   console.error("Error during logout:", err);
-  //   alert("like failed");
-  // }
-  //   };
   return (
     <div className=" hover:bg-accent-purple-light w-fit  rounded-4xl py-2 px-4 pointer">
       {isModalOpen && <UpdatePostModal edit_post={edit_post} update_post={update_post} close={close} setNewFetch={setNewFetch} newFetch={newFetch} setIsModalOpen={setIsModalOpen} isModalOpen={isModalOpen} post_pk={post_pk} post_text={post_text} />}

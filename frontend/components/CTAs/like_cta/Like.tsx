@@ -12,10 +12,11 @@ const Link = ({ post_pk }: postData) => {
   const [likeCount, setLikeCount] = useState<number>(0);
   const [likeStatus, setLikeStatus] = useState<number>(0);
   const [fetchAgain, setFetchAgain] = useState<boolean>(false);
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   useEffect(() => {
     const likeGet = async () => {
       try {
-        const response = await fetch(`http://127.0.0.1:80/like?post_id=${post_pk}`, {
+        const response = await fetch(`${apiUrl}/like?post_id=${post_pk}`, {
           method: "GET",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
@@ -38,7 +39,7 @@ const Link = ({ post_pk }: postData) => {
     };
     const likeCheck = async () => {
       try {
-        const response = await fetch(`http://127.0.0.1:80/like-check?post_id=${post_pk}`, {
+        const response = await fetch(`${apiUrl}/like-check?post_id=${post_pk}`, {
           method: "GET",
           headers: { "Content-Type": "application/json" },
           credentials: "include",

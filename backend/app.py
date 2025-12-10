@@ -34,7 +34,8 @@ UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), "uploads")
 app = Flask(__name__, static_url_path='/uploads', static_folder='uploads'   )
 
 DICTIONARY_FILE = os.path.join(os.path.dirname(__file__), "dictionary.json")
-PageUrl = "http://127.0.0.1:3000"
+# PageUrl = "http://127.0.0.1:3000"
+PageUrl = "https://social-campus-v2.vercel.app"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 CORS(app, supports_credentials=True, origins=[PageUrl],allow_headers=["Content-Type"], expose_headers=["Content-Type"])
 

@@ -12,6 +12,7 @@ type UserData = {
   user_first_name: string;
   user_last_name: string;
   user_avatar: string;
+  user_role: string;
 };
 export default function Home() {
   const router = useRouter();
@@ -63,7 +64,7 @@ export default function Home() {
   if (!data) return <p>No data received</p>;
   return (
     <>
-      <Aside_navigation user_first_name={data.user_first_name} user_last_name={data.user_last_name}></Aside_navigation>
+      <Aside_navigation user_role={data.user_role} user_first_name={data.user_first_name} user_last_name={data.user_last_name}></Aside_navigation>
       <main className="px-6 md:px-0 col-start-2 md:col-start-2">
         <FrontPageContent user_avatar={data.user_avatar} setNewFetch={setNewFetch} newFetch={newFetch} />
       </main>

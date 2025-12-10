@@ -74,7 +74,7 @@ const PostCard = ({ post_text, user_fk, post_created_at, post_pk, setNewFetch, n
   if (loading) return <p>Loading...</p>;
   if (!owner) return <p>No data received</p>;
   return (
-    <article className="flex flex-col gap-4 p-4 max-w-[500px] min-w-[320px]">
+    <article className="flex flex-col gap-4 p-4 max-w-[500px] min-w-[480px]">
       <div className="flex justify-between">
         <div className="flex gap-4">
           <img className=" rounded-full" src={`${apiUrl}/uploads/${owner.user_avatar}`} alt="profil billede" width={50} height={50} />

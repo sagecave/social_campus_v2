@@ -96,7 +96,7 @@ def get_data():
     #                     "status":"User not in session"}),401
 
     try:    
-        q = "SELECT user_first_name, user_last_name, user_email, user_username, user_avatar FROM `users` WHERE user_pk = %s"
+        q = "SELECT user_first_name, user_last_name, user_email, user_username, user_avatar, user_role FROM `users` WHERE user_pk = %s"
         db,cursor = x.db()
         cursor.execute(q,(user["user_pk"],))
         user = cursor.fetchone()

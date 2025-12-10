@@ -12,6 +12,7 @@ type UserData = {
   user_email: string;
   user_username: string;
   user_avatar: string;
+  user_role: string;
 };
 
 const Profile = () => {
@@ -66,7 +67,7 @@ const Profile = () => {
 
   return (
     <>
-      <Aside_navigation user_first_name={data.user_first_name} user_last_name={data.user_last_name}></Aside_navigation>
+      <Aside_navigation user_first_name={data.user_first_name} user_last_name={data.user_last_name} user_role={data.user_role}></Aside_navigation>
       <main className=" px-6 md:px-0 col-start-2 md:col-start-2">
         <ProfilePasswordPage user_avatar={data.user_avatar} user_first_name={data.user_last_name} user_last_name={data.user_last_name} user_email={data.user_email} user_username={data.user_username} />
       </main>

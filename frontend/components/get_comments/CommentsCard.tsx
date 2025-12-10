@@ -11,10 +11,12 @@ type PostCardProps = {
   // setNewFetch: React.Dispatch<React.SetStateAction<boolean>>;
   // newFetch: boolean;
   // user_avatar: string;
+
   comment_text: string;
 };
 type userData = {
-  user_first_name: string;
+  user_username: string;
+  user_avatar: string;
 };
 const CommentsCard = ({ comment_text, user_fk }: PostCardProps) => {
   const [owner, setOnwer] = useState<userData | null>(null);
@@ -50,9 +52,12 @@ const CommentsCard = ({ comment_text, user_fk }: PostCardProps) => {
   if (loading) return <p>Loading...</p>;
   if (!owner) return <p>No data received</p>;
   return (
-    <div>
-      <p>{owner.user_first_name}</p>
-      <p>{comment_text}</p>
+    <div className=" w-full flex gap-2 p-4 my-2 items-start">
+      <img className=" rounded-4xl " src={`${apiUrl}/uploads/${owner.user_avatar}`} alt="pic" width={40} height={40} />
+      <div className="flex flex-col">
+        <p className=" font-medium text-black text-[1.2rem]">{owner.user_username}</p>
+        <p>{comment_text}</p>
+      </div>
     </div>
   );
 };

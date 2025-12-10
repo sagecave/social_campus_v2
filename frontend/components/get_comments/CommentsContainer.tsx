@@ -51,7 +51,7 @@ const CommentsContainer = ({ post_pk, newFetch }: PostContainerProps) => {
   if (loading) return <p>Loading...</p>;
   if (!data) return <p>No data received</p>;
   return (
-    <section className="justify-self-center">
+    <section className="justify-self-center w-full">
       {data.map((data, i) => (
         <CommentsCard key={i} comment_text={data.comment_text} user_fk={data.user_fk} />
         // <CommentsCard key={i} user_avatar={user_avatar} setNewFetch={setNewFetch} newFetch={newFetch} user_fk={data.user_fk} post_pk={data.post_pk} />

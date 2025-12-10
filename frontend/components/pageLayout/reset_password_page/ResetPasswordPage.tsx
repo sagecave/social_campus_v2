@@ -2,6 +2,8 @@
 import { useEffect, useState } from "react";
 import Reset_password from "@/components/auth-modules/reset_password/Reset_password";
 import Image from "next/image";
+
+import LanSwitcher from "@/components/languages/LanSwitcher";
 type LanguageStrings = {
   english: string;
   danish: string;
@@ -17,6 +19,7 @@ type DictionaryType = {
 const ResetPasswordPage = () => {
   const [dictionary, setDictionary] = useState<DictionaryType | null>(null);
   const [language, setLanguage] = useState<"english" | "danish" | "spanish">("english");
+  const [reset, setReset] = useState<boolean>(false);
 
   const apiUrlDict = process.env.NEXT_PUBLIC_API_URL_DICTIONARY;
   useEffect(() => {
@@ -56,6 +59,7 @@ const ResetPasswordPage = () => {
         <span className=" text-accent-purple text-[3rem] ">{dictionary.change_it_here[language]}</span>
       </h1>
       <Reset_password enter_new_password={dictionary.new_password[language]} new_password={dictionary.new_password[language]} change_password={dictionary.change_password[language]}></Reset_password>
+      <LanSwitcher setReset={setReset} reset={reset} />
     </section>
   );
 };

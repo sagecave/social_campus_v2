@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import SignUpForm from "@/components/auth-modules/signup/SignUpForm";
 import Link from "next/link";
 import Image from "next/image";
+import LanSwitcher from "@/components/languages/LanSwitcher";
 type LanguageStrings = {
   english: string;
   danish: string;
@@ -25,6 +26,7 @@ type DictionaryType = {
 const SignupPageContent = () => {
   const [dictionary, setDictionary] = useState<DictionaryType | null>(null);
   const [language, setLanguage] = useState<"english" | "danish" | "spanish">("english");
+  const [reset, setReset] = useState<boolean>(false);
   const apiUrlDict = process.env.NEXT_PUBLIC_API_URL_DICTIONARY;
 
   useEffect(() => {
@@ -79,6 +81,7 @@ const SignupPageContent = () => {
           {dictionary.login[language]}
         </Link>
       </div>
+      <LanSwitcher setReset={setReset} reset={reset} />
     </section>
   );
 };

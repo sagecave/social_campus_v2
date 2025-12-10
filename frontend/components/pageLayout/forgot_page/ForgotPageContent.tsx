@@ -2,6 +2,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import Forgot_password from "@/components/auth-modules/forgot_password/Forgot_password";
+
+import LanSwitcher from "@/components/languages/LanSwitcher";
 import { useEffect, useState } from "react";
 type LanguageStrings = {
   english: string;
@@ -22,6 +24,7 @@ type DictionaryType = {
 const ForgotPageContent = () => {
   const [dictionary, setDictionary] = useState<DictionaryType | null>(null);
   const [language, setLanguage] = useState<"english" | "danish" | "spanish">("english");
+  const [reset, setReset] = useState<boolean>(false);
   const apiUrlDict = process.env.NEXT_PUBLIC_API_URL_DICTIONARY;
   useEffect(() => {
     const fetchDictionary = async () => {
@@ -68,6 +71,7 @@ const ForgotPageContent = () => {
           {dictionary.login[language]}
         </Link>
       </div>
+      <LanSwitcher setReset={setReset} reset={reset} />
     </section>
   );
 };

@@ -4,6 +4,7 @@ import LoginForm from "@/components/auth-modules/login/LoginForm";
 import Image from "next/image";
 import Link from "next/link";
 
+import LanSwitcher from "@/components/languages/LanSwitcher";
 type LanguageStrings = {
   english: string;
   danish: string;
@@ -23,6 +24,7 @@ type DictionaryType = {
 const LoginPageContent = () => {
   const [dictionary, setDictionary] = useState<DictionaryType | null>(null);
   const [language, setLanguage] = useState<"english" | "danish" | "spanish">("english");
+  const [reset, setReset] = useState<boolean>(false);
   const apiUrlDict = process.env.NEXT_PUBLIC_API_URL_DICTIONARY;
   useEffect(() => {
     const fetchDictionary = async () => {
@@ -74,6 +76,7 @@ const LoginPageContent = () => {
           {dictionary.signup[language]}
         </Link>
       </div>
+      <LanSwitcher setReset={setReset} reset={reset} />
     </section>
   );
 };

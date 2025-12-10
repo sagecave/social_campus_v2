@@ -79,9 +79,9 @@ const SearchUser = ({ modalOpen, setModalOpen, unfollow, follow, search_for_user
     e.preventDefault();
   };
   return (
-    <section className=" ">
+    <section className="w-full ">
       <div
-        className="absolute  left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 
+        className="absolute w-[21rem] md:w-[40rem]  left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 
                    bg-inside-border-white border border-border-grey rounded-xl px-4 pt-2 pb-10"
       >
         <h2 className="p-3 text-[1.2rem] font-semibold text-accent-purple">{search_for_users}</h2>

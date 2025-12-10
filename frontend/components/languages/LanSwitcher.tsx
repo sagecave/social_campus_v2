@@ -1,50 +1,42 @@
 "use client";
-import { useState, useEffect } from "react";
-type resetLan = {
+import { useState } from "react";
+
+type ResetLan = {
   setReset: React.Dispatch<React.SetStateAction<boolean>>;
   reset: boolean;
 };
-const LanSwitcher = ({ setReset, reset }: resetLan) => {
-  const [language, setlanguage] = useState<string>("english");
 
+const LanSwitcher = ({ setReset, reset }: ResetLan) => {
+  const [language, setLanguage] = useState<string>("english");
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-  const handleLanguage = async (language: string) => {
-    // e.preventDefault();
-    console.log(language);
+
+  const handleLanguage = async (newLang: string) => {
     try {
       const response = await fetch(`${apiUrl}/set-language`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ language }),
+        body: JSON.stringify({ language: newLang }),
         credentials: "include",
       });
 
-      if (!response.ok) {
-        const data = await response.json();
-        console.log(data);
-        // setErrorMessageGet(data.status);
-      }
       if (response.ok) {
-        const data = await response.json();
-        console.log(data);
-        // setErrorMessageGet(data.status);
-
-        // router.push(typeof data === "string" ? data : data.redirect ?? "/");
+        setReset((prev) => !prev);
       }
     } catch (err) {
-      console.error("Error during login:", err);
-      // Make alert to a user-friendly notification in the future
-      // setErrorMessageGet(Login_failed);
-    } finally {
-      setReset(!reset);
+      console.error(err);
     }
   };
-  useEffect(() => {
-    handleLanguage(language);
-  }, [language]);
 
   return (
-    <select name="language" value={language} onChange={(e) => setlanguage(e.target.value)}>
+    <select
+      name="language"
+      value={language}
+      onChange={(e) => {
+        const newLang = e.target.value;
+        setLanguage(newLang);
+        handleLanguage(newLang);
+      }}
+    >
       <option value="danish">Danish</option>
       <option value="english">English</option>
       <option value="spanish">Spanish</option>

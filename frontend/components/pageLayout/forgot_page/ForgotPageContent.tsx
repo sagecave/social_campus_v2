@@ -52,7 +52,7 @@ const ForgotPageContent = () => {
     };
 
     fetchDictionary();
-  }, [language]);
+  }, [language, reset]);
   if (!dictionary) return <p>Loading dictionary...</p>;
 
   return (

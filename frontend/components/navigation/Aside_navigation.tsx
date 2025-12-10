@@ -32,6 +32,7 @@ type DictionaryType = {
 const Aside_navigation = ({ user_first_name, user_last_name }: userData) => {
   const [dictionary, setDictionary] = useState<DictionaryType | null>(null);
   const [language, setLanguage] = useState<"english" | "danish" | "spanish">("english");
+  const [reset, setReset] = useState<boolean>(false);
   const apiUrlDict = process.env.NEXT_PUBLIC_API_URL_DICTIONARY;
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   useEffect(() => {
@@ -60,7 +61,7 @@ const Aside_navigation = ({ user_first_name, user_last_name }: userData) => {
     };
 
     fetchDictionary();
-  }, [language]);
+  }, [language, reset]);
   if (!dictionary) return <p>Loading dictionary...</p>;
   return (
     <nav className=" col-start-1 p-4 border-r-1 border-border-grey">
@@ -88,16 +89,8 @@ const Aside_navigation = ({ user_first_name, user_last_name }: userData) => {
         <li className="flex gap-2  hover:bg-accent-purple-light-white rounded-2xl  px-4 py-2  font-medium text-button-text">
           <Link className="flex gap-2 text-[1.2rem] capitalize w-full h-full" href="/profile">
             <Image src="/profile.svg" alt="Picture of the author" width={30} height={30} />
-            {/* <img className=" rounded-full" src={`http://127.0.0.1/uploads/${user_avatar}`} alt="profil billede" width={50} height={50} /> */}
             {user_first_name} {user_last_name}
           </Link>
-        </li>
-        <li className="flex gap-2  hover:bg-accent-purple-light-white rounded-2xl  px-4 py-2  font-medium text-button-text">
-          <div className="flex gap-2 text-[1.2rem] capitalize w-full h-full">
-            <Image src="/profile.svg" alt="Picture of the author" width={30} height={30} />
-            {/* <img className=" rounded-full" src={`http://127.0.0.1/uploads/${user_avatar}`} alt="profil billede" width={50} height={50} /> */}
-            <LanSwitcher />
-          </div>
         </li>
 
         <li className="flex gap-2  hover:bg-accent-purple-light-white rounded-2xl  px-4 py-2  font-medium text-button-text">
@@ -106,6 +99,12 @@ const Aside_navigation = ({ user_first_name, user_last_name }: userData) => {
             {/* {dictionary.home[language]} */}
             Admin
           </Link>
+        </li>
+        <li className="flex gap-2  hover:bg-accent-purple-light-white rounded-2xl  px-4 py-2  font-medium text-button-text">
+          <div className="flex gap-2 text-[1.2rem] capitalize w-full h-full">
+            <Image src="/profile.svg" alt="Picture of the author" width={30} height={30} />
+            <LanSwitcher setReset={setReset} reset={reset} />
+          </div>
         </li>
 
         {modalOpen ? (

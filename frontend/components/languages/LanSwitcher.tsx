@@ -1,10 +1,14 @@
 "use client";
 import { useState, useEffect } from "react";
-
-const LanSwitcher = () => {
+type resetLan = {
+  setReset: React.Dispatch<React.SetStateAction<boolean>>;
+  reset: boolean;
+};
+const LanSwitcher = ({ setReset, reset }: resetLan) => {
   const [language, setlanguage] = useState<string>("english");
+
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-  const handleLanguage = async () => {
+  const handleLanguage = async (language: string) => {
     // e.preventDefault();
     console.log(language);
     try {
@@ -31,24 +35,36 @@ const LanSwitcher = () => {
       console.error("Error during login:", err);
       // Make alert to a user-friendly notification in the future
       // setErrorMessageGet(Login_failed);
+    } finally {
+      setReset(!reset);
     }
   };
+  useEffect(() => {
+    handleLanguage(language);
+  }, [language]);
 
   return (
-    <form onSubmit={handleLanguage}>
-      <select
-        name="language"
-        value={language}
-        onChange={(e) => {
-          setlanguage(e.target.value);
-        }}
-      >
-        <option value="danish">Danish</option>
-        <option value="english">English</option>
-        <option value="spanish">Spanish</option>
-      </select>
-      <button type="submit">Change language</button>
-    </form>
+    <select name="language" value={language} onChange={(e) => setlanguage(e.target.value)}>
+      <option value="danish">Danish</option>
+      <option value="english">English</option>
+      <option value="spanish">Spanish</option>
+    </select>
+    // <form onSubmit={handleLanguage}>
+    //   <select
+    //     name="language"
+    //     value={language}
+    //     onChange={(e) => {
+    //       setlanguage(e.target.value);
+    //     }}
+    //   >
+    //     <option value="danish">Danish</option>
+    //     <option value="english">English</option>
+    //     <option value="spanish">Spanish</option>
+    //   </select>
+    //   <button className="flex gap-2 border-accent-purple border-2 hover:bg-accent-purple-light-white rounded-3xl px-4 py-2 bg-inside-border-white font-medium text-button-text" type="submit">
+    //     Change language
+    //   </button>
+    // </form>
   );
 };
 

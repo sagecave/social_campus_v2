@@ -22,8 +22,9 @@ type UserData = {
   user_avatar: string;
   setNewFetch: React.Dispatch<React.SetStateAction<boolean>>;
   newFetch: boolean;
+  user_pk: number;
 };
-export default function FrontPageContent({ user_avatar, setNewFetch, newFetch }: UserData) {
+export default function FrontPageContent({ user_avatar, setNewFetch, newFetch, user_pk }: UserData) {
   const [dictionary, setDictionary] = useState<DictionaryType | null>(null);
   const [language, setLanguage] = useState<"english" | "danish" | "spanish">("english");
   const apiUrlDict = process.env.NEXT_PUBLIC_API_URL_DICTIONARY;
@@ -60,6 +61,7 @@ export default function FrontPageContent({ user_avatar, setNewFetch, newFetch }:
       <CreatePost post={dictionary.post[language]} post_update_placeholder={dictionary.post_update_placeholder[language]} setNewFetch={setNewFetch} newFetch={newFetch}></CreatePost>
       <section className=" col-start-2">
         <PostContainer
+          user_pk={user_pk}
           update_post={dictionary.update_post[language]}
           close={dictionary.close[language]}
           make_comment={dictionary.make_comment[language]}

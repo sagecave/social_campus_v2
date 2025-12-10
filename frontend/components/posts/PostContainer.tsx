@@ -19,8 +19,9 @@ type PostContainerProps = {
   edit_post: string;
   close: string;
   post: string;
+  user_pk: number;
 };
-const Post_container = ({ newFetch, setNewFetch, user_avatar, update_post, make_comment, edit_post, post, close }: PostContainerProps) => {
+const Post_container = ({ newFetch, setNewFetch, user_avatar, update_post, make_comment, edit_post, post, close, user_pk }: PostContainerProps) => {
   const [data, setData] = useState<PostCardProps[] | null>(null);
   const [loading, setLoading] = useState(true);
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -66,6 +67,7 @@ const Post_container = ({ newFetch, setNewFetch, user_avatar, update_post, make_
           newFetch={newFetch}
           post_text={data.post_text}
           user_fk={data.user_fk}
+          user_pk={user_pk}
           post_created_at={data.post_created_at}
           post_pk={data.post_pk}
           close={close}

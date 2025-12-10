@@ -23,9 +23,10 @@ type PostCardProps = {
   edit_post: string;
   close: string;
   post: string;
+  user_pk: number;
 };
 
-const PostCard = ({ post_text, user_fk, post_created_at, post_pk, setNewFetch, newFetch, user_avatar, update_post, make_comment, edit_post, post, close }: PostCardProps) => {
+const PostCard = ({ post_text, user_fk, post_created_at, post_pk, setNewFetch, newFetch, user_avatar, update_post, make_comment, edit_post, post, close, user_pk }: PostCardProps) => {
   const [owner, setOnwer] = useState<PostCardProps | null>(null);
   const [loading, setLoading] = useState(true);
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -93,8 +94,8 @@ const PostCard = ({ post_text, user_fk, post_created_at, post_pk, setNewFetch, n
       <div className="flex gap-2">
         <Like post_pk={post_pk} />
         <Comment post={post} make_comment={make_comment} close={close} post_pk={post_pk} />
-        <UpdatePost edit_post={edit_post} update_post={update_post} close={close} post_pk={post_pk} post_text={post_text} setNewFetch={setNewFetch} newFetch={newFetch} />
-        <DeletePost post_pk={post_pk} setNewFetch={setNewFetch} newFetch={newFetch} />
+        {user_fk == user_pk && <UpdatePost edit_post={edit_post} update_post={update_post} close={close} post_pk={post_pk} post_text={post_text} setNewFetch={setNewFetch} newFetch={newFetch} />}
+        {user_fk == user_pk && <DeletePost post_pk={post_pk} setNewFetch={setNewFetch} newFetch={newFetch} />}
       </div>
     </article>
   );

@@ -159,7 +159,7 @@ const SignUpForm = ({ firstNameContent, usernameContent, signupContent, password
         <label className="text-label-dark-gray font-bold">{passwordContent}</label>
         <input
           className=" px-4 py-6 bg-inside-border-white border-2 rounded-border-form border-border-light-gray h-12 placeholder:text-light-gray caret-accent-purple w-full"
-          type="text"
+          type="password"
           name="password"
           placeholder={passwordContent}
           value={password}

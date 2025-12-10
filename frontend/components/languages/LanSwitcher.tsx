@@ -49,22 +49,6 @@ const LanSwitcher = ({ setReset, reset }: resetLan) => {
       <option value="english">English</option>
       <option value="spanish">Spanish</option>
     </select>
-    // <form onSubmit={handleLanguage}>
-    //   <select
-    //     name="language"
-    //     value={language}
-    //     onChange={(e) => {
-    //       setlanguage(e.target.value);
-    //     }}
-    //   >
-    //     <option value="danish">Danish</option>
-    //     <option value="english">English</option>
-    //     <option value="spanish">Spanish</option>
-    //   </select>
-    //   <button className="flex gap-2 border-accent-purple border-2 hover:bg-accent-purple-light-white rounded-3xl px-4 py-2 bg-inside-border-white font-medium text-button-text" type="submit">
-    //     Change language
-    //   </button>
-    // </form>
   );
 };
 

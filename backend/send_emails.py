@@ -11,6 +11,7 @@ from functools import wraps
 
 from icecream import ic
 PageUrl = "https://127.0.0.1:3000"
+serverUrl="https://127.0.0.1:80"
 # PageUrl = "https://social-campus-v2.vercel.app"
 ############VERIFICATION OF USER EMAIL##################
 def send_verify_email(user_email, user_verification_key):
@@ -34,7 +35,7 @@ def send_verify_email(user_email, user_verification_key):
         message["Subject"] = "Please verify your account"
 
         # Body of the email
-        body = f"""To verify your account, please <a href="{PageUrl}/verify-account?key={user_verification_key}">click here</a>"""
+        body = f"""To verify your account, please <a href="{serverUrl}/verify-account?key={user_verification_key}">click here</a>"""
         message.attach(MIMEText(body, "html"))
 
         # Connect to Gmail's SMTP server and send the email

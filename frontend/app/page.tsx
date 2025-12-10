@@ -64,7 +64,7 @@ export default function Home() {
   return (
     <>
       <Aside_navigation user_first_name={data.user_first_name} user_last_name={data.user_last_name}></Aside_navigation>
-      <main className=" col-start-2">
+      <main className="px-6 md:px-0 col-start-2 md:col-start-2">
         <FrontPageContent user_avatar={data.user_avatar} setNewFetch={setNewFetch} newFetch={newFetch} />
       </main>
     </>

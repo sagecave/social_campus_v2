@@ -2,7 +2,7 @@ import ResetPasswordPage from "@/components/pageLayout/reset_password_page/Reset
 
 const login = () => {
   return (
-    <main className=" col-start-2">
+    <main className="px-6 md:px-0 col-start-2 md:col-start-2">
       <ResetPasswordPage />
     </main>
   );

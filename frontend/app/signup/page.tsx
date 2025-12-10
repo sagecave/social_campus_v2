@@ -2,7 +2,7 @@ import SignupPageContent from "@/components/pageLayout/signup_page/SignupPageCon
 
 const signupForm = () => {
   return (
-    <main className="col-start-2">
+    <main className="px-6 md:px-0 col-start-2 md:col-start-2">
       <SignupPageContent />
     </main>
   );

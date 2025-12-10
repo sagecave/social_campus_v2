@@ -35,7 +35,7 @@ const LanSwitcher = () => {
   };
 
   return (
-    <form method="POST">
+    <form onSubmit={handleLanguage}>
       <select
         name="language"
         value={language}

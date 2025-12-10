@@ -81,9 +81,10 @@ const ProfileForm = ({ emailLan, update_profile, last_name, first_name, user_nam
       <ErrorHandlingModal errorMessageGet={errorMessageGet} setErrorMessageGet={setErrorMessageGet} />
       <form className="flex flex-col justify-self-center w-[inherit] max-w-160 gap-4 place-items-center" onSubmit={handleSubmit}>
         <div className="flex flex-col w-full">
-          <label className="text-label-dark-gray font-bold">{user_name}</label>
+          <label className="text-label-dark-gray font-bold ">{user_name}</label>
           <input
-            className=" px-4 py-6 bg-inside-border-white border-2 rounded-border-form border-border-light-gray h-12 placeholder:text-light-gray caret-accent-purple w-full"
+            className=" text-left
+ px-4 py-6 bg-inside-border-white border-2 rounded-border-form border-border-light-gray h-12 placeholder:text-light-gray caret-accent-purple w-full"
             type="text"
             name="username"
             value={username}

@@ -63,8 +63,7 @@ const ProfilePasswordPage = ({ user_avatar, user_first_name, user_last_name, use
   }, [language]);
   if (!dictionary) return <p>Loading dictionary...</p>;
   return (
-    <section>
-      <h1>profile</h1>
+    <section className="flex flex-col items-center">
       <ProfileImageUpdate change_your_avatar={dictionary.change_your_avatar[language]} change_avatar={dictionary.change_avatar[language]} user_avatar={user_avatar} />
 
       <ProfileForm

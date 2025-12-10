@@ -53,16 +53,16 @@ const ProfileForm = ({ user_avatar, change_your_avatar, change_avatar }: UserDat
   };
 
   return (
-    <div>
+    <div className="mb-6">
       <ErrorHandlingModal errorMessageGet={errorMessageGet} setErrorMessageGet={setErrorMessageGet} />
       {/* jeg er igang med at få dette image, så det kommer fra database i stedet for */}
-      <img className=" rounded-full" src={`${apiUrl}/uploads/${imageNameE}`} alt={imageNameE} width={50} height={50} />
+      <img className=" rounded-full justify-self-center my-4" src={`${apiUrl}/uploads/${imageNameE}`} alt={imageNameE} width={150} height={150} />
 
-      <form className="flex flex-col justify-self-center w-[inherit] max-w-160 gap-4 place-items-center" onSubmit={handleSubmit}>
-        <div className="flex flex-col w-full">
-          <label className="text-label-dark-gray font-bold">{change_avatar}</label>
+      <form className=" text-center flex flex-col justify-self-center w-[inherit] max-w-160 gap-4 place-items-center" onSubmit={handleSubmit}>
+        <div className="flex flex-col w-full ">
+          <label className="text-label-dark-gray font-bold text-center">{change_avatar}</label>
           <input
-            className=" px-4 py-6 bg-inside-border-white border-2 rounded-border-form border-border-light-gray h-12 placeholder:text-light-gray caret-accent-purple w-full"
+            className="[text-align-last:center] cursor-pointer px-4  placeholder:text-light-gray text-accent-purple w-full"
             type="file"
             name="userAvatar"
             placeholder={change_avatar}
@@ -71,7 +71,7 @@ const ProfileForm = ({ user_avatar, change_your_avatar, change_avatar }: UserDat
           ></input>
         </div>
 
-        <button className="bg-linear-to-r w-auto from-accent-purple to-accent-red rounded-full px-24 py-4 mt-6 text-inside-border-white font-bold text-[1.5rem] bg-[length:300%_100%] bg-left hover:bg-right transition-all duration-500" type="submit">
+        <button className=" bg-linear-to-r w-auto from-accent-purple to-accent-red rounded-full px-24 py-4  text-inside-border-white font-bold text-[1.5rem] bg-[length:300%_100%] bg-left hover:bg-right transition-all duration-500" type="submit">
           {change_your_avatar}
         </button>
       </form>

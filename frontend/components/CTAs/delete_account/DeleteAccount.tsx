@@ -37,7 +37,7 @@ const DeleteProfile = ({ delete_account }: DictionaryType) => {
     }
   };
   return (
-    <div className=" hover:bg-accent-purple-light w-fit  rounded-4xl py-2 px-4 pointer">
+    <div className="mt-4 hover:bg-accent-purple-light w-fit  rounded-4xl py-2 px-4 pointer">
       <form className="pointer " onSubmit={deletingAccount}>
         <button className="flex gap-2" type="submit">
           <Image className=" " src="/delete.svg" alt="Picture of the author" width={25} height={25} />
